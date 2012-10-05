@@ -8,7 +8,7 @@ starting from the beginning every time.
 It started some time ago when i was wondering if it's possible to do .NET development under linux.
 
 So by and by i developed some tools and perhaps they are useful for some other people too.
-There are no limitations in the kind of tools. They should just make the life easyer :)
+There are no limitations in the kind of tools. They should just make the life easier :)
 
 For example:
 
@@ -18,3 +18,4 @@ For example:
 - custom gtk Treelist
 - Taskmanager (if you want to execute some jobs written in c#)
 - Gtk Databinding support (Databind your objects to Gtk controls)
+- Tomboy and some other DBus client examples
