@@ -35,30 +35,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
-    <Reference Include="atk-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\atk\atk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="cairo-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gio-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\gio\gio-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\glib\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-dotnet">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="pango-sharp">
-      <HintPath>..\..\gtk-sharp\gtk-sharp\pango\pango-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\applications\log4net-1.2.10\bin\mono\2.0\release\log4net.dll</HintPath>
     </Reference>
@@ -72,6 +48,30 @@
       <HintPath>..\..\Json45r5\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>..\..\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\..\gtk-sharp\gio\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\gtk-sharp\glib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

@@ -33,9 +33,10 @@ namespace DockApplication
 		{
 			Application.Init ();
 
+			//try to restore the application from "applicationname.xml" in this case DockApplication.xml
 			win = MyDockApplication.RestoreInstance<MyDockApplication>();
 
-			if (win == null)
+			if (win == null) //if we cannot restore then create a new one
 			{
 				win = MyDockApplication.CreateInstance<MyDockApplication>();
 			}
@@ -49,13 +50,13 @@ namespace DockApplication
 
 		static void HandleDeleteEvent (object o, DeleteEventArgs args)
 		{
-			win.Save();
+			win.Save(); //save to "applicationname.xml" in this case DockApplication.xml
 			Application.Quit();
 		}
 
 		static void HandleDestroyEvent (object o, DestroyEventArgs args)
 		{
-			win.Save();
+			win.Save(); //save to "applicationname.xml" in this case DockApplication.xml
 			Application.Quit();
 		}
 	}
