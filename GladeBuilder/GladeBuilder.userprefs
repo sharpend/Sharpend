@@ -1,0 +1,45 @@
+﻿<Properties GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../Sharpend/Glade/glade_transform.xsl">
+    <Files>
+      <File FileName="GladeBuilder/builderImplementation.cs" Line="72" Column="64" />
+      <File FileName="../Sharpend/Glade/glade_transform.xsl" Line="613" Column="12" />
+      <File FileName="GladeBuilder/GladeFile.cs" Line="134" Column="50" />
+      <File FileName="GladeBuilder/data.xml" Line="1" Column="1" />
+      <File FileName="GladeBuilder/list.xml" Line="4" Column="11" />
+      <File FileName="../Sharpend/Glade/GladeBuilder.cs" Line="19" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True" selected="True">
+          <Node name="GladeBuilder" expanded="True" />
+          <Node name="Sharpend" expanded="True">
+            <Node name="Glade" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>gf.ClassName</Value>
+          <Value>gf.Filename</Value>
+          <Value>target.Filename</Value>
+          <Value>DataObjects.DataObjects</Value>
+          <Value>source</Value>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Configuration/Configuration.cs" line="137" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="86" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="143" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="19" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="132" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

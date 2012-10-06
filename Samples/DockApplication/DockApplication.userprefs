@@ -1,0 +1,29 @@
+﻿<Properties GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../Sharpend/GtkSharp/Widgets/MainWindow.cs">
+    <Files>
+      <File FileName="../../Sharpend/GtkSharp/Docking/DockItemContainer.cs" Line="248" Column="29" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/MainWindow.cs" Line="584" Column="45" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="66" Column="1" />
+      <File FileName="../../Sharpend/GtkSharp/Docking/PopupWindow.cs" Line="35" Column="1" />
+      <File FileName="DockApplication/toolbar.config" Line="29" Column="119" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Sharpend" selected="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

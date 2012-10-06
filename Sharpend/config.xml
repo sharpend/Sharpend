@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <windows>
+    <window name="" id ="">
+      <params>
+        <param name="id" type="String">value</param>
+      </params>
+    <window>
+  </windows>
+</configuration>
+

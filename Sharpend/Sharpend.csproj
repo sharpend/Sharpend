@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94641ABA-736F-4D76-BD1B-99C45313F988}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Sharpend</RootNamespace>
+    <AssemblyName>Sharpend</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\atk\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\gio\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\glib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\gtk-sharp\gtk-sharp\pango\pango-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\applications\log4net-1.2.10\bin\mono\2.0\release\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NDesk.DBus">
+      <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus-1.0\NDesk.DBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NDesk.DBus.GLib">
+      <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus.GLib-1.0\NDesk.DBus.GLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Json45r5\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Unity\UnityHelper.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\IAppSettingsProvider.cs" />
+    <Compile Include="Glade\GladeApplication.cs" />
+    <Compile Include="Utils\VirtualGrid\VirtualGridHeaderColumn.cs" />
+    <Compile Include="Utils\VirtualGrid\VirtualGridRow.cs" />
+    <Compile Include="Utils\VirtualGrid\VirtualTreeRow.cs" />
+    <Compile Include="Utils\VirtualGrid\VirtualGridCell.cs" />
+    <Compile Include="Utils\VirtualGrid\VirtualTreeList.cs" />
+    <Compile Include="GtkSharp\TreeList\GtkListTreeView.cs" />
+    <Compile Include="Utils\VirtualGrid\StandardGrid.cs" />
+    <Compile Include="Utils\XmlHelper.cs" />
+    <Compile Include="GtkSharp\Toolbar\CommandToolButton.cs" />
+    <Compile Include="Utils\Reflection.cs" />
+    <Compile Include="Utils\Parameter.cs" />
+    <Compile Include="Utils\ParameterSet.cs" />
+    <Compile Include="Utils\DelegateSet.cs" />
+    <Compile Include="Utils\DelegateData.cs" />
+    <Compile Include="Utils\CustomEventhandler.cs" />
+    <Compile Include="Utils\VirtualGrid\CustomEventArgs.cs" />
+    <Compile Include="Glade\GladeBuilder.cs" />
+    <Compile Include="GtkSharp\Docking\DockFrame.cs" />
+    <Compile Include="GtkSharp\Docking\DockContainer.cs" />
+    <Compile Include="GtkSharp\Docking\DockItemContainer.cs" />
+    <Compile Include="GtkSharp\Docking\PlaceholderWindow.cs" />
+    <Compile Include="GtkSharp\Widgets\PanedBox.cs" />
+    <Compile Include="GtkSharp\Widgets\CustomWidget.cs" />
+    <Compile Include="GtkSharp\Docking\DockframeWindow.cs" />
+    <Compile Include="Glade\ToolbarHelper.cs" />
+    <Compile Include="GtkSharp\Widgets\MainWindow.cs" />
+    <Compile Include="GtkSharp\Widgets\DockableWidget.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="GtkSharp\Utils.cs" />
+    <Compile Include="GtkSharp\Docking\PopupWindow.cs" />
+    <Compile Include="GtkSharp\TreeList\XmlTreeStore.cs" />
+    <Compile Include="GtkSharp\TreeList\XmlTreeModel.cs" />
+    <Compile Include="Utils\applications\tomboy\ITomboyRemoteControl.cs" />
+    <Compile Include="Utils\DBus\DBusBaseProxy.cs" />
+    <Compile Include="Utils\applications\tomboy\TomboyProxy.cs" />
+    <Compile Include="Utils\applications\tomboy\TomboyRemoteControl.cs" />
+    <Compile Include="Utils\applications\canonical\ISoundIndicator.cs" />
+    <Compile Include="Utils\applications\canonical\ICanonicalDbusMenu.cs" />
+    <Compile Include="Utils\applications\canonical\IUnityScope.cs" />
+    <Compile Include="Utils\applications\freedesktop\IDBus.cs" />
+    <Compile Include="Utils\TaskManager\ITask.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\TaskManager\TaskCompleted.cs" />
+    <Compile Include="Utils\TaskManager\BaseTask.cs" />
+    <Compile Include="Utils\Webservices\Discogs\Discogs.cs" />
+    <Compile Include="Utils\Webservices\Discogs\Artist.cs" />
+    <Compile Include="Utils\Webservices\Discogs\SearchResult.cs" />
+    <Compile Include="Utils\Webservices\Discogs\Track.cs" />
+    <Compile Include="Utils\Webservices\Discogs\Release.cs" />
+    <Compile Include="Utils\Webservices\Discogs\Image.cs" />
+    <Compile Include="Utils\CachedPictureList.cs" />
+    <Compile Include="GtkSharp\DataBinder.cs" />
+    <Compile Include="GtkSharp\BindableProperty.cs" />
+    <Compile Include="GtkSharp\BindableData.cs" />
+    <Compile Include="GtkSharp\DataObjectContainer.cs" />
+    <Compile Include="GtkSharp\Widgets\ProgressWindow.cs" />
+    <Compile Include="GtkSharp\Widgets\ProgressWindowImplementation.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Unity\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Glade\" />
+    <Folder Include="Glade\windows\" />
+    <Folder Include="GtkSharp\" />
+    <Folder Include="GtkSharp\TreeList\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Utils\VirtualGrid\" />
+    <Folder Include="GtkSharp\Toolbar\" />
+    <Folder Include="GtkSharp\Docking\" />
+    <Folder Include="GtkSharp\Widgets\" />
+    <Folder Include="Utils\applications\" />
+    <Folder Include="Utils\applications\tomboy\" />
+    <Folder Include="Utils\DBus\" />
+    <Folder Include="Utils\applications\canonical\" />
+    <Folder Include="Utils\applications\freedesktop\" />
+    <Folder Include="Utils\TaskManager\" />
+    <Folder Include="Utils\Webservices\" />
+    <Folder Include="Utils\Webservices\Discogs\" />
+    <Folder Include="GtkSharp\Widgets\glade\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GtkSharp\Widgets\glade\glade.config" />
+    <None Include="GtkSharp\Widgets\glade\progresswindow.glade" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Glade\glade_transform.xsl" />
+    <EmbeddedResource Include="Glade\glade_transform2.xsl" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<grid>
+	<columns>
+		
+		<column visible="false">
+			<name>Path</name>
+		</column>
+		
+		<column>
+			<name>Filename</name>
+		</column>
+		
+		<column visible="false">
+			<name>Object</name>
+		</column>
+		
+	</columns>
+</grid>

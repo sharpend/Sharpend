@@ -1,0 +1,40 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Utils/Utils.cs">
+    <Files>
+      <File FileName="Glade/DockableWindow.cs" Line="2" Column="14" />
+      <File FileName="Glade/GladeDockApplication.cs" Line="2" Column="7" />
+      <File FileName="GtkSharp/Docking/DockItemContainer.cs" Line="36" Column="7" />
+      <File FileName="Utils/applications/tomboy/TomboyRemoteControl.cs" Line="2" Column="7" />
+      <File FileName="GtkSharp/Docking/DockContainer.cs" Line="452" Column="7" />
+      <File FileName="GtkSharp/Widgets/CustomWidget.cs" Line="320" Column="7" />
+      <File FileName="GtkSharp/Docking/DockFrame.cs" Line="461" Column="7" />
+      <File FileName="GtkSharp/Widgets/DockableWidget.cs" Line="196" Column="7" />
+      <File FileName="GtkSharp/Docking/PlaceholderWindow.cs" Line="156" Column="7" />
+      <File FileName="GtkSharp/Docking/PopupWindow.cs" Line="47" Column="7" />
+      <File FileName="GtkSharp/Widgets/MainWindow.cs" Line="636" Column="7" />
+      <File FileName="Utils/Extensions.cs" Line="55" Column="36" />
+      <File FileName="Utils/Utils.cs" Line="6" Column="7" />
+      <File FileName="Utils/VirtualGrid/VirtualGridRow.cs" Line="87" Column="30" />
+      <File FileName="Utils/Webservices/Discogs/Artist.cs" Line="2" Column="7" />
+      <File FileName="Utils/Webservices/Discogs/Image.cs" Line="21" Column="22" />
+      <File FileName="Configuration/Configuration.cs" Line="27" Column="69" />
+      <File FileName="Glade/ToolbarHelper.cs" Line="89" Column="75" />
+      <File FileName="GtkSharp/Widgets/PanedBox.cs" Line="499" Column="7" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="SharpendGtk2" expanded="True" selected="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

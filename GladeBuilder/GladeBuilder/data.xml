@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tree>
+  <children>
+    <child>
+			<data>CHild1</data>
+	</child>
+	<child>
+			<data>CHild2</data>
+	</child>
+  </children>
+
+</tree>
