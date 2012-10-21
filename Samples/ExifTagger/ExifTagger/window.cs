@@ -1,0 +1,11 @@
+
+	   using System;
+	   using Gtk;
+	 
+	  
+	  /******************************************
+			THIS IS AUTO GENERATED CODE BY GLADEBUILDER
+			DO NOT EDIT
+			USE THE IMPLEMENTATION CLASS INSTEAD
+	  *******************************************/
+	  namespace window{public partial class window: Gtk.Window{private Gtk.VBox box1;public Gtk.VBox Box1{get{return box1;}}private Gtk.HBox box2;public Gtk.HBox Box2{get{return box2;}}private Gtk.Entry entryPath;public Gtk.Entry EntryPath{get{return entryPath;}}private Gtk.FileChooserButton filechooserbutton1;public Gtk.FileChooserButton Filechooserbutton1{get{return filechooserbutton1;}}private Gtk.Entry entryRegEx;public Gtk.Entry EntryRegEx{get{return entryRegEx;}}private Gtk.TreeView treeview1;public Gtk.TreeView Treeview1{get{return treeview1;}}private Gtk.HBox box3;public Gtk.HBox Box3{get{return box3;}}private Gtk.Button btnExit;public Gtk.Button BtnExit{get{return btnExit;}}public window() : this(String.Empty) {}public window(String name) : base(name){this.Name = name;box1 = new Gtk.VBox();box1.Name ="box1";box1.Visible =true;box2 = new Gtk.HBox();box2.Name ="box2";box2.Visible =true;entryPath = new Gtk.Entry();entryPath.Name ="entryPath";entryPath.Visible =true;filechooserbutton1 = new Gtk.FileChooserButton("dummy",FileChooserAction.Open);filechooserbutton1.Name ="filechooserbutton1";filechooserbutton1.Visible =true;box2.PackStart(entryPath,true,true,0);box2.PackStart(filechooserbutton1,false,true,0);entryRegEx = new Gtk.Entry();entryRegEx.Name ="entryRegEx";entryRegEx.Visible =true;treeview1 = new Gtk.TreeView();treeview1.Name ="treeview1";treeview1.Visible =true;//omit GtkTreeSelectionbox3 = new Gtk.HBox();box3.Name ="box3";box3.Visible =true;btnExit = new Gtk.Button();btnExit.Name ="btnExit";btnExit.Visible =true;btnExit.Label =@"Beenden";box3.PackStart(btnExit,false,true,0);box1.PackStart(box2,false,true,0);box1.PackStart(entryRegEx,false,true,0);box1.PackStart(treeview1,true,true,0);box1.PackStart(box3,false,true,0);this.Add(box1);init();} //constructor} //class} //namespace
