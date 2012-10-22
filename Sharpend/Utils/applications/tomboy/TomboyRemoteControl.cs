@@ -20,6 +20,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+
+#if DBUS
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
@@ -254,3 +256,4 @@ namespace Sharpend.Utils.Applications.Tomboy
 	}
 }
 
+#endif
