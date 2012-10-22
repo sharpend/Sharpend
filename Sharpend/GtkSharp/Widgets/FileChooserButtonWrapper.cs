@@ -35,7 +35,7 @@ namespace Sharpend.GtkSharp
 	/// The FileChooserWrapper contains some extentsions for a FileChooser and
 	/// connects it optional to a Entry Widget
 	/// </summary>
-	public class FileChooserWrapper
+	public class FileChooserButtonWrapper
 	{
 		/// <summary>
 		/// Wrapped FileChooserButton
@@ -70,28 +70,22 @@ namespace Sharpend.GtkSharp
 			private set;
 		}
 
+		/// <summary>
+		/// Occurs when SelectionChanged event from the FilechooserButton is fired
+		/// </summary>
 		public event EventHandler OnSelectionChanged;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Sharpend.GtkSharp.FileChooserWrapper"/> class.
+		/// Store data in specified configfile
+		/// default this is null, then the application.config file ist used
 		/// </summary>
-		/// <param name='title'>
-		/// Title.
-		/// </param>
-		/// <param name='chooser'>
-		/// Chooser.
-		/// </param>
-		/// <param name='action'>
-		/// Action.
-		/// </param>
-		public FileChooserWrapper (String title, FileChooserButton chooser,FileChooserAction action)
+		/// <value>
+		/// The config file.
+		/// </value>
+		public String ConfigFile 
 		{
-			Chooser = chooser;
-			EntryPath = null;
-			CurrentFilter = null;
-			Chooser.Action = action;
-			Chooser.Title = title;
-			init();
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -103,17 +97,36 @@ namespace Sharpend.GtkSharp
 		/// <param name='chooser'>
 		/// Chooser.
 		/// </param>
+		/// <param name='action'>
+		/// Action.
+		/// </param>
+		public FileChooserButtonWrapper (String title, FileChooserButton chooser,FileChooserAction action)
+			: this (title,chooser,null,action)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Sharpend.GtkSharp.FileChooserWrapper"/> class.
+		/// 
+		/// </summary>
+		/// <param name='title'>
+		/// Title.
+		/// </param>
+		/// <param name='chooser'>
+		/// Chooser.
+		/// </param>
 		/// <param name='entryPath'>
-		/// Entry path.
+		/// Entry to display selected path (optional, can be null)
 		/// </param>
 		/// <param name='action'>
 		/// Action.
 		/// </param>
-		public FileChooserWrapper (String title, FileChooserButton chooser, Entry entryPath,FileChooserAction action)
+		public FileChooserButtonWrapper (String title, FileChooserButton chooser, Entry entryPath,FileChooserAction action)
 		{
 			Chooser = chooser;
 			EntryPath = entryPath;
 			Chooser.Action = action;
+			ConfigFile = null;
 			CurrentFilter = null;
 			Chooser.Title = title;
 			init();
@@ -138,6 +151,9 @@ namespace Sharpend.GtkSharp
 			}
 		}
 
+		/// <summary>
+		/// initialize wrapper
+		/// </summary>
 		private void init()
 		{
 			if (EntryPath != null)
@@ -149,6 +165,11 @@ namespace Sharpend.GtkSharp
 
 		void HandleFileChooserSelectionChanged (object sender, EventArgs e)
 		{
+			if (Chooser.Filename == null)
+			{
+				return;
+			}
+
 			switch (Chooser.Action) {
 				case FileChooserAction.SelectFolder:
 					EntryPath.Text = Chooser.CurrentFolder;
@@ -172,7 +193,22 @@ namespace Sharpend.GtkSharp
 		{
 			if (!String.IsNullOrEmpty(EntryPath.Text))
 			{
-				//Chooser.
+				if (String.IsNullOrEmpty(ConfigFile))
+				{
+					System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getApplicationConfig();
+					if (fi == null)
+					{
+						fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
+					}
+				} else
+				{
+					System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile(ConfigFile);
+					if (fi == null)
+					{
+						throw new Exception("configfile: " + ConfigFile + " does not exist! ");
+					}
+				}
+
 				String xp = "/configuration/chooser/chooser_" + Chooser.Name;
 				Sharpend.Configuration.ConfigurationManager.setValue(xp,EntryPath.Text,true);
 			}
@@ -185,6 +221,11 @@ namespace Sharpend.GtkSharp
 		{
 			String xp = "/configuration/chooser/chooser_" + Chooser.Name;
 			String cp = Sharpend.Configuration.ConfigurationManager.getString(xp,true);
+			if (!String.IsNullOrEmpty(ConfigFile))
+			{
+				cp = Sharpend.Configuration.ConfigurationManager.getString(ConfigFile,xp,true);
+			} 
+		
 			if (!String.IsNullOrEmpty(cp))
 			{
 				switch (Chooser.Action) 

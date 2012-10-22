@@ -1,20 +1,21 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../Sharpend/Glade/glade_transform.xsl">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GladeBuilder/glade.gladebuilder">
     <Files>
-      <File FileName="GladeBuilder/builderImplementation.cs" Line="72" Column="64" />
-      <File FileName="../Sharpend/Glade/glade_transform.xsl" Line="613" Column="12" />
-      <File FileName="GladeBuilder/GladeFile.cs" Line="134" Column="50" />
-      <File FileName="GladeBuilder/data.xml" Line="1" Column="1" />
-      <File FileName="GladeBuilder/list.xml" Line="4" Column="11" />
-      <File FileName="../Sharpend/Glade/GladeBuilder.cs" Line="19" Column="1" />
+      <File FileName="GladeBuilder/builderImplementation.cs" Line="80" Column="130" />
+      <File FileName="GladeBuilder/glade.gladebuilder" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="GladeBuilder" expanded="True" />
+        <State expanded="True">
+          <Node name="GladeBuilder" expanded="True">
+            <Node name="glade.gladebuilder" selected="True" />
+          </Node>
           <Node name="Sharpend" expanded="True">
-            <Node name="Glade" expanded="True" />
+            <Node name="Configuration" expanded="True" />
+            <Node name="GtkSharp" expanded="True">
+              <Node name="Widgets" expanded="True" />
+            </Node>
           </Node>
         </State>
       </Pad>
@@ -33,13 +34,7 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Configuration/Configuration.cs" line="137" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="86" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="143" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="19" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="132" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

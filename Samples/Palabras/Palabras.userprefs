@@ -1,19 +1,19 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Palabras/PalabrasRunner.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Palabras/PalabrasWindowImplementation.cs">
     <Files>
-      <File FileName="Palabras/PalabrasRunner.cs" Line="140" Column="14" />
+      <File FileName="Palabras/PalabrasRunner.cs" Line="79" Column="3" />
       <File FileName="Palabras/Main.cs" Line="16" Column="30" />
-      <File FileName="Palabras/TomboyProxy.cs" Line="179" Column="6" />
+      <File FileName="Palabras/TomboyProxy.cs" Line="179" Column="4" />
       <File FileName="Palabras/glade.config" Line="39" Column="23" />
-      <File FileName="Palabras/PalabrasWindowImplementation.cs" Line="105" Column="4" />
+      <File FileName="Palabras/PalabrasWindowImplementation.cs" Line="167" Column="4" />
       <File FileName="Palabras/PalabrasWindow.cs" Line="63" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Palabras" expanded="True">
-            <Node name="PalabrasRunner.cs" selected="True" />
+            <Node name="PalabrasWindowImplementation.cs" selected="True" />
           </Node>
         </State>
       </Pad>

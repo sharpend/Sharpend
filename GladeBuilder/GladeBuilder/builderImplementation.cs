@@ -60,20 +60,31 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			//btnAddFiles.SelectMultiple = true;
 		    //btnAddFiles.Shown += HandleShown;
 
-			Gtk.FileFilter ff = new Gtk.FileFilter();
-			ff.AddPattern("*.glade");
-			btnAddFiles.Filter = ff;
+//			Gtk.FileFilter ff = new Gtk.FileFilter();
+//			ff.AddPattern("*.glade");
+//			btnAddFiles.Filter = ff;
+
+			FileChooserButtonWrapper fc1 = new FileChooserButtonWrapper("Please select a .glade file",BtnAddFiles,FileChooserAction.Open);
+			fc1.OnSelectionChanged += HandleSelectionChanged;
+			fc1.AddPattern("*.glade");
 
 			btnAddFiles.Action = FileChooserAction.Open;
 			btnRemoveSelected.Clicked += RemoveSelectedClicked;
 
-			BtnSelectOutputPath.Action = FileChooserAction.SelectFolder;
-			BtnSelectOutputPath.SelectionChanged += BtnSelectOutputPathChanged;
+			//BtnSelectOutputPath.Action = FileChooserAction.SelectFolder;
+			//BtnSelectOutputPath.SelectionChanged += BtnSelectOutputPathChanged;
+			FileChooserButtonWrapper fc2 = new FileChooserButtonWrapper("Please select an output path",BtnSelectOutputPath,EntryOutputPath,FileChooserAction.SelectFolder);
+
 
 			btnSaveAs.Clicked += BtnSaveAsClicked;
 
 			//config files
-			btnSelectConfigFile.SelectionChanged += BtnConfigFileSelectionChanged;
+			//btnSelectConfigFile.SelectionChanged += BtnConfigFileSelectionChanged;
+
+			FileChooserButtonWrapper fc = new FileChooserButtonWrapper("Please select a .gladebuilder file", BtnSelectConfigFile,EntryConfigFile,FileChooserAction.Open);
+			fc.AddPattern("*.gladebuilder");
+			fc.OnSelectionChanged += BtnConfigFileSelectionChanged;
+
 			BtnGenerate.Clicked += BtnGenerateClicked;
 
 			btnExit.Clicked += delegate(object sender, EventArgs e) {
@@ -157,7 +168,7 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 				fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
 			}
 
-			Sharpend.Configuration.ConfigurationManager.setValue("/configuration/lastloaded",EntryConfigFile.Text.Trim(),true);
+			//Sharpend.Configuration.ConfigurationManager.setValue("/configuration/lastloaded",EntryConfigFile.Text.Trim(),true);
 			Sharpend.Configuration.ConfigurationManager.setValue("/configuration/pane",paned1.Position.ToString(),true);
 		}
 
@@ -166,12 +177,12 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// </summary>
 		private void restoreSettings()
 		{
-			String s = Sharpend.Configuration.ConfigurationManager.getString("lastloaded");
-			if (!String.IsNullOrEmpty(s))
-			{
-				EntryConfigFile.Text = s;
-				loadData(entryConfigFile.Text.Trim());
-			}
+//			String s = Sharpend.Configuration.ConfigurationManager.getString("lastloaded");
+//			if (!String.IsNullOrEmpty(s))
+//			{
+//				EntryConfigFile.Text = s;
+//				loadData(entryConfigFile.Text.Trim());
+//			}
 
 			String p = Sharpend.Configuration.ConfigurationManager.getString("pane");
 			if (!String.IsNullOrEmpty(p))
@@ -180,10 +191,10 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			}
 		}
 
-		void BtnSelectOutputPathChanged (object sender, EventArgs e)
-		{
-			entryOutputPath.Text = BtnSelectOutputPath.CurrentFolder;
-		}
+//		void BtnSelectOutputPathChanged (object sender, EventArgs e)
+//		{
+//			entryOutputPath.Text = BtnSelectOutputPath.CurrentFolder;
+//		}
 
 		void BtnSaveAsClicked (object sender, EventArgs e)
 		{
@@ -225,7 +236,6 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 
 		void BtnConfigFileSelectionChanged (object sender, EventArgs e)
 		{
-			entryConfigFile.Text = btnSelectConfigFile.File.Path;
 			loadData(entryConfigFile.Text.Trim());
 		}
 
@@ -360,16 +370,22 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			bool save = true;
 			if (fi.Exists) 
 			{
+//				save = false;
+//				var dialog = new MessageDialog(this,DialogFlags.Modal,MessageType.Info,ButtonsType.OkCancel,
+//				                               "File " + fi.FullName + " exists, overwrite ?",new object[0]); 	
+//				int res = dialog.Run ();
+//				if ((ResponseType) res == ResponseType.Ok) {
+//					save = true;
+//					fi.Delete();
+//				}
+//
+//				dialog.Destroy();
 				save = false;
-				var dialog = new MessageDialog(this,DialogFlags.Modal,MessageType.Info,ButtonsType.OkCancel,
-				                               "File " + fi.FullName + " exists, overwrite ?",new object[0]); 	
-				int res = dialog.Run ();
-				if ((ResponseType) res == ResponseType.Ok) {
+				if (Message.ShowInfoMessage("File " + fi.FullName + " exists, overwrite ?",this) == ResponseType.Ok)
+				{
 					save = true;
 					fi.Delete();
 				}
-
-				dialog.Destroy();
 			}
 
 			if (save)
@@ -405,4 +421,4 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			fc.Destroy();
 		}
 
-	} //sdclass} //namespace
+	} //class} //namespace
