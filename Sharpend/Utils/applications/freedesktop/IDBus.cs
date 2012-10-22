@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+#if DBUS
 using NDesk.DBus;
 using System.Collections.Generic;
 
@@ -56,3 +57,4 @@ namespace Sharpend.Utils.Applications.FreeDesktop
 	}
 }
 
+#endif

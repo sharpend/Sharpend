@@ -21,6 +21,7 @@
 
 using System;
 
+#if DBUS
 namespace Sharpend.Utils.Applications.Tomboy
 {
 	/// <summary>
@@ -47,3 +48,4 @@ namespace Sharpend.Utils.Applications.Tomboy
 	}
 }
 
+#endif

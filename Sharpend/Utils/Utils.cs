@@ -24,8 +24,11 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using log4net.Config;
+
+#if SHARPZIPLIB
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Checksums;
+#endif
 
 namespace Sharpend.Utils
 {
@@ -188,6 +191,7 @@ namespace Sharpend.Utils
 		/// <param name='outputfile'>
 		/// name of the zip
 		/// </param>
+        #if SHARPZIPLIB
 		public static void CompressFolder(String folder, String outputfile)
 		{
 			DirectoryInfo di = new DirectoryInfo(folder);
@@ -230,6 +234,7 @@ namespace Sharpend.Utils
 				throw new Exception("the folder " + folder + " does not exist");
 			}
 		}
+#endif
 
 		public static String getDateTimeForIndex(DateTime datetime)
 		{
