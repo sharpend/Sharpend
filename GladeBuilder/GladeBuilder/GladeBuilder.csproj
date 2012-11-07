@@ -74,7 +74,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="glade.config" />
     <None Include="glade.gladebuilder" />
   </ItemGroup>
   <ItemGroup>

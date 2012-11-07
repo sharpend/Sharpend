@@ -22,23 +22,24 @@
 using System;
 using Gtk;
 
+//TODO is this needed ??
 namespace Sharpend.GtkSharp.Docking
 {
-	public class DockframeWindow : Window
-	{
-		public DockframeWindow(IntPtr raw) : base(raw)
-		{
-		}
-		
-		public DockframeWindow (String title) :  base(title)
-		{
-		}
-		
-		
-		public virtual void init()
-		{
-		}
-		
-	}
+//	public class DockframeWindow : Window
+//	{
+//		public DockframeWindow(IntPtr raw) : base(raw)
+//		{
+//		}
+//		
+//		public DockframeWindow (String title) :  base(title)
+//		{
+//		}
+//		
+//		
+//		public virtual void init()
+//		{
+//		}
+//		
+//	}
 }
 

@@ -372,14 +372,21 @@ namespace Sharpend.GtkSharp
 		{
 			if (container1.Children.Length == 0)
 			{
+				//Console.WriteLine("panedbox: no children add: " + widget.Name + " widget: " + widget.Visible);
+				//Console.WriteLine("container1: " +container1.Visible);
 				if (widget.Parent != null)
 				{
 					widget.Reparent(container1); //TODO check if parent id not container1
 				}
-				
+
+				if (!container1.Visible)
+				{
+					container1.Visible = true;
+				}
 				container1.PackStart(widget,true,true,0);	
 			} else 
 			{
+				//Console.WriteLine("have children");
 				PanedBox lb = getLastChild(this);		
 				PanedBox newbox = new PanedBox(lb,widget);
 				lb.Append(newbox);

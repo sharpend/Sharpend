@@ -1,9 +1,16 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/GtkSharp/Docking/PlaceholderWindow.cs">
+    <Files>
+      <File FileName="Sharpend/GtkSharp/Toolbar/CommandToolButton.cs" Line="27" Column="1" />
+      <File FileName="Sharpend/Utils/DBus/DBusBaseProxy.cs" Line="1" Column="1" />
+      <File FileName="Sharpend/GtkSharp/Docking/DockFrame.cs" Line="251" Column="20" />
+      <File FileName="Sharpend/GtkSharp/Docking/PlaceholderWindow.cs" Line="80" Column="3" />
+      <File FileName="Sharpend/GtkSharp/Utils.cs" Line="102" Column="16" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True" />
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />

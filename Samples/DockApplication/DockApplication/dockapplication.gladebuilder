@@ -2,5 +2,6 @@
   <glade>
     <gladefile windowname="window1" outputpath="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication" filename="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/window1.glade" createimplementation="True" namespace="DockApplication" class="Window1" customwidgetclass="DockableWidget" customwidget="True" usegtk2="False" />
     <gladefile windowname="SampleWindow" outputpath="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication" filename="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/window2.glade" createimplementation="True" namespace="DockApplication" class="SampleWindow" customwidgetclass="DockableWidget" customwidget="True" usegtk2="False" />
+    <gladefile windowname="window1" outputpath="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication" filename="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/dockframewindow.glade" createimplementation="True" namespace="DockApplication" class="DockframeWindow" customwidgetclass="DockableWidget" customwidget="True" usegtk2="False" />
   </glade>
 </configuration>

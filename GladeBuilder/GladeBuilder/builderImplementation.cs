@@ -39,6 +39,12 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			private set;
 		}
 
+		/// <summary>
+		/// Container for the bindable DataObjects
+		/// </summary>
+		/// <value>
+		/// The data objects.
+		/// </value>
 		public DataObjectContainer DataObjects {
 			get;
 			private set;
@@ -57,12 +63,6 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			treeview1.RowActivated += HandleRowActivated;
 
 			btnAddFiles.SelectionChanged += HandleSelectionChanged;
-			//btnAddFiles.SelectMultiple = true;
-		    //btnAddFiles.Shown += HandleShown;
-
-//			Gtk.FileFilter ff = new Gtk.FileFilter();
-//			ff.AddPattern("*.glade");
-//			btnAddFiles.Filter = ff;
 
 			FileChooserButtonWrapper fc1 = new FileChooserButtonWrapper("Please select a .glade file",BtnAddFiles,FileChooserAction.Open);
 			fc1.OnSelectionChanged += HandleSelectionChanged;
@@ -71,19 +71,14 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			btnAddFiles.Action = FileChooserAction.Open;
 			btnRemoveSelected.Clicked += RemoveSelectedClicked;
 
-			//BtnSelectOutputPath.Action = FileChooserAction.SelectFolder;
-			//BtnSelectOutputPath.SelectionChanged += BtnSelectOutputPathChanged;
 			FileChooserButtonWrapper fc2 = new FileChooserButtonWrapper("Please select an output path",BtnSelectOutputPath,EntryOutputPath,FileChooserAction.SelectFolder);
-
 
 			btnSaveAs.Clicked += BtnSaveAsClicked;
 
 			//config files
-			//btnSelectConfigFile.SelectionChanged += BtnConfigFileSelectionChanged;
-
-			FileChooserButtonWrapper fc = new FileChooserButtonWrapper("Please select a .gladebuilder file", BtnSelectConfigFile,EntryConfigFile,FileChooserAction.Open);
-			fc.AddPattern("*.gladebuilder");
-			fc.OnSelectionChanged += BtnConfigFileSelectionChanged;
+			FileChooserButtonWrapper fc3 = new FileChooserButtonWrapper("Please select a .gladebuilder file", BtnSelectConfigFile,EntryConfigFile,FileChooserAction.Open);
+			fc3.AddPattern("*.gladebuilder");
+			fc3.OnSelectionChanged += BtnConfigFileSelectionChanged;
 
 			BtnGenerate.Clicked += BtnGenerateClicked;
 
@@ -132,9 +127,9 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 				if (String.IsNullOrEmpty(fn))
 				{
 					saveAs();
+					fn = EntryConfigFile.Text.Trim();
 				}
 
-				fn = EntryConfigFile.Text.Trim();
 				if (saveFile(fn))
 				{
 					Sharpend.Glade.GladeBuilder.generateCode(fn,true);
@@ -146,7 +141,7 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			} catch (Exception ex)
 			{
 				textviewMessages.Buffer.Text = ex.ToString();
-			}
+			} 
 		}
 
 
@@ -252,7 +247,9 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// </param>
 		private void loadData(String filename)
 		{
+
 			TreeList.Rows.Clear();
+			textviewMessages.Buffer.Clear();
 
 			XmlDocument doc = new XmlDocument();
 			doc.Load(filename);
@@ -339,9 +336,15 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// <param name='fullname'>
 		/// Fullname.
 		/// </param>
-		private void doSave(String fullname)
+		private void doSave(String fullname, bool clear)
 		{
 			XmlDocument d = new XmlDocument();
+
+			if (clear)
+			{
+				d.Load(fullname);
+				d.RemoveAll();
+			}
 
 			XmlElement config = d.CreateElement("configuration");
 			d.AppendChild(config);
@@ -366,31 +369,21 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			}
 
 			FileInfo fi = new FileInfo(fullname);
-
-			bool save = true;
+			bool save = true;	
+			bool clear = false;
 			if (fi.Exists) 
 			{
-//				save = false;
-//				var dialog = new MessageDialog(this,DialogFlags.Modal,MessageType.Info,ButtonsType.OkCancel,
-//				                               "File " + fi.FullName + " exists, overwrite ?",new object[0]); 	
-//				int res = dialog.Run ();
-//				if ((ResponseType) res == ResponseType.Ok) {
-//					save = true;
-//					fi.Delete();
-//				}
-//
-//				dialog.Destroy();
 				save = false;
 				if (Message.ShowInfoMessage("File " + fi.FullName + " exists, overwrite ?",this) == ResponseType.Ok)
 				{
 					save = true;
-					fi.Delete();
+					clear = true;
 				}
 			}
-
+		
 			if (save)
 			{
-				doSave(fullname);
+				doSave(fullname,clear);
 				return true;
 			}
 

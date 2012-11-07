@@ -163,6 +163,18 @@ namespace Sharpend.GtkSharp
 			restoreData();
 		}
 
+		/// <summary>
+		/// fired when the filechooser selection is changed
+		/// 
+		/// pay attention, if you delete the current selected file, this event will occur too !
+		/// 
+		/// </summary>
+		/// <param name='sender'>
+		/// Sender.
+		/// </param>
+		/// <param name='e'>
+		/// E.
+		/// </param>
 		void HandleFileChooserSelectionChanged (object sender, EventArgs e)
 		{
 			if (Chooser.Filename == null)
@@ -187,27 +199,35 @@ namespace Sharpend.GtkSharp
 		}
 
 		/// <summary>
+		/// initialize (create if not exist) a config file
+		/// </summary>
+		private void initConfig()
+		{
+			if (String.IsNullOrEmpty(ConfigFile))
+			{
+				System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getApplicationConfig();
+				if (fi == null)
+				{
+					fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
+				}
+			} else
+			{
+				System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile(ConfigFile);
+				if (fi == null)
+				{
+					throw new Exception("configfile: " + ConfigFile + " does not exist! ");
+				}
+			}
+		}
+
+		/// <summary>
 		/// save path of selected file or folder in the config
 		/// </summary>
 		private void storeData()
 		{
 			if (!String.IsNullOrEmpty(EntryPath.Text))
 			{
-				if (String.IsNullOrEmpty(ConfigFile))
-				{
-					System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getApplicationConfig();
-					if (fi == null)
-					{
-						fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
-					}
-				} else
-				{
-					System.IO.FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile(ConfigFile);
-					if (fi == null)
-					{
-						throw new Exception("configfile: " + ConfigFile + " does not exist! ");
-					}
-				}
+				initConfig();
 
 				String xp = "/configuration/chooser/chooser_" + Chooser.Name;
 				Sharpend.Configuration.ConfigurationManager.setValue(xp,EntryPath.Text,true);
@@ -219,6 +239,8 @@ namespace Sharpend.GtkSharp
 		/// </summary>
 		private void restoreData()
 		{
+			initConfig();
+
 			String xp = "/configuration/chooser/chooser_" + Chooser.Name;
 			String cp = Sharpend.Configuration.ConfigurationManager.getString(xp,true);
 			if (!String.IsNullOrEmpty(ConfigFile))

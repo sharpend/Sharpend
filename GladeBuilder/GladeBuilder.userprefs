@@ -1,20 +1,27 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GladeBuilder/glade.gladebuilder">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../Sharpend/GtkSharp/Docking/DockContainer.cs">
     <Files>
-      <File FileName="GladeBuilder/builderImplementation.cs" Line="80" Column="130" />
-      <File FileName="GladeBuilder/glade.gladebuilder" Line="1" Column="1" />
+      <File FileName="../Sharpend/GtkSharp/Widgets/FileChooserButtonWrapper.cs" Line="180" Column="1" />
+      <File FileName="GladeBuilder/builderImplementation.cs" Line="139" Column="1" />
+      <File FileName="GladeBuilder/MainWindow.cs" Line="43" Column="1" />
+      <File FileName="../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="40" Column="34" />
+      <File FileName="../Sharpend/GtkSharp/Docking/DockContainer.cs" Line="50" Column="27" />
+      <File FileName="../Sharpend/GtkSharp/Widgets/CustomWidget.cs" Line="37" Column="31" />
+      <File FileName="../Sharpend/Utils/CachedPictureList.cs" Line="32" Column="33" />
+      <File FileName="../Sharpend/Glade/GladeBuilder.cs" Line="47" Column="1" />
+      <File FileName="../Sharpend/Glade/glade_transform.xsl" Line="23" Column="1" />
+      <File FileName="../Sharpend/Glade/glade_transform2.xsl" Line="24" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="GladeBuilder" expanded="True">
-            <Node name="glade.gladebuilder" selected="True" />
-          </Node>
+          <Node name="GladeBuilder" expanded="True" />
           <Node name="Sharpend" expanded="True">
-            <Node name="Configuration" expanded="True" />
             <Node name="GtkSharp" expanded="True">
-              <Node name="Widgets" expanded="True" />
+              <Node name="Docking" expanded="True">
+                <Node name="DockContainer.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
@@ -34,7 +41,14 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/GladeBuilder/GladeBuilder/builderImplementation.cs" line="137" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/GladeBuilder/GladeBuilder/builderImplementation.cs" line="255" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/GladeBuilder/GladeBuilder/builderImplementation.cs" line="370" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/FileChooserButtonWrapper.cs" line="180" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/GladeBuilder/GladeBuilder/builderImplementation.cs" line="139" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Glade/GladeBuilder.cs" line="97" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
