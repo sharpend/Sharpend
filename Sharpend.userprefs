@@ -1,16 +1,30 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/GtkSharp/Docking/PlaceholderWindow.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Sharpend/GtkSharp/Toolbar/CommandToolButton.cs" Line="27" Column="1" />
-      <File FileName="Sharpend/Utils/DBus/DBusBaseProxy.cs" Line="1" Column="1" />
-      <File FileName="Sharpend/GtkSharp/Docking/DockFrame.cs" Line="251" Column="20" />
-      <File FileName="Sharpend/GtkSharp/Docking/PlaceholderWindow.cs" Line="80" Column="3" />
-      <File FileName="Sharpend/GtkSharp/Utils.cs" Line="102" Column="16" />
+      <File FileName="Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs" Line="34" Column="31" />
+      <File FileName="Sharpend/Utils/VirtualGrid/VirtualTreeRow.cs" Line="354" Column="12" />
+      <File FileName="Sharpend/Utils/VirtualGrid/VirtualTreeList.cs" Line="134" Column="27" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" />
+        <State expanded="True">
+          <Node name="Sharpend" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="GtkSharp" expanded="True">
+              <Node name="Docking" expanded="True" />
+              <Node name="Widgets" expanded="True" />
+            </Node>
+            <Node name="Utils" expanded="True">
+              <Node name="VirtualGrid" expanded="True">
+                <Node name="VirtualTreeList.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="TaskManager" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
+        </State>
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />
@@ -24,7 +38,11 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="331" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Utils/Reflection.cs" line="250" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="330" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <AuthorInfo Name="Dirk Lehmeier" Email="sharpend_develop@yahoo.de" Copyright="Dirk Lehmeier" Company="" Trademark="" />

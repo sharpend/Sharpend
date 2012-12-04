@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="glib-sharp">
       <HintPath>..\..\gtk-sharp\gtk-sharp\glib\glib-sharp.dll</HintPath>
+      <Package>glib-sharp-2.0</Package>
     </Reference>
     <Reference Include="NDesk.DBus">
       <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus-1.0\NDesk.DBus.dll</HintPath>

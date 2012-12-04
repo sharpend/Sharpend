@@ -310,6 +310,67 @@ namespace Sharpend.Utils
 			return String.Empty;
 		}
 
+		/// <summary>
+		/// Executes a shell/commandline command
+		/// 
+		/// If an exception occurs the exception is catched and the function returns false !
+		/// 
+		/// </summary>
+		/// <returns>
+		/// The command.
+		/// </returns>
+		/// <param name='path'>
+		/// If set to <c>true</c> path.
+		/// </param>
+		/// <param name='commandname'>
+		/// If set to <c>true</c> commandname.
+		/// </param>
+		/// <param name='username'>
+		/// If set to <c>true</c> username.
+		/// </param>
+		/// <param name='arguments'>
+		/// If set to <c>true</c> arguments.
+		/// </param>
+		/// <param name='output'>
+		/// the output of the commandline command or the exception string if an exception occurs
+		/// </param>
+		/// <param name='RedirectStandardOutput'>
+		/// If set to <c>true</c> redirect standard output.
+		/// </param>
+		/// <param name='UseShellExecute'>
+		/// If set to <c>true</c> use shell execute.
+		/// </param>
+		public static bool executeCommand(String path, String commandname, String username, String arguments, 
+		                           out string output, bool RedirectStandardOutput=true, bool UseShellExecute=false)
+		{
+			output = String.Empty;
+			try
+			{
+				//System.Diagnostics.Process p = new System.Diagnostics.Process();
+				using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+				{
+					p.StartInfo.FileName = commandname;
+					p.StartInfo.UserName = username;
+					//p.StartInfo.Arguments = "\"" + arguments + "\"";
+					p.StartInfo.Arguments = arguments;
+
+					p.StartInfo.RedirectStandardOutput = RedirectStandardOutput;
+					p.StartInfo.UseShellExecute = UseShellExecute;
+					//p.StartInfo.CreateNoWindow = true;
+					
+					p.Start();
+					output = p.StandardOutput.ReadToEnd();
+					p.WaitForExit();
+					//p.Close();
+					return true;
+				}
+			} catch (Exception ex)
+			{
+				output = ex.ToString();
+				return false;
+			}
+		}
+
 
 		
 	}//class

@@ -32,15 +32,46 @@ namespace Palabras{
 		Gtk.Alignment headerAlign;
 		static Gdk.Cursor handCursor = new Gdk.Cursor (Gdk.CursorType.Hand2);
 		private String spanishword = String.Empty;
-		
+		protected static log4net.ILog log;
+
+		public String Language1 {
+			get;
+			set;
+		}
+
+		public String Language2 {
+			get;
+			set;
+		}
+
+		public String TranslationsFile {
+			get;
+			set;
+		}
+
 		public static TomboyProxy Proxy
 		{
 			get;
 			private set;
 		}
-		
-		public void init() 
+
+		public PalabrasWindow(String name,String translationsfile,String lng1, String lng2)
+			: this (name)
 		{
+			TranslationsFile = translationsfile;
+			Language1 = lng1;
+			Language2 = lng2;
+			myinit();
+		}
+
+		public void init()
+		{
+		}
+
+		public void myinit() 
+		{
+			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 			loadData();		
 			showRandomWord();
 			initBus();
@@ -65,7 +96,10 @@ namespace Palabras{
 			btnNewWord.Clicked += HandleBtnNewWordClicked;
 			btnWeb.Clicked += HandleBtnWebClicked;
 			btnSearch.Clicked += HandleBtnSearchClicked;
-			
+
+			log.Debug("Lng1" + Language1);
+			log.Debug("Lng2" + Language2);
+
 			GLib.Timeout.Add (10000, () => {
 					showRandomWord();
 					return true;
@@ -76,7 +110,7 @@ namespace Palabras{
 		void HandleBtnSearchClicked (object sender, EventArgs e)
 		{
 			String word = entry1.Text.Trim();
-			XmlNode nd = doc.SelectSingleNode("//word[(translation/@language='es') and (translation = '"+word+"')]");
+			XmlNode nd = doc.SelectSingleNode("//word[(translation/@language='"+Language2+"') and (translation = '"+word+"')]"); //TODO language ??
 			showWord(nd);
 		}
 
@@ -100,12 +134,20 @@ namespace Palabras{
 		{
 			if (doc == null)
 			{
-				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("spanish.xml");
-				
+				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile(TranslationsFile);
+
+				if (fi == null)
+				{
+					throw new Exception("Translations file does not exist: " + TranslationsFile);
+				}
+
 				if (fi.Exists)
 				{
 					doc = new XmlDocument();
 					doc.Load (fi.FullName);
+				} else
+				{
+					throw new Exception("Translations file does not exist: " + fi.FullName);
 				}
 			}
 		}
@@ -118,7 +160,7 @@ namespace Palabras{
 			//Connection.Open(
 						
 			//Console.WriteLine("xxx");
-			Proxy = new TomboyProxy(doc);
+			Proxy = new TomboyProxy(doc,Language1,Language2, TranslationsFile);
 			//Console.WriteLine("endinitBus");
 		}
 		
@@ -136,14 +178,17 @@ namespace Palabras{
 			
 			if (String.IsNullOrEmpty(srclng) || String.IsNullOrEmpty(destlng))
 			{
-				srclng = "de";
-				destlng = "es";
+				log.Debug("set default" + Language1 + "-" + Language2);
+				srclng = Language1;
+				destlng = Language2;
 			}
 			
 			XmlNode src = node.SelectSingleNode("./translation[@language = '" + srclng + "']");
 			XmlNode dest = node.SelectSingleNode("./translation[@language = '" + destlng + "']");
-			
-			XmlNode sp = node.SelectSingleNode("./translation[@language = 'es']");
+
+			log.Debug("src dest: " + srclng + "-" + destlng);
+
+			XmlNode sp = node.SelectSingleNode("./translation[@language = '"+Language2+"']"); //TODO language ??
 			spanishword = sp.InnerText;			
 			
 			lblWord.Text  = src.InnerText;
@@ -152,8 +197,8 @@ namespace Palabras{
 				
 		public void showRandomWord()
 		{
-			String srclng = "de";
-			String destlng = "es";
+			String srclng = Language1;
+			String destlng = Language2;
 			
 			Random rnd = new Random();
 			
@@ -164,10 +209,10 @@ namespace Palabras{
 			int l = rnd.Next(1,3);
 			if (l == 1)
 			{
-			 srclng = "es";
-			 destlng = "de";
+				srclng = Language2;
+				destlng = Language1;
 			}
-			
+			log.Debug("rnd: " + Language1 + "-" + Language2);
 			
 			XmlNode nd = doc.SelectSingleNode("//word[" + idx.ToString() + "]" );
 			

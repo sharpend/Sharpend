@@ -138,6 +138,7 @@
     <Compile Include="GtkSharp\Widgets\ProgressWindowImplementation.cs" />
     <Compile Include="GtkSharp\Widgets\FileChooserButtonWrapper.cs" />
     <Compile Include="GtkSharp\Widgets\DockcontainerWidget.cs" />
+    <Compile Include="GtkSharp\Widgets\DatePicker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
