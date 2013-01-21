@@ -91,7 +91,8 @@ namespace Palabras
 //					PopupWindow.Language1 = Language1;
 //					PopupWindow.Language2 = Language2;
 //					PopupWindow.TranslationsFile = TranslationsFile;
-					PopupWindow.Destroyed += HandlePopupWindowDestroyed;
+					//PopupWindow.Destroyed += HandlePopupWindowDestroyed;
+					PopupWindow.DeleteEvent += HandleDeleteEvent;
 				}
 				log.Debug("before show");
 				PopupWindow.Show();
@@ -100,6 +101,17 @@ namespace Palabras
 			{
 				log.Error(ex);
 			}
+		}
+
+		void HandleDeleteEvent (object o, DeleteEventArgs args)
+		{
+			log.Debug("HandleDeleteEvent");
+			
+			if (PopupWindow != null)
+			{
+				PopupWindow = null;
+			}
+			mainloop.Quit();
 		}
 
 		static void HandlePopupWindowDestroyed (object sender, EventArgs e)
