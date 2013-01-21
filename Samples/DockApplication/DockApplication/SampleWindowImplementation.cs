@@ -26,17 +26,54 @@ using Sharpend.GtkSharp;
 namespace DockApplication{	public partial class SampleWindow
 						: DockableWidget	{		public void init() 
 		{
+			Gtk.Button btn = new Gtk.Button("Date");
+			btn.Clicked += HandleButtonClicked;
+			this.box3.PackEnd(btn,true,true,0);
+		}
 
+		void HandleButtonClicked (object sender, EventArgs e)
+		{
+			PopupWindow pw = DatePicker.ShowAsPopup(DateTime.Now,false,true);
+			//pw.SetSizeRequest(800,600);
+			//PopupWindow pw = DatePicker.ShowAsPopup();
+			//PopupWindow pw = DatePicker.ShowAsPopup(DateTime.Now);
+			(pw.CurrentWidget as DatePicker).OnChanged += HandleOnDateChanged;
+			pw.ShowAll();
+		}
+
+		void HandleOnDateChanged (object sender, EventArgs e)
+		{
+			Console.WriteLine(sender);
+			DatePicker dt = sender as DatePicker;
+			Console.WriteLine(dt.Date + "-" + dt.Date2);
 		}
 
 		public void ShowText(object sender, EventArgs e)
 		{
-			String s = sender as String;
+			//String s = sender as String;
+			String s = "call: ";
+
+			String xx = sender as String;
+			if (xx != null)
+			{
+				s+=xx;
+			}
+
 			if (!String.IsNullOrEmpty(s))
 			{
 				//textview1.Buffer.Clear();
 				s = s + "\n";
 				textview1.Buffer.Text += s;
+			}
+		}
+
+		public void ShowText2(object sender, EventArgs e)
+		{
+			String s = sender as String;
+			if (!String.IsNullOrEmpty(s))
+			{
+				//textview1.Buffer.Clear();
+				textview1.Buffer.Text += "\n I'm Showtext2";
 			}
 		}
 	} //class} //namespace

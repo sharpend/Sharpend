@@ -1,30 +1,67 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../Sharpend/GtkSharp/Widgets/MainWindow.cs">
     <Files>
-      <File FileName="DockApplication/DockframeWindow.cs" Line="21" Column="6" />
-      <File FileName="DockApplication/DockframeWindowImplementation.cs" Line="61" Column="16" />
-      <File FileName="../../Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs" Line="133" Column="7" />
-      <File FileName="DockApplication/windows.config" Line="46" Column="10" />
-      <File FileName="DockApplication/toolbar.config" Line="29" Column="62" />
-      <File FileName="../../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="29" Column="1" />
+      <File FileName="../../Sharpend/Utils/VirtualGrid/VirtualGridRow.cs" Line="327" Column="30" />
+      <File FileName="../../Sharpend/Utils/VirtualGrid/VirtualTreeRow.cs" Line="132" Column="8" />
+      <File FileName="DockApplication/TreelistWindowImplementation.cs" Line="115" Column="4" />
+      <File FileName="../../Sharpend/Utils/VirtualGrid/VirtualTreeList.cs" Line="54" Column="87" />
+      <File FileName="DockApplication/tree.xml" Line="13" Column="47" />
+      <File FileName="DockApplication/SampleWindowImplementation.cs" Line="58" Column="22" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/DatePicker.cs" Line="9" Column="31" />
+      <File FileName="../../Sharpend/GtkSharp/Docking/PopupWindow.cs" Line="42" Column="3" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="138" Column="4" />
+      <File FileName="DockApplication/SampleWindow.cs" Line="135" Column="20" />
+      <File FileName="../../Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" Line="553" Column="31" />
+      <File FileName="../../Sharpend/Utils/VirtualGrid/VirtualGridCell.cs" Line="46" Column="42" />
+      <File FileName="../../Sharpend/Utils/VirtualGrid/StandardGrid.cs" Line="276" Column="43" />
+      <File FileName="DockApplication/windows.config" Line="22" Column="74" />
+      <File FileName="DockApplication/toolbar.config" Line="31" Column="61" />
+      <File FileName="DockApplication/TreelistWindow.cs" Line="1" Column="1" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/MainWindow.cs" Line="673" Column="23" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True" selected="True">
+          <Node name="DockApplication" expanded="True" />
+          <Node name="Sharpend" expanded="True">
+            <Node name="GtkSharp" expanded="True">
+              <Node name="Docking" expanded="True" />
+              <Node name="Widgets" expanded="True" />
+            </Node>
+          </Node>
+        </State>
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
+        <State>
+          <Value>vr.Datas</Value>
+          <Value>row.Datas</Value>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/DockframeWindowImplementation.cs" line="37" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="726" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="729" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/TreelistWindowImplementation.cs" line="95" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/TreelistWindowImplementation.cs" line="113" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="408" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="541" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="457" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Utils/VirtualGrid/VirtualTreeRow.cs" line="80" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/DockableWidget.cs" line="45" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/MainWindow.cs" line="652" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/MainWindow.cs" line="695" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/MainWindow.cs" line="668" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/GtkSharp/Widgets/MainWindow.cs" line="673" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="../../Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="455" offsetX="582" offsetY="6834" expression="childrow.Data" liveUpdate="False" />
+    <Watch file="../../Sharpend/GtkSharp/TreeList/GtkListTreeView.cs" line="537" offsetX="302" offsetY="8109" expression="Tree.Model" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

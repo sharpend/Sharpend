@@ -70,6 +70,8 @@
     <Compile Include="SampleWindowImplementation.cs" />
     <Compile Include="DockframeWindow.cs" />
     <Compile Include="DockframeWindowImplementation.cs" />
+    <Compile Include="TreelistWindow.cs" />
+    <Compile Include="TreelistWindowImplementation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -85,6 +87,9 @@
     <None Include="toolbar.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="glade.gladebuilder" />
+    <None Include="dockapplication.gladebuilder" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="tree.xml" />
   </ItemGroup>
 </Project>

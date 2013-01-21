@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<grid>
+	<columns>
+		<column renderer="Gtk.CellRendererPixbuf,gtk-sharp" type="Gdk.Pixbuf,gdk-sharp" >  
+			<name>Pic</name>
+		</column>
+		
+		<column editable="true" editablecolumn="canedit"> 
+			<name>Title</name>
+		</column>
+		
+		<column visible="true" type="System.Boolean"> 
+			<name>canedit</name>
+		</column>
+		
+		<!--
+		
+		
+		-->
+		
+	</columns>
+</grid>
