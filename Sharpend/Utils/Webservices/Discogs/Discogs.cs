@@ -29,6 +29,9 @@ using System.Collections.Generic;
 #if !GTK2
 namespace Sharpend.Utils.Webservices.Discogs
 {
+	/// <summary>
+	/// Discogs Webservice Client
+	/// </summary>
 	public class Discogs
 	{
 		private String baseUrl = "http://api.discogs.com/";
@@ -37,20 +40,34 @@ namespace Sharpend.Utils.Webservices.Discogs
 		{
 		}
 		
-		
+		/// <summary>
+		/// Get Artist with the specified artistname
+		/// </summary>
+		/// <returns>
+		/// The artist.
+		/// </returns>
+		/// <param name='artist'>
+		/// Artist.
+		/// </param>
 		public Artist GetArtist(String artist)
 		{
 			String data = getData(this.baseUrl + "artist/" + artist);
 			return Artist.CreateInstance(data);
 		}
 
-    public Release GetRelease(String id)
-    {
-      id = Uri.EscapeDataString(id);
-      String data = getData(this.baseUrl + "releases/" + id);
-      return Release.CreateInstance(data);      
-    }
+	    public Release GetRelease(String id)
+	    {
+	      id = Uri.EscapeDataString(id);
+	      String data = getData(this.baseUrl + "releases/" + id);
+	      return Release.CreateInstance(data);      
+	    }
 
+		/// <summary>
+		/// Search the specified query.
+		/// </summary>
+		/// <param name='query'>
+		/// Query.
+		/// </param>
 		public List<SearchResult> Search(String query)
 		{
 			query = Uri.EscapeDataString(query);

@@ -127,11 +127,38 @@ namespace Sharpend.Utils
                     {
                         Delegate del = (Delegate)fi.GetValue(sender);
                         if (del != null)
-                        {                                       
+                        {             
                             if (del.GetInvocationList().Length > 0)
                             {
+								Console.WriteLine("delegate already hooked, and only one is allowed! ->" + eventname + " sender: " + sender + " target: " + target);
                                 return;
                             }
+                        }
+                    }
+                }
+
+				if (multi1.Equals("Multi",StringComparison.OrdinalIgnoreCase))
+                {
+					//Console.WriteLine("do multi hook: " + eventname + " sender: " + sender + " target: " + target);
+                    FieldInfo fi = sender.GetType().GetField(eventname, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                    if (fi != null)
+                    {
+                        Delegate del = (Delegate)fi.GetValue(sender);
+                        if (del != null)
+                        {             
+                            Delegate[] lst = del.GetInvocationList();
+							if (lst.Length > 0)
+							{
+								foreach (Delegate hd in lst)
+								{
+									//Console.WriteLine("delegate: " + hd.Target.GetType());
+									if (hd.Target.GetType().ToString() == target.GetType().ToString())
+									{
+										Console.WriteLine("delegate already hooked to target: " + eventname + " sender: " + sender + " target: " + target);
+										return;
+									}
+								}
+							}	
                         }
                     }
                 }

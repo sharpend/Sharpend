@@ -20,14 +20,16 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 #if !GTK2
 namespace Sharpend.Utils.Webservices.Discogs
 {
 	public class Artist
 	{
-		private JObject data;
+		private JToken data;
 		
 		
 		public String Name {
@@ -50,7 +52,9 @@ namespace Sharpend.Utils.Webservices.Discogs
 			  return (String)data["resp"]["artist"]["data_quality"];
 			}
 		}
-		
+
+		public List<Image> Images { get; private set; }
+
 //		public String DataQuality {
 //			get
 //			{
@@ -59,9 +63,24 @@ namespace Sharpend.Utils.Webservices.Discogs
 //		}
 		
 		
-		private Artist (JObject data)
+		private Artist (JToken data)
 		{
 			this.data = data;
+
+			if (data["resp"]["artist"]["images"] != null)
+			{
+				var imagelist = from c in data["resp"]["artist"]["images"].Children() select c;
+				Images = new List<Image>(imagelist.Count());
+
+				foreach (JToken tok in imagelist)
+				{
+					Images.Add(Image.CreateInstance(tok));
+				}
+			} else
+			{
+				Images = new List<Image>(0);
+			}
+
 		}
 				
 		public static Artist CreateInstance(String json)

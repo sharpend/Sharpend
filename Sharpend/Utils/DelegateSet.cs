@@ -57,7 +57,12 @@ namespace Sharpend.Utils
 		{
 			delegates.Add(new DelegateData(target,functionname,eventname,sourcename));
 		}
-		
+
+		public void addDelegate(String target, String functionname, String eventname, String sourcename, String multi)
+		{
+			delegates.Add(new DelegateData(target,functionname,eventname,sourcename,multi));
+		}
+
 		public static DelegateSet CreateInstance(XmlNode node)
 		{
 			DelegateSet ds = new DelegateSet();
@@ -70,8 +75,15 @@ namespace Sharpend.Utils
 				String functionname = XmlHelper.getAttributeValue(nd,"function");
 				String eventname = XmlHelper.getAttributeValue(nd,"event");
 				String sourcename = XmlHelper.getAttributeValue(nd,"source");
+				String multi = XmlHelper.getAttributeValue(nd,"multi");
 				
-				ds.addDelegate(target,functionname,eventname,sourcename);
+				if (!String.IsNullOrEmpty(multi))
+				{
+					ds.addDelegate(target,functionname,eventname,sourcename,multi);
+				} else
+				{
+					ds.addDelegate(target,functionname,eventname,sourcename);
+				}
 			}
 			
 			return ds;

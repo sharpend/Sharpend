@@ -45,6 +45,11 @@ namespace Sharpend.Utils
 			get;
 			private set;
 		}
+
+		public String Multi {
+			get;
+			private set;
+		}
 		
 		/// <summary>
 		/// Serialization only
@@ -59,6 +64,16 @@ namespace Sharpend.Utils
 			FunctionName = functionname;
 			EventName = eventname;
 			SourceName = sourcename;
+			Multi = "Single";
+		}
+
+		public DelegateData (String target, String functionname, String eventname, String sourcename, String multi)
+		{
+			Target = target;
+			FunctionName = functionname;
+			EventName = eventname;
+			SourceName = sourcename;
+			Multi = multi;
 		}
 
 		#region IXmlSerializable implementation
@@ -73,6 +88,7 @@ namespace Sharpend.Utils
 			FunctionName = reader.GetAttribute("FunctionName");
 			EventName = reader.GetAttribute("EventName");
 			SourceName = reader.GetAttribute("SourceName");
+			Multi = reader.GetAttribute("Multi");
 			reader.Read(); //because there is no endelement
 		}
 
@@ -83,7 +99,7 @@ namespace Sharpend.Utils
 			writer.WriteAttributeString("FunctionName",FunctionName);
 			writer.WriteAttributeString("EventName",EventName);
 			writer.WriteAttributeString("SourceName",SourceName);
-			
+			writer.WriteAttributeString("Multi",Multi);
 			writer.WriteEndElement();
 		}
 		#endregion

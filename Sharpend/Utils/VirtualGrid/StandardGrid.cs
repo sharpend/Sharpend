@@ -260,10 +260,37 @@ namespace Sharpend.Utils
                 XmlNodeList columns = nd.SelectNodes(".//column");
                 foreach (XmlNode nd2 in columns)
                 {
+					object data = null;
                     String columnname = nd2.SelectSingleNode("name").InnerText;
                     String columndata = nd2.SelectSingleNode("data").InnerText;
-										
-                    VirtualGridCell cell = row.addGridColumn(columnname, columndata);
+
+					if (columnname == null)
+					{
+						throw new Exception("columnname is null");
+					}
+
+					//Console.WriteLine("col" + columnname);
+					VirtualGridHeaderColumn header = getHeaderByName(columnname);
+					if ((OnGetData == null) && (header != null) && (!String.IsNullOrEmpty(header.ColumnType)))
+					{
+						Type tp = Type.GetType(header.ColumnType);
+						data = Convert.ChangeType(columndata,tp);
+					} else
+					{
+						if (OnGetData != null)
+						{
+							OnGetData(columnname,columndata,out data);
+						} else 
+						{
+							data = columndata;
+						}
+					}
+					if (data == null) //TODO correct ?? 
+					{
+						throw new Exception("data is null");
+					}
+
+                    VirtualGridCell cell = row.addGridColumn(columnname, data);
 					if (cell != null)
 					{
 						cell.CustomOption = XmlHelper.getAttributeValue(nd2,"customoption");

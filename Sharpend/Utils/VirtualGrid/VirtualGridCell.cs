@@ -40,7 +40,7 @@ namespace Sharpend.Utils
 			}
 			set
 			{
-				if (!String.IsNullOrEmpty(HeaderColumn.ColumnType))
+				if ((!String.IsNullOrEmpty(HeaderColumn.ColumnType)) && (value != null))
 				{
 					Type tp = Type.GetType(HeaderColumn.ColumnType);
 					data = Convert.ChangeType(value,tp);

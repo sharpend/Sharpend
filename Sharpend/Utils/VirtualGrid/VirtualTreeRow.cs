@@ -42,20 +42,22 @@ namespace Sharpend.Utils
 
         public String CustomOption { get; set; }
 
-        public object AsImage
-        {
-            get
-            {
-                try
-                {
-                    byte[] buf = VirtualGridRow.getImage(NodeValue,this.Grid);
-                    return new Gdk.Pixbuf(buf);
-                } catch
-                {
-                    return null;
-                }
-            }
-        }
+		//DL rempixbuf
+//        public object AsImage
+//        {
+//            get
+//            {
+//                try
+//                {
+//                    byte[] buf = VirtualGridRow.getImage(NodeValue,this.Grid);
+//                    return new Gdk.Pixbuf(buf);
+//                } catch (Exception ex)
+//                {
+//					Console.WriteLine("VirtualTreeRow.AsImage: "  + ex.ToString());
+//                    return null;
+//                }
+//            }
+//        }
 		
 		public VirtualGridRow BaseRow {
 			get;
@@ -82,11 +84,11 @@ namespace Sharpend.Utils
 						i++;
 					}
 					
-					//swap
-					int idx = BaseRow.getCellIndex(Parent.Name);
-					object tmp = ret[0];
-					ret[0] = ret[idx];
-					ret[idx] = tmp;
+					//swap  ... why ???  //DL rempixbuf
+//					int idx = BaseRow.getCellIndex(Parent.Name);
+//					object tmp = ret[0];
+//					ret[0] = ret[idx];
+//					ret[idx] = tmp;
 				}
 				return ret;
 				
@@ -127,33 +129,33 @@ namespace Sharpend.Utils
 				//return ret;
 			}	
 		}
-		
-		public object[] DataWithImage
-		{
-			get 
-			{
-				object[] ret;
-				//VirtualGridRow row = FirstRow;
-				if (BaseRow != null)
-				{
-					ret = new object[BaseRow.ColumnCount];
-					//ret = new object[1];
-					//ret[0] = AsImage;
-					
-					int i=0;
-					foreach (object o in BaseRow.Datas)
-					{
-						ret[i] = o;
-						i++;
-					}
-				} else
-				{
-					ret = new object[1];
-					ret[0] = NodeValue;
-				}
-				return ret;
-			}
-		}
+		//DL rempixbuf
+//		public object[] DataWithImage
+//		{
+//			get 
+//			{
+//				object[] ret;
+//				//VirtualGridRow row = FirstRow;
+//				if (BaseRow != null)
+//				{
+//					ret = new object[BaseRow.ColumnCount];
+//					//ret = new object[1];
+//					//ret[0] = AsImage;
+//					
+//					int i=0;
+//					foreach (object o in BaseRow.Datas)
+//					{
+//						ret[i] = o;
+//						i++;
+//					}
+//				} else
+//				{
+//					ret = new object[1];
+//					ret[0] = NodeValue;
+//				}
+//				return ret;
+//			}
+//		}
 		
 		
 		public VirtualGridHeaderColumn HeaderColumn {
@@ -317,7 +319,17 @@ namespace Sharpend.Utils
 				//Console.WriteLine("prnt");
 				foreach (VirtualGridRow row in Parent.Rows)
 				{
-					String val = (String)row.getData(Name); //TODO convert
+					//String val = (String)row.getData(Name); //TODO convert
+					String val;
+					object data = row.getData(Name);
+					if (Grid.OnGetComparisionData != null)
+					{
+						Grid.OnGetComparisionData(Name,data, out val);
+					} else
+					{
+						val = (String)data;
+					}
+
 					//Console.WriteLine("val2:" + val + "-" + NodeValue);
                     if (val != null)
                     {
@@ -366,8 +378,19 @@ namespace Sharpend.Utils
                             String check = (String)row.getData(this.HeaderColumn); //TODO convert ?
                             if (!String.IsNullOrEmpty(check) && (check.Equals(NodeValue)))
                             {
-                                String data = (String)row.getData(this.HeaderColumn.ChildColumn); //TODO convert ?
-                                addData(Name, data, this.HeaderColumn.ChildColumn,row);
+                                object data = row.getData(this.HeaderColumn.ChildColumn); //TODO convert ?
+                               
+								String cmp = null;
+								if (Grid.OnGetComparisionData != null)
+								{
+									Grid.OnGetComparisionData(this.HeaderColumn.ColumnName,data,out cmp);
+								} else
+								{
+									cmp = (String)data;
+								}
+
+
+								addData(Name, cmp, this.HeaderColumn.ChildColumn,row);
                             }
                         }
                         //Grid.stopStopWatch("singlerow");
@@ -383,8 +406,26 @@ namespace Sharpend.Utils
                     foreach (VirtualGridRow row in Grid.Rows)
                     {
                         //Grid.startStopWatch("singlerow");
-                        String data = (String)row.getData(this.HeaderColumn); //TODO convert ?
-                        addData(Name, data, this.HeaderColumn,row);
+                        //String data = (String)row.getData(this.HeaderColumn); //TODO convert ?
+                        
+						//addData(Name, data, this.HeaderColumn,row);
+
+						//TODO refactor ... got same code  twice in here ... not really
+						// one time we use headercolumn one time hedercolumn.child...
+						object data = row.getData(this.HeaderColumn); //TODO convert ?
+                               
+						String cmp = null;
+						if (Grid.OnGetComparisionData != null)
+						{
+							Grid.OnGetComparisionData(this.HeaderColumn.ColumnName,data,out cmp);
+						} else
+						{
+							cmp = (String)data;
+						}
+
+
+						addData(Name, cmp, this.HeaderColumn,row);
+
                         //Grid.stopStopWatch("singlerow");
                     }
                     Grid.stopStopWatch("allrows");

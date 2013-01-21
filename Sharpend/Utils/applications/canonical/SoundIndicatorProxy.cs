@@ -1,5 +1,5 @@
 ////
-//// ISoundIndicator.cs
+////  SoundIndicatorProxy.cs
 ////
 ////  Author:
 ////       Dirk Lehmeier <sharpend_develop@yahoo.de>
@@ -18,7 +18,6 @@
 ////
 ////  You should have received a copy of the GNU Lesser General Public License
 ////  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
 //using System;
 //
 //#if DBUS
@@ -26,20 +25,39 @@
 //
 //namespace Sharpend.Utils.Applications.Canonical
 //{
-//	
-//	public delegate void SoundStateUpdateUpdateHandler(int state);
-//		
-//	[Interface("com.canonical.indicator.sound")]
-//	public interface ISoundIndicator
+//	public class SoundIndicatorProxy : DBusBaseProxy<ISoundIndicator>
 //	{
-//		bool BlacklistMediaPlayer(string player_desktop_name, bool blacklist);
-//	    bool IsBlacklisted(string player_desktop_name);
-//	    int GetSoundState();
-//	    //void EnableTrackSpecificItems((Err) player_object_path, string player_desktop_id);
-//	    //void EnablePlayerSpecificItems((Err) player_object_path, string player_desktop_id);
-//	    //event EventHandler<int> SoundStateUpdate;
-//		event SoundStateUpdateUpdateHandler SoundStateUpdate;
+//		public event SoundStateUpdateUpdateHandler OnSoundStateUpdate;
+//
+//		public int Volume {
+//			get;
+//			private set;
+//		}
+//		
+//		public SoundIndicatorProxy () : base("com.canonical.indicator.sound","/com/canonical/indicator/sound/service")
+//		{
+//			this.Register();
+//		}
+//
+//		public override void Register ()
+//		{
+//			base.Register ();	
+//			RemoteInterface.SoundStateUpdate += SoundChanged;
+//		}
+//
+//		public int GetVolume()
+//		{
+//			return RemoteInterface.GetSoundState();
+//		}
+//
+//		private void SoundChanged(int value)
+//		{
+//			Volume = value;
+//			if (OnSoundStateUpdate != null)
+//			{
+//				OnSoundStateUpdate(Volume);
+//			}
+//		}
 //	}
 //}
-//
 //#endif

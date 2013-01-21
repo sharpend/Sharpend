@@ -50,6 +50,9 @@ namespace Sharpend.Utils
 	/// <summary>
 	/// implements a virtual grid with columns, headers and rows
 	/// </summary>
+
+	public delegate void GetDataHandler(String columnname,object input, out object data);
+	public delegate void GetComparisionDataHandler(String columnname,object input, out string data);
 	public class VirtualTreeList
 	{
 		/// <summary>
@@ -87,7 +90,7 @@ namespace Sharpend.Utils
         /// <summary>
         /// soll pixbuf geladen werden
         /// </summary>
-        public bool LoadPixBuf { get; set; }
+        //public bool LoadPixBuf { get; set; }
 		
 		private object locker = new object(); 
 		//private System.Diagnostics.Stopwatch stopwatch;
@@ -115,7 +118,7 @@ namespace Sharpend.Utils
 				Console.WriteLine(s);
 			}
 		}
-		
+
 		public void startStopWatch(String key)
 		{
 			addLogMessage("start: " +  key);
@@ -155,7 +158,22 @@ namespace Sharpend.Utils
 			get;
 			set;
 		}
-		
+
+		/// <summary>
+		/// called before data will added in a tree cell
+		/// e.g. if you have a gridcell containing a pixbuf <column type=type="Gdk.Pixbuf,gdk-sharp"... but you have
+		/// loaded an xml with the filename inside you have to load the pixbuf
+		/// from the filename in this handler
+		/// </summary>
+		public GetDataHandler OnGetData=null;
+		/// <summary>
+		/// this is used if you want to group columns for a TreeList
+		/// if you have other objects then strings (e.g pixbuf see the above event)
+		/// then you have to return a string for comparision for the TreeList
+		/// e.g the filename of the pixbuf
+		/// </summary>
+		public GetComparisionDataHandler OnGetComparisionData=null;
+
 		public VirtualTreeList ()
 		{
 			HeaderColumns = new List<VirtualGridHeaderColumn>(100);
@@ -244,6 +262,22 @@ namespace Sharpend.Utils
             row.setData(columnName, data);
         }
         
+		/// <summary>
+		/// called after row.setData to inform a derived grid about changes
+		/// </summary>
+		/// <param name='row'>
+		/// Row.
+		/// </param>
+		/// <param name='columnName'>
+		/// Column name.
+		/// </param>
+		/// <param name='data'>
+		/// Data.
+		/// </param>
+		public virtual void afterSetData(VirtualGridRow row, String columnName, object data)
+		{	
+		}
+
 		public List<VirtualGridHeaderColumn> getHeaderColumns()
 		{
 			List<VirtualGridHeaderColumn> lst = null;

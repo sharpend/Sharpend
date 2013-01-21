@@ -185,31 +185,31 @@ namespace Sharpend.Utils
                 {
                     object data = getData(hc);
                     ret[i] = data;
-
-                    if (hc.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
-                    {
-                        ret[i] = null;
-                        if (Grid.LoadPixBuf)
-                        {
-                            try
-                            {
-                                if (data != null)
-                                {
-//                                    byte[] buf = getImage((String)data,this.Grid);
-//                                    ret[i] = new Gdk.Pixbuf(buf);
-
-									ret[i] = Sharpend.Utils.CachedPictureList.Instance.GetPicture((String)data);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-								//TODO logging
-                                Console.WriteLine(ex.ToString());
-                                ret[i] = null;
-								//throw ex;
-                            }
-                        }
-                    }
+					//DL rempixbuf
+//                    if (hc.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+//                    {
+//                        ret[i] = null;
+//                        if (Grid.LoadPixBuf)
+//                        {
+//                            try
+//                            {
+//                                if (data != null)
+//                                {
+////                                    byte[] buf = getImage((String)data,this.Grid);
+////                                    ret[i] = new Gdk.Pixbuf(buf);
+//
+//									ret[i] = Sharpend.Utils.CachedPictureList.Instance.GetPicture((String)data);
+//                                }
+//                            }
+//                            catch (Exception ex)
+//                            {
+//								//TODO logging
+//                                Console.WriteLine(ex.ToString());
+//                                ret[i] = null;
+//								//throw ex;
+//                            }
+//                        }
+//                    }
                     
                     i++;
                 }
@@ -232,7 +232,7 @@ namespace Sharpend.Utils
 			dataCache = new Dictionary<string, object>(100);
             CustomOption = String.Empty;
 		}
-		
+
 		public virtual void addCell(VirtualGridCell column)
 		{
 			Cells.Add(column);
@@ -243,9 +243,12 @@ namespace Sharpend.Utils
 			VirtualGridHeaderColumn hc = Grid.getHeaderByName(headername);
 			if (hc != null)
 			{
-				VirtualGridCell cell = new VirtualGridCell(Grid,this,hc,data);
-				dataCache.Add(headername.ToLower(),cell.Data);
+				VirtualGridCell cell = new VirtualGridCell(Grid,this,hc,null);
+				//dataCache.Add(headername.ToLower(),cell.Data);
 				addCell(cell);
+
+				setData(headername,data,false); //??
+
 				return cell;
 				//hc.addRow(this);
 			}
@@ -311,6 +314,10 @@ namespace Sharpend.Utils
 		
 		public object getData(VirtualGridHeaderColumn header)
 		{
+			if (header == null)
+			{
+				return null; //is this correct ?? 
+			}
 			
 			if (dataCache.ContainsKey(header.ColumnName.ToLower()))
 			{
@@ -320,6 +327,17 @@ namespace Sharpend.Utils
 			VirtualGridCell cell = getCell(header);
 			if (cell != null)
 			{
+				//DL rempixbuf
+//				if (Grid.OnGetData != null)
+//				{
+//					object o;
+//					Grid.OnGetData(header.ColumnName,cell.Data,out o);
+//					if (o != null)
+//					{
+//						return o;
+//					}
+//				}
+
 				return cell.Data;
 			}
 			
@@ -344,36 +362,53 @@ namespace Sharpend.Utils
 			return null;
 		}
 
+		/// <summary>
+		/// Sets or updates the data for this row
+		/// </summary>
+		/// <param name='columnName'>
+		/// Column name.
+		/// </param>
+		/// <param name='data'>
+		/// Data.
+		/// </param>
+		/// <param name='changed'>
+		/// Changed.
+		/// </param>
         public virtual void setData(String columnName, object data, bool changed)
         {
+			object dt;
+			dt = data;
+
+			if (Grid.OnGetData != null)
+			{
+				Grid.OnGetData(columnName,data,out dt);
+			}
+
 			VirtualGridCell cell = getCell(columnName);
 			if (cell != null)
 			{
-				cell.Data = data;
+				cell.Data = dt;
                 cell.Changed = changed;
                 if (dataCache.ContainsKey(columnName.ToLower()))
                 {
                     dataCache.Remove(columnName.ToLower());
-                    dataCache.Add(columnName.ToLower(), data);
-                }
+                    dataCache.Add(columnName.ToLower(), dt);
+                } else
+				{
+					dataCache.Add(columnName.ToLower(), dt);
+				}
+				Grid.afterSetData(this,columnName,dt);
                 return;
 			} else
 			{
-				addGridColumn(columnName,data);	
+				addGridColumn(columnName,dt);
+				Grid.afterSetData(this,columnName,dt);
 			}
-			
-//            foreach (VirtualGridCell cell in Cells)
-//            {
-//                if (cell.HeaderColumn.ColumnName.Equals(columnName,StringComparison.OrdinalIgnoreCase))
-//                {
-//                    
-//                }
-//            }
         }
 		
         public virtual void setData(String columnName, object data)
         {
-            setData(columnName, data, false);
+             setData(columnName, data, false);
         }
 
 		public String[] getValues(VirtualGridHeaderColumn without)
