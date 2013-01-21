@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+#if DBUS
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
@@ -94,7 +95,45 @@ namespace Sharpend.Utils
 				return false;
 			}	
 		}
-		
+
+		/// <summary>
+		/// release specified dbus interface
+		/// </summary>
+		/// <returns>
+		/// The register.
+		/// </returns>
+		/// <param name='DBusInterface'>
+		/// If set to <c>true</c> D bus interface.
+		/// </param>
+		public static bool ReleaseName(String DBusInterface)
+		{
+			if (Bus.Session.NameHasOwner (DBusInterface)) 
+			{
+				ReleaseNameReply rp = Bus.Session.ReleaseName(DBusInterface);
+
+				Console.WriteLine(rp.ToString());
+				if (rp == ReleaseNameReply.Released)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	
+		/// <summary>
+		/// unregister specified dbusinterface
+		/// </summary>
+		/// <param name='dbusinterface'>
+		/// Dbusinterface.
+		/// </param>
+		/// <param name='DBusPath'>
+		/// D bus path.
+		/// </param>
+		public static void UnRegister(String DBusPath)
+		{
+			Bus.Session.Unregister(new ObjectPath(DBusPath));
+		}
+
 		public virtual void Register()
 		{
 			if (RemoteInterface == null)
@@ -108,7 +147,7 @@ namespace Sharpend.Utils
 			//BusG.Init ();
 						
 			T remoteObject = Activator.CreateInstance<T>();
-			
+
 			Bus.Session.Register(new ObjectPath(dbuspath),remoteObject);
 			if (Bus.Session.RequestName (dbusinterface) != RequestNameReply.PrimaryOwner)
 			{
@@ -122,4 +161,4 @@ namespace Sharpend.Utils
 		
 	}
 }
-
+#endif

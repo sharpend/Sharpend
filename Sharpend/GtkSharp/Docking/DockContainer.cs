@@ -110,6 +110,7 @@ namespace Sharpend.GtkSharp.Docking
 				}	
 			} else
 			{
+				//Console.WriteLine("add new item: " + itemcontainer.Name);
 				//add a new item
 				itemcontainer.CurrentContainer = this;
 				AddItem(itemcontainer);	
@@ -285,6 +286,7 @@ namespace Sharpend.GtkSharp.Docking
 				throw new Exception("this should not happen"); //TODO			
 			} else
 			{	
+				//Console.WriteLine("addPages()");
 				List<PanedBox> lst = ChildBoxes;
 				
 				int pos = 0;
@@ -320,10 +322,15 @@ namespace Sharpend.GtkSharp.Docking
 						{
 							c.Remove(w);
 						}
-						
+
+						//Console.WriteLine("insert page: " + w.Name + " visible: " + w.Visible);
+						//Console.WriteLine("notebook: " + notebook.Visible);
 						notebook.InsertPage(w,lbl2,pos);
 						
 						pos++;
+					} else
+					{
+						throw new Exception("item " + w.Name+ "is to in the panedbox");
 					}
 				}
 						
@@ -341,14 +348,16 @@ namespace Sharpend.GtkSharp.Docking
 				}
 				
 				Gtk.Label lbl = new Gtk.Label(tt2);
-				
+
+				notebook.Visible = true;
+				//Console.WriteLine("insert page: " + first.Name + " visible: " + first.Visible);
+				//Console.WriteLine("notebook: " + notebook.Visible);
 				notebook.InsertPage(first,lbl,pos);
-				
-				
+								
 				AddItem(notebook);
 				notebook.Page = 0;
 				Mode = ViewMode.Notebook;
-				notebook.Visible = true;
+
 			}
 		}
 		

@@ -21,6 +21,8 @@
 
 using System;
 using System.Collections.Generic;
+
+#if DBUS
 using NDesk.DBus;
 
 namespace Sharpend
@@ -68,3 +70,4 @@ namespace Sharpend
 	}
 }
 
+#endif

@@ -25,24 +25,14 @@ using Sharpend.GtkSharp;
 
 namespace GladeBuilder
 {
+	/// <summary>
+	/// This is the gladebuilder mainwindow
+	/// </summary>
 	public class MainWindow
 	{
-		//private static MyDockApplication win;
-
 		public static void Main (string[] args)
 		{
 			Application.Init ();
-
-//			win = MyDockApplication.RestoreInstance<MyDockApplication>();
-//
-//			if (win == null)
-//			{
-//				win = MyDockApplication.CreateInstance<MyDockApplication>();
-//			}
-//
-//			win.DestroyEvent += HandleDestroyEvent;
-//			win.DeleteEvent += HandleDeleteEvent;
-//			win.ShowAll();
 
 			builder b = new builder();
 			b.DeleteEvent += HandleDeleteEvent;
@@ -55,13 +45,11 @@ namespace GladeBuilder
 
 		static void HandleDeleteEvent (object o, DeleteEventArgs args)
 		{
-			//win.Save();
 			Application.Quit();
 		}
 
 		static void HandleDestroyEvent (object o, DestroyEventArgs args)
 		{
-			//win.Save();
 			Application.Quit();
 		}
 	}

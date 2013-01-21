@@ -215,16 +215,26 @@ namespace Sharpend.GtkSharp.Docking
 			}
 			return base.OnMotionNotifyEvent (evnt);
 		}
-		
+
+		/// <summary>
+		/// recursive add all children
+		/// </summary>
+		/// <param name='parent'>
+		/// Parent.
+		/// </param>
+		/// <param name='list'>
+		/// List.
+		/// </param>
 		protected void addChildren(Container parent, List<Widget> list)
 		{
 			foreach (Widget w in parent.AllChildren)
 			{
 				list.Add(w);
-				
+				//Console.WriteLine("xxx:" + w.Name);
 				Container c = w as Container;
 				if (c != null)
 				{
+					//Console.WriteLine("-->:" + w.Name);
 					addChildren(c,list);
 				}
 			}	
@@ -234,77 +244,91 @@ namespace Sharpend.GtkSharp.Docking
 		{
 		  
 		  List<Widget> lst = new List<Widget>(100);
-		  addChildren(this,lst);
+		  addChildren(this,lst); //recursiv add all children in the list
 		  targetContainer = null; 
-		  foreach(Widget w in lst)
-		  {	 
-			int rx = 0;
-			int ry = 0;
-				
-			int sx,sy;
-			this.Window.GetOrigin (out sx, out sy);
-			if (w.Window != null)
-			{
-				w.Window.GetOrigin(out rx,out ry);	
-				rx = rx - sx; //x of widget relativ to window
-				ry = ry - sy; //y of widget relative to window
-				
-				 if ( (rx <= cX) && (cX <= (rx+w.Allocation.Width)))
-				 {
-					if ((ry <= cY) && (cY <= (ry+w.Allocation.Height)))
-					{
-					  if (w is DockContainer)
-					  {					            
-						targetContainer = (DockContainer)w;
-						if (placeholderwindow != null)
+			bool done = false;
+		  
+			//foreach(Widget w in lst)
+			for (int i=lst.Count-1;i>-1;i--)
+			  {	 
+					Widget w = lst[i];
+
+				//Console.WriteLine("fe: " + w.Name);
+				int rx = 0;
+				int ry = 0;
+					
+				int sx,sy;
+				this.Window.GetOrigin (out sx, out sy);
+				if (w.Window != null)
+				{
+					//Console.WriteLine("window:" + w.Window.ToString() + " sx: " + sx + " sy: " + sy);
+					w.Window.GetOrigin(out rx,out ry);	
+					rx = rx - sx; //x of widget relativ to window
+					ry = ry - sy; //y of widget relative to window
+					
+					 if ( (rx <= cX) && (cX <= (rx+w.Allocation.Width)))
+					 {
+						if ((ry <= cY) && (cY <= (ry+w.Allocation.Height)))
 						{
-			    		  int wd = w.Allocation.Width;
-						  int wh = w.Allocation.Height / 2;
-						  int wx = rx + sx;
-						  int wy = ry + sy;
-						  			
-						  targetAlign = getAlignment(rx,ry,cX,cY,w.Allocation.Width,w.Allocation.Height);
-						  
-						  //bool alignChanged = placeholderwindow.Alignment != targetAlign;			
-						  placeholderwindow.Alignment = targetAlign;		
-						  switch (targetAlign) 
-						  {
-									case ItemAlignment.Top:
-										wh = w.Allocation.Height / 3;
-										break;
-									case ItemAlignment.Left:
-										wh = w.Allocation.Height;
-										wd = w.Allocation.Width /3;
-										break;
-									case ItemAlignment.Right:
-										wh = w.Allocation.Height;
-										wd = w.Allocation.Width /3;
-										wx = wx + (w.Allocation.Width -wd);
-										break;
-									case ItemAlignment.Bottom:
-										wh = w.Allocation.Height / 3;
-										wy = wy + (w.Allocation.Height - wh);
-										break;
-									case ItemAlignment.Center:
-										wh = w.Allocation.Height / 3;
-										wd = w.Allocation.Width / 3;
-										wx = wx + wd;
-										wy = wy + wh;
-										break;
-									default:
-										break;
+						  if (w is DockContainer)
+						  {	
+							//Console.WriteLine("tc:" + w.Name);
+							targetContainer = (DockContainer)w;
+							if (placeholderwindow != null)
+							{
+				    		  int wd = w.Allocation.Width;
+							  int wh = w.Allocation.Height / 2;
+							  int wx = rx + sx;
+							  int wy = ry + sy;
+							  			
+							  targetAlign = getAlignment(rx,ry,cX,cY,w.Allocation.Width,w.Allocation.Height);
+							  
+							  //bool alignChanged = placeholderwindow.Alignment != targetAlign;			
+							  placeholderwindow.Alignment = targetAlign;		
+							  switch (targetAlign) 
+							  {
+										case ItemAlignment.Top:
+											wh = w.Allocation.Height / 3;
+											break;
+										case ItemAlignment.Left:
+											wh = w.Allocation.Height;
+											wd = w.Allocation.Width /3;
+											break;
+										case ItemAlignment.Right:
+											wh = w.Allocation.Height;
+											wd = w.Allocation.Width /3;
+											wx = wx + (w.Allocation.Width -wd);
+											break;
+										case ItemAlignment.Bottom:
+											wh = w.Allocation.Height / 3;
+											wy = wy + (w.Allocation.Height - wh);
+											break;
+										case ItemAlignment.Center:
+											wh = w.Allocation.Height / 3;
+											wd = w.Allocation.Width / 3;
+											wx = wx + wd;
+											wy = wy + wh;
+											break;
+										default:
+											break;
+							  }
+							  
+							  //if (alignChanged) {		
+							  placeholderwindow.Move(wx,wy);
+							  placeholderwindow.Resize(wd,wh);
+							  done = true;
+							//		}
+							}
 						  }
-						  
-						  //if (alignChanged) {		
-						  placeholderwindow.Move(wx,wy);
-						  placeholderwindow.Resize(wd,wh);
-						//		}
 						}
-					  }
-					}
-				 }
-			}	
-		  }		
+					 }
+				}	
+
+				if (done)
+				{
+					break;
+				}
+			  } //foreach		
 		}
 		
 		

@@ -355,6 +355,7 @@ namespace Sharpend.GtkSharp.Docking
 		
 		void HeaderButtonRelease (object ob, Gtk.ButtonReleaseEventArgs args)
 		{
+			//Console.WriteLine("HeaderButtonRelease");
 			if (args.Event.Button == 1) {
 				Frame.HidePlaceholder ();
 				
@@ -398,20 +399,21 @@ namespace Sharpend.GtkSharp.Docking
 							PanedBox.removeItem(this); //remove Item
 						}
 					}
-					
+
+					//Console.WriteLine("alg:" + frame.TargetAlign);
 					//add the new item
 					if (Frame.TargetContainer.FrameNotebook.Visible == true)
 					{
 						this.Reparent(null);
 						this.Parent = null;
-						Console.WriteLine("add " + this.Name + " to "  + Frame.TargetContainer.Name);
+						//Console.WriteLine("add1 " + this.Name + " to "  + Frame.TargetContainer.Name);
 						frame.TargetContainer.addPage(this,Frame.TargetAlign);
 						this.Visible = true;
 					
 					} else
 					{
 						this.Reparent(null);
-						Console.WriteLine("add " + this.Name + " to "  + Frame.TargetContainer.Name);
+						//Console.WriteLine("add2 " + this.Name + " to "  + Frame.TargetContainer.Name);
 						Frame.TargetContainer.addItem(this,Frame.TargetAlign);
 						this.Visible = true;
 					}

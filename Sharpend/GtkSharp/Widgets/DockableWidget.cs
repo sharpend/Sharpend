@@ -113,7 +113,35 @@ namespace Sharpend.GtkSharp
 				ID += "_" + Guid.NewGuid().ToString();
 			}
 		}
-		
+
+		private PopupWindow GetPopup(Gtk.Widget widget)
+		{
+			if (widget.Parent != null)
+			{
+				if (widget.Parent is PopupWindow)
+				{
+					return (widget.Parent as PopupWindow);
+				} else
+				{
+					return GetPopup(widget.Parent);
+				}
+			}
+			return null;
+		}
+
+		public void Close()
+		{
+			PopupWindow pw = GetPopup(this);
+
+			if (pw != null)
+			{
+				pw.Close();
+			} else
+			{
+				Destroy();
+			}
+		}
+
 		public static DockableWidget createWindow(XmlNode node)
 		{	
 			//Console.WriteLine("createWindow");

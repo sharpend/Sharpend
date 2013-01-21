@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- New document created with EditiX at Sat May 14 08:02:49 CEST 2011 -->
+
+<grid>
+	<columns>
+		<column editable="false">
+			<name>fullfilename</name>
+		</column>	
+		
+		<column editable="false">
+			<name>tags</name>
+		</column>	
+	
+	</columns>
+</grid>

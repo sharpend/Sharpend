@@ -1,18 +1,17 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../Sharpend/GtkSharp/Widgets/MainWindow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs">
     <Files>
-      <File FileName="../../Sharpend/GtkSharp/Docking/DockItemContainer.cs" Line="248" Column="29" />
-      <File FileName="../../Sharpend/GtkSharp/Widgets/MainWindow.cs" Line="584" Column="45" />
-      <File FileName="../../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="66" Column="1" />
-      <File FileName="../../Sharpend/GtkSharp/Docking/PopupWindow.cs" Line="35" Column="1" />
-      <File FileName="DockApplication/toolbar.config" Line="29" Column="119" />
+      <File FileName="DockApplication/DockframeWindow.cs" Line="21" Column="6" />
+      <File FileName="DockApplication/DockframeWindowImplementation.cs" Line="61" Column="16" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs" Line="133" Column="7" />
+      <File FileName="DockApplication/windows.config" Line="46" Column="10" />
+      <File FileName="DockApplication/toolbar.config" Line="29" Column="62" />
+      <File FileName="../../Sharpend/GtkSharp/Widgets/DockableWidget.cs" Line="29" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Sharpend" selected="True" />
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />
@@ -23,7 +22,9 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/DockframeWindowImplementation.cs" line="37" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

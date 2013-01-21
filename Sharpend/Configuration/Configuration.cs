@@ -304,15 +304,82 @@ namespace Sharpend.Configuration
 			return getValue(configfile,xpath);
 		}
 
-		public static String getString(String elementname)
+		/// <summary>
+		/// returns an elementvalue as string
+		/// if usexpath=true elementname must be an xpath
+		/// otherwise elementname must be an child of /configuration 
+		/// </summary>
+		/// <returns>
+		///  an elementvalue if exist, otherwise String.Empty
+		/// </returns>
+		/// <param name='elementname'>
+		/// Elementname.
+		/// </param>
+		/// <param name='usexpath'>
+		/// Usexpath.
+		/// </param>
+		public static String getString(String elementname, bool usexpath)
 		{
+
 			String xp = "/configuration/" + elementname;
+			if (usexpath)
+			{
+				xp = elementname;
+			}
+
 			XmlNode nd = getValue(xp);
 			if (nd != null)
 			{
 				return nd.InnerText;
 			}
 			return String.Empty;
+		}
+
+		/// <summary>
+		/// returns string element value from specified configfile
+		/// </summary>
+		/// <returns>
+		/// The string.
+		/// </returns>
+		/// <param name='configfile'>
+		/// Configfile.
+		/// </param>
+		/// <param name='elementname'>
+		/// Elementname.
+		/// </param>
+		/// <param name='usexpath'>
+		/// Usexpath.
+		/// </param>
+		public static String getString(String configfile, String elementname, bool usexpath)
+		{
+			String xp = "/configuration/" + elementname;
+			if (usexpath)
+			{
+				xp = elementname;
+			}
+
+			XmlNode nd = getValue(configfile,xp);
+			if (nd != null)
+			{
+				return nd.InnerText;
+			}
+			return String.Empty;
+		}
+
+
+		/// <summary>
+		/// returns an elementvalue as string where the element 
+		/// must be a childnode from the /configuration node
+		/// </summary>
+		/// <returns>
+		/// The string.
+		/// </returns>
+		/// <param name='elementname'>
+		/// Elementname.
+		/// </param>
+		public static String getString(String elementname)
+		{
+			return getString(elementname,false);
 		}
 
 		public static bool getBool(String elementname)

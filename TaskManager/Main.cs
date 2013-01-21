@@ -74,6 +74,20 @@ namespace TaskManager
 			#if DBUS
 			BusG.Init();
 			rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
+
+			if (rc == null)
+			{
+				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
+				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.UnRegister("/eu/shaprend/taskmanager");
+				//Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
+				rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
+			}
+
+			if (rc == null)
+			{
+				throw new Exception("could not register dbus eu.shaprend.taskmanager");
+			}
+
 			rc.OnStartTask += HandleRcOnStartTask;
 			#endif
 			

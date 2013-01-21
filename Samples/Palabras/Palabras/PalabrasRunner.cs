@@ -45,22 +45,52 @@ namespace Palabras
 			private set;
 		}
 		
-		
+		public String WindowName {
+			get;
+			private set;
+		}
 		
 		public PalabrasRunner (String name)
 		{
 			Sharpend.Utils.Utils.initLog4Net();
 			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-			log.Debug("hello i'm PalabrasRunner");
+			log.Debug("hello i'm PalabrasRunner " + name);
+			this.WindowName = name;
 		}
-		
-		private static void showWindow()
+
+		public String Language1 {
+			get;
+			private set;
+		}
+
+		public String Language2 {
+			get;
+			private set;
+		}
+
+		public String TranslationsFile {
+			get;
+			private set;
+		}
+
+		public PalabrasRunner(String name,String translationsxml, String lng1, String lng2) 
+			: this(name)
+		{
+			TranslationsFile = translationsxml;
+			Language1 = lng1;
+			Language2 = lng2;
+		}
+
+		private void showWindow()
 		{
 			log.Debug("showWindow");
 			try {
 				if (PopupWindow == null)
 				{
-					PopupWindow = new PalabrasWindow("asd");
+					PopupWindow = new PalabrasWindow(WindowName,TranslationsFile,Language1,Language2);
+//					PopupWindow.Language1 = Language1;
+//					PopupWindow.Language2 = Language2;
+//					PopupWindow.TranslationsFile = TranslationsFile;
 					PopupWindow.Destroyed += HandlePopupWindowDestroyed;
 				}
 				log.Debug("before show");

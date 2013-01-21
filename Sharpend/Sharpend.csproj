@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;DBUS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -136,6 +136,9 @@
     <Compile Include="GtkSharp\DataObjectContainer.cs" />
     <Compile Include="GtkSharp\Widgets\ProgressWindow.cs" />
     <Compile Include="GtkSharp\Widgets\ProgressWindowImplementation.cs" />
+    <Compile Include="GtkSharp\Widgets\FileChooserButtonWrapper.cs" />
+    <Compile Include="GtkSharp\Widgets\DockcontainerWidget.cs" />
+    <Compile Include="GtkSharp\Widgets\DatePicker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -33,7 +33,7 @@ namespace DockApplication
 		{
 			Application.Init ();
 
-			//try to restore the application from "applicationname.xml" in this case DockApplication.xml
+			//try to restore the application from "applicationname.xml", in this case DockApplication.xml
 			win = MyDockApplication.RestoreInstance<MyDockApplication>();
 
 			if (win == null) //if we cannot restore then create a new one

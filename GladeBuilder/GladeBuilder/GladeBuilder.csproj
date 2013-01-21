@@ -74,10 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="glade.config" />
-    <None Include="data.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="glade.gladebuilder" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="list.xml" />

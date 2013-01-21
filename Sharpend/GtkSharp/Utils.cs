@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using Gtk;
 
 namespace Sharpend.GtkSharp
 {
@@ -35,5 +36,87 @@ namespace Sharpend.GtkSharp
 			Data = data;
 		}
 	}
+
+	/// <summary>
+	/// Utils for Messagedialogs
+	/// </summary>
+	public static class Message
+	{
+
+		/// <summary>
+		/// show a message dialog
+		/// </summary>
+		/// <returns>
+		/// The message.
+		/// </returns>
+		/// <param name='message'>
+		/// Message.
+		/// </param>
+		/// <param name='parent'>
+		/// Parent.
+		/// </param>
+		/// <param name='flags'>
+		/// Flags.
+		/// </param>
+		/// <param name='messagetype'>
+		/// Messagetype.
+		/// </param>
+		/// <param name='buttonstype'>
+		/// Buttonstype.
+		/// </param>
+		public static ResponseType ShowMessage(String message, Gtk.Window parent, Gtk.DialogFlags flags,Gtk.MessageType messagetype,ButtonsType buttonstype)
+		{
+			var dialog = new MessageDialog(parent,flags,messagetype,buttonstype,message,new object[0]);
+
+			try
+			{
+				int res = dialog.Run ();
+				return (ResponseType)res;
+			}
+			finally
+			{	
+				dialog.Destroy();
+			}
+		}
+
+		/// <summary>
+		/// shows an modal info message dialog with given buttons
+		/// </summary>
+		/// <returns>
+		/// The info message.
+		/// </returns>
+		/// <param name='message'>
+		/// Message.
+		/// </param>
+		/// <param name='parent'>
+		/// Parent.
+		/// </param>
+		/// <param name='buttonstype'>
+		/// Buttonstype.
+		/// </param>
+		public static ResponseType ShowInfoMessage(String message, Gtk.Window parent, ButtonsType buttonstype)
+		{
+			return ShowMessage(message, parent,Gtk.DialogFlags.Modal,MessageType.Info,buttonstype);
+		}
+
+		/// <summary>
+		/// Shows an modal info message dialog with ok and cancel button
+		/// </summary>
+		/// <returns>
+		/// The info message.
+		/// </returns>
+		/// <param name='message'>
+		/// Message.
+		/// </param>
+		/// <param name='parent'>
+		/// Parent.
+		/// </param>
+		public static ResponseType ShowInfoMessage(String message, Gtk.Window parent)
+		{
+			return ShowMessage(message, parent,Gtk.DialogFlags.Modal,MessageType.Info,ButtonsType.OkCancel);
+		}
+
+	}
+
 }
 

@@ -52,7 +52,22 @@ namespace Palabras
 				return root;
 			}	
 		}
-		
+
+		public String Language1 {
+			get;
+			private set;
+		}
+
+		public String Language2 {
+			get;
+			private set;
+		}
+
+		public String TranslationsFile {
+			get;
+			private set;
+		}
+
 		public override void Register ()
 		{
 			//Bus.Session.ReleaseName(DBusInterface);
@@ -62,14 +77,17 @@ namespace Palabras
 			RemoteInterface.NoteSaved += HandleRemoteInterfaceNoteSaved;
 		}
 		
-		public TomboyProxy (XmlDocument doc) : this()
+		public TomboyProxy (XmlDocument doc,String lng1, String lng2, String translationsfile) : this()
 		{
-			xmldoc = doc;		
+			xmldoc = doc;
+			Language1 = lng1;
+			Language2 = lng2;
+			TranslationsFile = translationsfile;
 		}
 		
 		void HandleRemoteInterfaceNoteSaved (string uri)
 		{
-			Console.WriteLine("saved" + uri);
+			//Console.WriteLine("saved" + uri);
 			String title = RemoteInterface.GetNoteTitle(uri);
 			
 			if (title.Equals("vokabeln",StringComparison.OrdinalIgnoreCase))
@@ -108,7 +126,7 @@ namespace Palabras
 					}
 				}
 				
-				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("spanish.xml");
+				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile(TranslationsFile);
 				xmldoc.Save(fi.FullName);
 			}
 		}
@@ -133,8 +151,8 @@ namespace Palabras
 			word.AppendChild(t1);
 			word.AppendChild(t2);
 			
-		   	t1.AddAttributeValue("language","es");
-		   	t2.AddAttributeValue("language","de");
+		   	t1.AddAttributeValue("language",Language2);
+		   	t2.AddAttributeValue("language",Language1);
 			
 		   	t1.InnerText = trans1;
 		   	t2.InnerText = trans2;
@@ -162,8 +180,8 @@ namespace Palabras
 			word.AppendChild(t1);
 			word.AppendChild(t2);
 			
-		   	t1.AddAttributeValue("language","es");
-		   	t2.AddAttributeValue("language","de");
+		   	t1.AddAttributeValue("language",Language2);
+		   	t2.AddAttributeValue("language",Language1);
 			
 		   	t1.InnerText = trans1;
 		   	t2.InnerText = trans2;
