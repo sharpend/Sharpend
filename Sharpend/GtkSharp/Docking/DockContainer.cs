@@ -90,6 +90,15 @@ namespace Sharpend.GtkSharp.Docking
 		/// </param>
 		public void addItem(DockItemContainer itemcontainer, ItemAlignment align)
 		{
+			if ((itemcontainer.CurrentWidget != null) && (itemcontainer.CurrentWidget is DockcontainerWidget))
+			{
+				if (this == (itemcontainer.CurrentWidget as DockcontainerWidget).Dock)
+				{
+					return;
+				}
+			}
+
+			//itemcontainer.ParentWindow
 			if ((itemcontainer.CurrentContainer != null) && (itemcontainer.CurrentContainer == this))
 			{
 				//containing this item

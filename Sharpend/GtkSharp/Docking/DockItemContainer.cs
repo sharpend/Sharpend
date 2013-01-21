@@ -95,8 +95,17 @@ namespace Sharpend.GtkSharp.Docking
 				return frame;
 			}
 		}
-		
-		
+
+		public Box HeaderBox {
+			get;
+			private set;
+		}
+
+//		public Alignment HeaderAlignment {
+//			get;
+//			private set;
+//		}
+
 		private Pango.Layout layout;
 		
 		static Gdk.Cursor fleurCursor = new Gdk.Cursor (Gdk.CursorType.Fleur);
@@ -130,7 +139,18 @@ namespace Sharpend.GtkSharp.Docking
 			get;
 			private set;
 		}
-		
+
+		/// <summary>
+		/// If true, the header will be faded out to 10 px height after some seconds
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if fade out header; otherwise, <c>false</c>.
+		/// </value>
+		public bool FadeOutHeader {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// only for serialization
 		/// </summary>
@@ -141,6 +161,7 @@ namespace Sharpend.GtkSharp.Docking
 		public DockItemContainer (DockFrame dockframe) : this(dockframe,null)
 		{
 			CurrentContainer = null;
+			FadeOutHeader = true;
 			//Console.WriteLine("create new DockItemContainer");
 		}
 
@@ -179,6 +200,7 @@ namespace Sharpend.GtkSharp.Docking
 		public DockItemContainer (DockFrame dockframe, Widget widget)
 		{
 			this.Expand = true;
+			this.FadeOutHeader = true;
 			//initIcons();
 			
 			frame = dockframe;
@@ -194,33 +216,37 @@ namespace Sharpend.GtkSharp.Docking
 			btnDock = new Button(img1); 
 			btnDock.Relief = ReliefStyle.None;
 			btnDock.Clicked += HandleBtnDockClicked; 
+			btnDock.EnterNotifyEvent += HandleButtonEnterNotifyEvent;
 
 			Gtk.Image img = new Gtk.Image("gtk-close",IconSize.SmallToolbar);	
 			btnClose = new Button(img);
 			btnClose.Visible = true;
 			btnClose.Clicked += HandleBtnCloseClicked;
 			btnClose.Relief = ReliefStyle.None;
-			
-			HBox box = new HBox (false, 0);
-			box.PackStart (title, true, false, 0);
-			box.PackEnd (btnClose, false, false, 0);
-			box.PackEnd (btnDock, false, false, 0);
+			btnClose.EnterNotifyEvent += HandleButtonEnterNotifyEvent;
+
+			HeaderBox = new HBox (false, 0);
+			HeaderBox.PackStart (title, true, false, 0);
+			HeaderBox.PackEnd (btnClose, false, false, 0);
+			HeaderBox.PackEnd (btnDock, false, false, 0);
 									
 			headerAlign = new Alignment (0.0f, 0.0f, 1.0f, 1.0f);
 			headerAlign.TopPadding = headerAlign.BottomPadding = headerAlign.RightPadding = headerAlign.LeftPadding = 0;
-			headerAlign.Add (box);
+			headerAlign.Add (HeaderBox);
 			
 			header = new EventBox ();
 			header.Events |= Gdk.EventMask.KeyPressMask | Gdk.EventMask.KeyReleaseMask;
 			header.ButtonPressEvent += HeaderButtonPress;
 			header.ButtonReleaseEvent += HeaderButtonRelease;
+
+
 //			header.MotionNotifyEvent += HeaderMotion;
 //			header.KeyPressEvent += HeaderKeyPress;
 //			header.KeyReleaseEvent += HeaderKeyRelease;
 			header.Add (headerAlign);
 			//header.Drawn += HandleHeaderDrawn;
 						
-			header.Add(new Gtk.Button("gtk-close"));
+			//header.Add(new Gtk.Button("gtk-close"));
 			
 			header.Realized += delegate {
 				header.Window.Cursor = handCursor;
@@ -233,7 +259,7 @@ namespace Sharpend.GtkSharp.Docking
 			
 			PackStart (header, false, false, 0);
 			ShowAll ();
-			
+
 			if (widget != null)
 			{
 				CurrentWidget = widget;
@@ -245,6 +271,15 @@ namespace Sharpend.GtkSharp.Docking
 					title.Text = (widget as DockableWidget).Title;
 				}
 			}
+
+			doRemove = true;
+			GLib.Timeout.Add(5000,new GLib.TimeoutHandler(removeHeader));
+		}
+
+		void HandleButtonEnterNotifyEvent (object o, EnterNotifyEventArgs args)
+		{
+			//Console.WriteLine("HandleButtonEnterNotifyEvent");
+			doRemove = false;
 		}
 
 		void HandleBtnDockClicked (object sender, EventArgs e)
@@ -464,17 +499,73 @@ namespace Sharpend.GtkSharp.Docking
 				return area;
 			}
 		}
-		
-		
+
+		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
+		{
+//			Console.WriteLine("mn");
+//			header.Show();
+			return base.OnMotionNotifyEvent (evnt);
+		}
+
+		private bool removeHeader()
+		{
+			//Console.WriteLine("removeHeader" + FadeOutHeader);
+			if ((doRemove) && FadeOutHeader)
+			{
+				//Console.WriteLine("removehandler");
+				header.HeightRequest = header.AllocatedHeight;
+				removeing = true;
+				header.Remove(headerAlign);
+				GLib.Timeout.Add (50, delegate {
+					//Console.WriteLine(header.HeightRequest);
+					if (header.HeightRequest > 10) 
+					{
+						header.HeightRequest = header.HeightRequest-4;
+						return true;
+					}
+					removeing = false;
+				    return false;
+	             });
+			}
+
+			return false;
+		}
+
+		bool removeing = false;
+		bool doRemove = false;
 		private void HeaderLeaveNotify (object ob, EventArgs a)
 		{
 			//pointerHover = false;
-			header.QueueDraw ();
+			//header.Hide();
+			//Console.WriteLine("leave" + ob + "--");
+			doRemove = true;
+			if (header.Children.Length == 1)
+			{
+				GLib.Timeout.Add(600,new GLib.TimeoutHandler(removeHeader));
+			} else
+			{
+				header.QueueDraw ();
+			}
 		}
-		
+
+		private bool showHeader()
+		{
+			if (!doRemove)
+			{
+				header.Add(headerAlign); 
+			}
+			return false;
+		}
+
 		private void HeaderEnterNotify (object ob, EventArgs a)
 		{
 			//pointerHover = true;
+			if (removeing)
+				return;
+
+			//Console.WriteLine("add");
+			doRemove = false;
+			GLib.Timeout.Add(300,new GLib.TimeoutHandler(showHeader));
 			header.QueueDraw ();
 		}
 				

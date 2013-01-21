@@ -33,7 +33,7 @@ namespace Sharpend.GtkSharp
 	/// File chooser wrapper.
 	/// 
 	/// The FileChooserWrapper contains some extentsions for a FileChooser and
-	/// connects it optional to a Entry Widget
+	/// connects it to a Entry Widget (optional)
 	/// </summary>
 	public class FileChooserButtonWrapper
 	{

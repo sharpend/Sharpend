@@ -354,6 +354,8 @@ namespace Sharpend.GtkSharp
 			{
 				this.Maximize();
 			}
+
+			CreateStartupWindows();
 		}
 
 		/// <summary>
@@ -461,12 +463,12 @@ namespace Sharpend.GtkSharp
 		}
 		
 		
-		public static void hookDelegate(object senderwidget, String targetwidget, String eventname, String functionname, object callingObject)
+		public static void hookDelegate(object senderwidget, String targetwidget, String eventname, String functionname, object callingObject, String multi)
 		{
 			List<object> lst = getWindows(targetwidget, callingObject);
 			foreach(object obj in lst)
 			{
-				Sharpend.Utils.Reflection.hookDelegate(senderwidget,obj,eventname,functionname,"Single","Single");
+				Sharpend.Utils.Reflection.hookDelegate(senderwidget,obj,eventname,functionname, multi, multi);
 			}	
 			
 			if (lst.Count == 0)
@@ -507,7 +509,7 @@ namespace Sharpend.GtkSharp
 			//List<object> 
 			foreach (object obj in lst)
 			{
-				hookDelegate(obj,dd.Target,dd.EventName,dd.FunctionName,callingObject);
+				hookDelegate(obj,dd.Target,dd.EventName,dd.FunctionName,callingObject,dd.Multi);
 			}
 		}
 
@@ -553,8 +555,8 @@ namespace Sharpend.GtkSharp
 					if (!MainWindow.Instance.WindowList.ContainsKey(wnd.ID))
 					{
 						MainWindow.Instance.WindowList.Add(wnd.ID,wnd);
-						wnd.hookDelegates();
-					}
+						//wnd.hookDelegates(); //not needed because the hookDelegates call in hookDelegates() above ??
+					} 
 				}
 				
 				if (parent.Children != null)
@@ -570,22 +572,74 @@ namespace Sharpend.GtkSharp
 				}
 			}
 		}
-		
-		
+
+		private bool WindowInList(String classname)
+		{
+			foreach (KeyValuePair<String,DockableWidget> kp in WindowList)
+			{
+				String cn = kp.Value.GetType().ToString();
+				if (cn.Equals(classname))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public void CreateStartupWindows()
+		{
+			XmlNodeList lst = Configuration.ConfigurationManager.getValues("windows.config","//window[@startup = 'true']");
+			foreach (XmlNode nd in lst)
+			{
+				String cn = nd.Attributes["class"].Value;
+				if (!WindowInList(cn))
+				{
+					CreateWindow(nd);
+				}
+			}
+		}
+
+		private void CreateWindow(XmlNode node)
+		{
+			DockableWidget wnd =  DockableWidget.CreateInstance(node);
+			addWidget(wnd);
+		}
+
 		public void createWindow(String classname)
 		{
 		   	//String configfile = Configuration.ConfigurationManager.AppSettings["windows_config"];	
 		   	XmlNode nd = Configuration.ConfigurationManager.getValue("windows.config","//window[@class = '"+classname+"']");
 			if (nd != null)
-			{
-			  DockableWidget wnd =  DockableWidget.CreateInstance(nd);
-			  addWidget(wnd);
+			{	
+				CreateWindow(nd);
 			} else
 			{
 				//TODO exception or logging ??
 				Console.WriteLine("Window " + classname + " has no entry in windows.config");
 			}
 		}
+
+		/// <summary>
+		/// creates a dockable widget by classname
+		/// 
+		/// uses parameters and delegates from the windows.config file
+		/// </summary>
+		/// <returns>
+		/// The dockable widget.
+		/// </returns>
+		/// <param name='classname'>
+		/// Classname.
+		/// </param>
+		public DockableWidget createDockableWidget(String classname)
+		{
+			XmlNode nd = Configuration.ConfigurationManager.getValue("windows.config","//window[@class = '"+classname+"']");
+			if (nd != null)
+			{
+			  	return DockableWidget.CreateInstance(nd);
+			}
+			return null;
+		}
+
 
 		//TODO nameing ... functionnames upper or lowercase ?
 		public void createPopupWindow(String classname)
@@ -619,8 +673,29 @@ namespace Sharpend.GtkSharp
 				windowlist.Add(widget.ID,widget);
 				pw.SetSizeRequest(640,480);
 				pw.WindowPosition = WindowPosition.CenterOnParent;
-				pw.Destroyed += HandlePwDestroyed;
+				//pw.Destroyed += HandlePwDestroyed;
+				pw.DeleteEvent += HandleDeleteEvent;
+				pw.OnClose += HandleOnClose;
+				//pw.Destroyed += HandleDestroyed;
 				pw.ShowAll();	
+			}
+		}
+
+		void HandleDestroyed (object sender, EventArgs e)
+		{
+			Console.WriteLine("");
+		}
+
+		void HandleDeleteEvent (object o, DeleteEventArgs args)
+		{
+			PopupWindow pw = (o as PopupWindow);
+			if (pw != null)
+			{
+				DockableWidget dw = (pw.CurrentWidget as DockableWidget);
+				if (dw != null)
+				{
+					windowlist.Remove(dw.ID);
+				}
 			}
 		}
 
@@ -655,9 +730,25 @@ namespace Sharpend.GtkSharp
 			windowlist.Add(wnd.ID,wnd);
 			pw.SetSizeRequest(640,480);
 			pw.WindowPosition = WindowPosition.CenterAlways;
-			pw.Destroyed += HandlePwDestroyed;
+			//pw.Destroyed += HandlePwDestroyed;
+			pw.DeleteEvent += HandleDeleteEvent;
+			pw.OnClose += HandleOnClose;
+			//pw.DestroyEvent += HandleDestroyEvent;
 			pw.Shown += HandlePwShown;
 			pw.ShowAll();
+		}
+
+		void HandleOnClose (object o, EventArgs e)
+		{
+			PopupWindow pw = (o as PopupWindow);
+			if (pw != null)
+			{
+				DockableWidget dw = (pw.CurrentWidget as DockableWidget);
+				if (dw != null)
+				{
+					windowlist.Remove(dw.ID);
+				}
+			}
 		}
 
 		void HandlePwShown (object sender, EventArgs e)

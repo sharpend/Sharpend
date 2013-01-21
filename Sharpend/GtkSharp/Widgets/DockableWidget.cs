@@ -53,23 +53,52 @@ namespace Sharpend.GtkSharp
 			get;
 			protected set; //TODO private ???
 		}
-		
+
+		/// <summary>
+		/// Allow creation of multiple windoes (not implemented)
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if allow multiple windows; otherwise, <c>false</c>.
+		/// </value>
 		public bool AllowMultipleWindows {
 			get;
 			set;
 		}
 		
-				
+		///Delegates hooked to this window		
 		public DelegateSet Delegates {
 			get;
 			internal set;
 		}
-		
+
+		/// <summary>
+		/// Gets or sets the title of the window
+		/// </summary>
+		/// <value>
+		/// The title.
+		/// </value>
 		public String Title {
 			get;
 			set;
 		}
-		
+
+		/// <summary>
+		/// If set to true a instance of this window will created at the startup of a dockable application
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if startup; otherwise, <c>false</c>.
+		/// </value>
+		public bool Startup {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Creation Parameters
+		/// </summary>
+		/// <value>
+		/// The parameters.
+		/// </value>
 		public ParameterSet Params
 		{
 			get;
@@ -87,11 +116,19 @@ namespace Sharpend.GtkSharp
 			init();
 			this.Title = name;
 		}
-		
+
 		public DockableWidget(String name, bool allowmultiplewindows) : base(name)
 		{
 			AllowMultipleWindows = allowmultiplewindows;
 			this.Title = name;
+			init();
+		}
+
+		public DockableWidget(String name, bool allowmultiplewindows,bool startup) : base(name)
+		{
+			AllowMultipleWindows = allowmultiplewindows;
+			this.Title = name;
+			this.Startup = startup;
 			init();
 		}
 		
@@ -160,6 +197,7 @@ namespace Sharpend.GtkSharp
 				wnd.Params = param;
 				wnd.Delegates = delegates;
 				wnd.hookDelegates();
+				wnd.afterInit();
 				return wnd;
 			}
 			return null;
@@ -228,7 +266,8 @@ namespace Sharpend.GtkSharp
 		{
 			this.ID = reader["ID"];
 			this.AllowMultipleWindows = Convert.ToBoolean(reader["AllowMultipleWindows"]);
-			
+			this.Startup = Convert.ToBoolean(reader["Startup"]);
+
 			base.doReadXml (reader);
 			
 			reader.Read();
@@ -246,7 +285,9 @@ namespace Sharpend.GtkSharp
 		{
 			writer.WriteAttributeString("ID",this.ID);
 			writer.WriteAttributeString("AllowMultipleWindows",this.AllowMultipleWindows.ToString());
+			writer.WriteAttributeString("Startup",this.Startup.ToString());
 			
+
 			base.doWriteXml (writer);
 			
 			if (Delegates != null)

@@ -49,6 +49,8 @@ namespace Sharpend.GtkSharp
 		public String ColumnName;
 	}
 
+	public delegate void CellClickedHandler(VirtualGridRow row, int column, object data, int x, int y, Gdk.Rectangle cellrect);
+
 	/// <summary>
 	/// 
 	/// This a TreeList Model Implementation for the Gtk.Treeview control
@@ -63,13 +65,19 @@ namespace Sharpend.GtkSharp
         private Dictionary<VirtualGridRow, Gtk.TreeIter> TreeIterators = null;
         public EventHandler AfterEdit = null;
 		public EventHandler Toggled = null;
-        public Gtk.TreeCellDataFunc OnTreeCellData = null;
+
+		/// <summary>
+		/// fired when a single cell was clicked 
+		/// </summary>
+		public CellClickedHandler OnCellClicked = null;
+		public Gtk.TreeCellDataFunc OnTreeCellData = null;
         private ArrayList columns;
 		
         /// <summary>
         /// wenn true werden pixbufs auch in der zeile angezeigt (sonst nur als tree knoten)
         /// </summary>
-        public bool PixBufInRow { get; set; }
+		/// DL rempixbuf
+        //public bool PixBufInRow { get; set; }
 		public bool SkipFirstChildrow {
 			get;
 			set;
@@ -96,34 +104,117 @@ namespace Sharpend.GtkSharp
 		{
 			Tree = tree;
 			SkipFirstChildrow = false;
+			Tree.WidgetEventAfter += HandleWidgetEventAfter;
+		}
+
+//		void HandleButtonPressEvent (object o, Gtk.ButtonPressEventArgs args)
+//		{
+//			Console.WriteLine("asdda");
+//		}
+//
+//		void HandleMotionNotifyEvent (object o, Gtk.MotionNotifyEventArgs args)
+//		{
+//			Gtk.TreeView tree = (o as Gtk.TreeView);
+//			if (tree != null)
+//			{
+//				//tree.Model
+//				//tree.Model.
+//			}
+//		}
+
+		void HandleWidgetEventAfter (object o, Gtk.WidgetEventAfterArgs args)
+		{
+			if (args.Event.Type != Gdk.EventType.ButtonRelease)
+				return;
+
+			Gdk.EventButton evt = (Gdk.EventButton)args.Event;
+
+			if (evt.Button != 1)
+				return;
+
+			Gtk.TreeIter iter;
+			Gdk.EventButton eb = (args.Event as Gdk.EventButton);
+
+			Gtk.TreePath tp;
+
+			int x = Convert.ToInt32(eb.X);
+			int y = Convert.ToInt32(eb.Y);
+
+			Tree.GetPathAtPos(x,y,out tp);
+
+			if (Tree.Model.GetIter(out iter,tp))
+			{
+				int idx=0;
+				foreach (Gtk.TreeViewColumn col in Tree.Columns)
+				{
+					Gdk.Rectangle rec = Tree.GetCellArea(tp,col);
+					if ((x >= rec.X) && (x <= (rec.X + rec.Width)))
+					{
+						object obj = Tree.Model.GetValue(iter,idx);
+						if (obj != null)
+						{
+							//Console.WriteLine("clicked column" + idx + " data: " + obj);
+							CellClicked(iter,idx,obj,x,y,rec);
+							return;
+						}
+					}
+					idx++;
+				}
+			}
+		}
+
+		protected virtual void CellClicked(Gtk.TreeIter iter, int column, object data, int x, int y, Gdk.Rectangle cellrect)
+		{
+			VirtualGridRow row = getGridRow(iter);
+			if (OnCellClicked != null)
+			{
+				OnCellClicked(row,column,data,x,y,cellrect);
+			}
 		}
 		
 		protected override void addHeaderColumn (VirtualGridHeaderColumn headercolumn)
 		{
+			//throw new Exception("is it used ??");
             base.addHeaderColumn(headercolumn);
                             
             Gtk.TreeViewColumn column = new Gtk.TreeViewColumn();
             column.Visible = headercolumn.Visible;
             column.Title = headercolumn.ColumnName;
             column.Resizable = true;
-            Gtk.CellRendererText artistNameCell = new Gtk.CellRendererText();
+            //Gtk.CellRendererText artistNameCell = new Gtk.CellRendererText();
+			Gtk.CellRenderer renderer;
             //Gtk.CellRendererCombo artistNameCell = new Gtk.CellRendererCombo();
-			
-			column.PackStart(artistNameCell, true);
+
+
+			if (!String.IsNullOrEmpty(headercolumn.Renderer))
+			{
+				Type tp = Type.GetType(headercolumn.Renderer);
+				renderer = (Gtk.CellRenderer)Sharpend.Utils.Reflection.createInstance(tp);
+			}
+            else
+            {
+                renderer = new Gtk.CellRendererText();
+                //renderer = treecellrenderer;
+            }
+
+
+			column.PackStart(renderer, true);
             Tree.AppendColumn(column);
 
             String attribute = "text";
-            if (headercolumn.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+
+			if (headercolumn.ColumnType.Equals("Gdk.Pixbuf,gdk-sharp", StringComparison.OrdinalIgnoreCase))
             {
                 attribute = "pixbuf";
             }
+					
 
             if (OnTreeCellData != null)
             {
-                column.SetCellDataFunc(artistNameCell, OnTreeCellData);
+                column.SetCellDataFunc(renderer, OnTreeCellData);
             }
 
-            column.AddAttribute(artistNameCell, attribute, HeaderColumns.Count - 1);            
+            column.AddAttribute(renderer, attribute, HeaderColumns.Count - 1);            
 		}
 		
 		public void reloadColumns()
@@ -140,11 +231,12 @@ namespace Sharpend.GtkSharp
                 column.Resizable = true;
                 Gtk.CellRenderer cell;
                 TreeListCellRendererText treecellrenderer = null;
-                if (c.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
-                {
-                    cell = new Gtk.CellRendererPixbuf ();
-                }
-				else if (!String.IsNullOrEmpty(c.Renderer))
+				//DL rempixbuf
+//                if (c.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+//                {
+//                    cell = new Gtk.CellRendererPixbuf ();
+//                }
+				if (!String.IsNullOrEmpty(c.Renderer))
 				{
 					Type tp = Type.GetType(c.Renderer);
 					cell = (Gtk.CellRenderer)Sharpend.Utils.Reflection.createInstance(tp);
@@ -154,16 +246,22 @@ namespace Sharpend.GtkSharp
                     treecellrenderer = new TreeListCellRendererText(c.ColumnName, i);
                     cell = treecellrenderer;
                 }
-                       
+                
 				columns.Add(cell);
                 column.PackStart(cell, true);
                 Tree.AppendColumn(column);
 
                 String attribute = "text";
-                if (c.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
-                {
-                    attribute = "pixbuf";
-                }
+				//DL rempixbuf
+//                if (c.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+//                {
+//                    attribute = "pixbuf";
+//                }
+
+				if (cell is Gtk.CellRendererPixbuf)
+				{
+					attribute = "pixbuf";
+				}
 
                 if (OnTreeCellData != null)
                 {
@@ -275,12 +373,13 @@ namespace Sharpend.GtkSharp
 					i++;
 				} else
 				{
-					if (col.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
-	                {
-	                    types[i] = typeof(Gdk.Pixbuf); //TODO load types from headercolumn ... at the moment only string
-	                    i++;
-	                }
-	                else
+					//DL rem pixbuf
+//					if (col.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+//	                {
+//	                    types[i] = typeof(Gdk.Pixbuf); //TODO load types from headercolumn ... at the moment only string
+//	                    i++;
+//	                }
+//	                else
 	                {
 	                    types[i] = typeof(String); //TODO load types from headercolumn ... at the moment only string
 	                    i++;
@@ -320,35 +419,36 @@ namespace Sharpend.GtkSharp
 			}
 			return ts;
 		}
-		
-		protected bool renderImage(VirtualTreeRow row, VirtualTreeRow childrow)
-		{
-//			if ((row.Cells[0].CustomOption != null) && (row.Cells[0].CustomOption.Equals("nopic")))
+//DL rempixbuf		
+//		protected bool renderImage(VirtualTreeRow row, VirtualTreeRow childrow)
+//		{
+////			if ((row.Cells[0].CustomOption != null) && (row.Cells[0].CustomOption.Equals("nopic")))
+////			{
+////				return false;
+////			}
+//			if (childrow.BaseRow != null)
 //			{
-//				return false;
+//				VirtualGridCell cell = childrow.BaseRow.getCell(row.HeaderColumn);
+//				if (cell != null)
+//				{
+//					if (cell.CustomOption.Equals("nopic",StringComparison.OrdinalIgnoreCase))
+//					{
+//						return false;
+//					}
+//				}
 //			}
-			if (childrow.BaseRow != null)
-			{
-				VirtualGridCell cell = childrow.BaseRow.getCell(row.HeaderColumn);
-				if (cell != null)
-				{
-					if (cell.CustomOption.Equals("nopic",StringComparison.OrdinalIgnoreCase))
-					{
-						return false;
-					}
-				}
-			}
-									
-			if (row.HeaderColumn.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
-            {
-				return true;
-			}	
-			return false;
-		}
+//									
+//			if (row.HeaderColumn.CustomOption.Equals("pixbuf", StringComparison.OrdinalIgnoreCase))
+//            {
+//				return true;
+//			}	
+//			return false;
+//		}
 		
 		protected void addData(Gtk.TreeStore store, Gtk.TreeIter iter, VirtualTreeRow row, bool withiter)
 		{						
 			//Console.WriteLine("->"  + row.NodeValue);			
+			//store.AppendValues(row.Data);
 			foreach (KeyValuePair<String,VirtualTreeRow> kp in row.Children)
 			{
 				//GroupedChildRows grp = kp.Value;
@@ -358,13 +458,14 @@ namespace Sharpend.GtkSharp
 				bool wi = withiter;
 				if (! withiter)
 				{
-                    if (renderImage(row, childrow))
-                    {                      
-                        it = store.AppendValues(childrow.DataWithImage);
-					
-                        wi = true;
-                    }
-                    else
+					//DL rempixbuf
+//                    if (renderImage(row, childrow))
+//                    {                      
+//                        it = store.AppendValues(childrow.DataWithImage);
+//					
+//                        wi = true;
+//                    }
+                    //else
                     {
                         it = store.AppendValues(childrow.Data);
                         wi = true;
@@ -401,13 +502,15 @@ namespace Sharpend.GtkSharp
 					for (int i=idx;i<row.Rows.Count;i++)
 					{
 						VirtualGridRow vr = row.Rows[i];
-	                    bool tmp = LoadPixBuf;
-	                    if (!PixBufInRow)
-	                    {
-	                        LoadPixBuf = false;
-	                    }
+//DL rempixbuf
+//	                    bool tmp = LoadPixBuf;
+//	                    if (!PixBufInRow)
+//	                    {
+//	                        LoadPixBuf = false;
+//	                    }
 	                    store.AppendValues(iter,vr.Datas);
-	                    LoadPixBuf = tmp;
+	                    //DL rempixbuf
+						//LoadPixBuf = tmp;
 					}
 				}
 				//stopStopWatch("AppendValues");
@@ -430,8 +533,7 @@ namespace Sharpend.GtkSharp
 			Tree.Model = null;
 			if (Tree.Model != null)
 			{
-				(Tree.Model as Gtk.TreeStore).Clear();
-				
+				(Tree.Model as Gtk.TreeStore).Clear();		
 			}
 			removeColumns();
 			reloadColumns();
@@ -518,7 +620,10 @@ namespace Sharpend.GtkSharp
             VirtualGridRow cr = getGridRow(iter);
             if (cr != null)
             {
-                TreeIterators.Add(cr, iter); 
+                if (!TreeIterators.ContainsKey(cr))
+				{
+					TreeIterators.Add(cr, iter); 
+				}
             }
             return false;
         }
@@ -535,7 +640,13 @@ namespace Sharpend.GtkSharp
             }
 
             TreeIterators = new Dictionary<VirtualGridRow, Gtk.TreeIter>(1000);
-            Tree.Model.Foreach(new Gtk.TreeModelForeachFunc(foreachItem));
+            
+			if (Tree.Model == null)
+			{
+				return false;
+			}
+
+			Tree.Model.Foreach(new Gtk.TreeModelForeachFunc(foreachItem));
             if (TreeIterators != null)
             {
                 if (TreeIterators.ContainsKey(row))
@@ -574,19 +685,65 @@ namespace Sharpend.GtkSharp
 		
 			
 	
-        public override void setData(VirtualGridRow row, string columnName, string data)
-        {
-            base.setData(row, columnName, data);
+//        public override void setData(VirtualGridRow row, string columnName, string data)
+//        {
+//            base.setData(row, columnName, data);
+//
+////            Gtk.TreeIter iter;
+////            if (getIter(row, out iter))
+////			{
+////	            int cnt = getColumnIndex(row, columnName);
+////	            if (cnt > -1)
+////	            {
+////	                Tree.Model.SetValue(iter, cnt, data);
+////	            }
+////			} else
+////			{
+////				//ts.AppendValues(row.Datas);
+////				(Tree.Model as Gtk.TreeStore).AppendValues(row.Datas);
+////			}
+//        }
 
-            Gtk.TreeIter iter;
-            getIter(row, out iter);
+		/// <summary>
+		///  called after row.setData to inform a derived grid about changes 
+		/// </summary>
+		/// <param name='row'>
+		///  Row. 
+		/// </param>
+		/// <param name='columnName'>
+		///  Column name. 
+		/// </param>
+		/// <param name='data'>
+		///  Data. 
+		/// </param>
+		public override void afterSetData (VirtualGridRow row, string columnName, object data)
+		{
+			base.afterSetData (row, columnName, data);
 
-            int cnt = getColumnIndex(row, columnName);
-            if (cnt > -1)
-            {
-                Tree.Model.SetValue(iter, cnt, data);
-            }
-        }
+			if (data == null)
+			{
+				throw new Exception("data is null");
+			}
+
+			Gtk.TreeIter iter;
+            if (getIter(row, out iter))
+			{
+	            int cnt = getColumnIndex(row, columnName);
+	            if (cnt > -1)
+	            {
+	                Tree.Model.SetValue(iter, cnt, data);
+	            }
+			} else
+			{
+				//ts.AppendValues(row.Datas);
+				if (Tree.Model == null)
+				{
+					Tree.Model = getTreeStore();
+				}
+
+				(Tree.Model as Gtk.TreeStore).AppendValues(row.Datas);
+			}
+		}
 
         public void test()
         {

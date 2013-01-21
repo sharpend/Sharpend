@@ -59,6 +59,13 @@ namespace Sharpend.GtkSharp
 			}
 		}
 
+		public DockContainer Dock {
+			get
+			{
+				return dock;
+			}
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Sharpend.GtkSharp.DockcontainerWidget"/> class.
 		/// </summary>

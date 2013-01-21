@@ -29,7 +29,9 @@ namespace Sharpend.GtkSharp
 	public class PopupWindow : Gtk.Window
 	{
 		private Box box = new Box(Orientation.Vertical,0);
-		
+
+		public event EventHandler OnClose;
+
 		public PopupWindow () : base (Gtk.WindowType.Popup)
 		{
 		}
@@ -41,9 +43,10 @@ namespace Sharpend.GtkSharp
 		
 		public PopupWindow (CustomWidget widget) : base (Gtk.WindowType.Toplevel)
 		{
+			SetSizeRequest(320,200);
 			box.Expand = true;
 			this.Add(box);
-			
+
 			Decorated = true;
 			//TransientFor = (Gtk.Window) frame.Toplevel;
 			TypeHint = WindowTypeHint.Utility;
@@ -51,14 +54,20 @@ namespace Sharpend.GtkSharp
 			widget.Visible = true;
 			box.PackEnd(widget,true,true,0);
 			widget.Visible = true;
-			SetSizeRequest(320,200);
+			//
 			CurrentWidget = widget;
+			//Console.WriteLine(widget.Parent);
 		}
 		
 		public void Close()
 		{
 			//box.Remove(CurrentWidget);
 			//CurrentWidget.Destroy();
+			if (OnClose != null)
+			{
+				OnClose(this,new EventArgs());
+			}
+
 			Destroy();
 		}
 	
