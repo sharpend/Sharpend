@@ -9,14 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SharpendGtk2</RootNamespace>
     <AssemblyName>SharpendGtk2</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;GTK2</DefineConstants>
+    <DefineConstants>DEBUG;GTK2;XWTSUPPORT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -35,17 +34,18 @@
     <Folder Include="Glade\" />
     <Folder Include="GtkSharp\" />
     <Folder Include="Utils\" />
+    <Folder Include="Glade\windows\treelist\" />
+    <Folder Include="Glade\windows\windowlist\" />
+    <Folder Include="Utils\applications\tomboy\" />
+    <Folder Include="Utils\DBus\" />
+    <Folder Include="Utils\applications\freedesktop\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\IAppSettingsProvider.cs" />
-    <Compile Include="Glade\DockableWindow.cs" />
     <Compile Include="Glade\GladeApplication.cs" />
     <Compile Include="Glade\GladeBuilder.cs" />
-    <Compile Include="Glade\GladeDockApplication.cs" />
     <Compile Include="Glade\ToolbarHelper.cs" />
-    <Compile Include="Glade\windows\treelist\TreeListWindow.cs" />
-    <Compile Include="Glade\windows\windowlist\WindowList.cs" />
     <Compile Include="GtkSharp\Utils.cs" />
     <Compile Include="GtkSharp\Docking\DockContainer.cs" />
     <Compile Include="GtkSharp\Docking\DockFrame.cs" />
@@ -70,7 +70,6 @@
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Utils\XmlHelper.cs" />
-    <Compile Include="Utils\DBus\DBusBaseProxy.cs" />
     <Compile Include="Utils\TaskManager\BaseTask.cs" />
     <Compile Include="Utils\TaskManager\ITask.cs" />
     <Compile Include="Utils\TaskManager\TaskCompleted.cs" />
@@ -88,18 +87,15 @@
     <Compile Include="Utils\Webservices\Discogs\SearchResult.cs" />
     <Compile Include="Utils\Webservices\Discogs\Track.cs" />
     <Compile Include="Utils\applications\canonical\ICanonicalDbusMenu.cs" />
-    <Compile Include="Utils\applications\canonical\ISoundIndicator.cs" />
-    <Compile Include="Utils\applications\canonical\IUnityScope.cs" />
-    <Compile Include="Utils\applications\freedesktop\IDBus.cs" />
-    <Compile Include="Utils\applications\tomboy\ITomboyRemoteControl.cs" />
-    <Compile Include="Utils\applications\tomboy\TomboyProxy.cs" />
-    <Compile Include="Utils\applications\tomboy\TomboyRemoteControl.cs" />
+    <Compile Include="Utils\CachedPictureList.cs" />
+    <Compile Include="GtkSharp\BindableData.cs" />
+    <Compile Include="GtkSharp\BindableProperty.cs" />
+    <Compile Include="GtkSharp\DataBinder.cs" />
+    <Compile Include="GtkSharp\DataObjectContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Glade\glade_transform.xsl" />
     <None Include="Glade\glade_transform2.xsl" />
-    <None Include="Glade\windows\treelist\treelist.glade" />
-    <None Include="Glade\windows\windowlist\windowlist.glade" />
     <None Include="GtkSharp\Docking\stock-auto-hide.png" />
     <None Include="GtkSharp\Docking\stock-close-12.png" />
     <None Include="GtkSharp\Docking\stock-dock.png" />
@@ -110,26 +106,26 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\..\..\..\usr\lib\cli\gdk-sharp-2.0\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\..\..\..\usr\lib\cli\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\..\..\..\usr\lib\cli\glib-sharp-2.0\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="NDesk.DBus">
-      <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus-1.0\NDesk.DBus.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\applications\log4net-1.2.10\bin\mono\2.0\release\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Json45r5\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\..\..\..\usr\lib\cli\gdk-sharp-2.0\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\..\..\usr\lib\cli\glib-sharp-2.0\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\..\..\..\..\usr\lib\cli\gtk-dotnet-2.0\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\..\..\usr\lib\cli\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\applications\log4net-1.2.10\bin\mono\2.0\release\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Xwt">
+      <HintPath>..\..\..\xwt\Xwt\bin\Debug\Xwt.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
