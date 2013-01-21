@@ -27,7 +27,9 @@ using System.IO;
 using Sharpend.Utils;
 using System.Xml;
 using System.Xml.Serialization;
+#if !GTK2
 using System.Threading.Tasks;
+#endif
 
 #if !GTK2
 namespace Sharpend.GtkSharp
