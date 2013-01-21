@@ -126,7 +126,14 @@ namespace Sharpend.Glade
 				{
 					Boolean.TryParse(gtk2,out usegtk2);
 				}
-				
+
+				bool xwtcode = false;
+				String xwt = XmlHelper.getAttributeValue(nd,"xwtoutput");
+				if (!String.IsNullOrEmpty(xwt))	
+				{
+					Boolean.TryParse(xwt,out xwtcode);
+				}
+
 				if (File.Exists(fn))
 				{
 					String filename = windowname;
@@ -141,7 +148,14 @@ namespace Sharpend.Glade
 					}
 					
 					//String xsldoc = Sharpend.Configuration.ConfigurationManager.AppSettings["glade_transform"];		
-					FileInfo xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform.xsl");
+					FileInfo xsldoc;
+					if (xwtcode)
+					{
+						xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform_xwt.xsl");
+					} else
+					{
+						xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform.xsl");
+					}
 
 					String xslname = String.Empty;
 					if (xsldoc != null)
@@ -149,13 +163,26 @@ namespace Sharpend.Glade
 						xslname = xsldoc.FullName;
 					}
 
-					generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform.xsl");
+					if (xwtcode)
+					{
+						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform.xsl");
+					} else
+					{
+						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform_xwt.xsl");
+					}
 					
 					if (createImplementaionClass)
 					{
 						if (!File.Exists(outputpath + filename + "Implementation.cs"))
 						{
-							xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform2.xsl");
+							if (xwtcode)
+							{
+								xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform2_xwt.xsl");
+							} else
+							{
+								xsldoc = Configuration.ConfigurationManager.getConfigFile("glade_transform2.xsl");
+							}
+
 							if (xsldoc != null)
 							{
 								xslname = xsldoc.FullName;
