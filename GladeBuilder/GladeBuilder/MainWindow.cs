@@ -20,7 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Gtk;
+using Xwt;
 using Sharpend.GtkSharp;
 
 namespace GladeBuilder
@@ -30,28 +30,69 @@ namespace GladeBuilder
 	/// </summary>
 	public class MainWindow
 	{
+
+		private static builder bob;
 		public static void Main (string[] args)
 		{
-			Application.Init ();
+//			Application.Init ();
+//
+//			builder b = new builder();
+//			b.DeleteEvent += HandleDeleteEvent;
+//			b.DestroyEvent += HandleDestroyEvent;
+//
+//			b.ShowAll();
+//
+//			Application.Run ();
 
-			builder b = new builder();
-			b.DeleteEvent += HandleDeleteEvent;
-			b.DestroyEvent += HandleDestroyEvent;
+			String engineType = "Xwt.GtkBackend.GtkEngine, Xwt.Gtk, Version=1.0.0.0";
+			Application.Initialize (engineType);
 
-			b.ShowAll();
 
+			bob = new builder ();
+			bob.Title = "Gladebuilder";
+			bob.Width = 500;
+			bob.Height = 400;
+			bob.Show ();
+			bob.Disposed += HandleDisposed;
+			bob.CloseRequested += HandleCloseRequested;
+			bob.Location = new Point(200,200);
 			Application.Run ();
+			
+			bob.Dispose ();
+
 		}
 
-		static void HandleDeleteEvent (object o, DeleteEventArgs args)
+		static void HandleCloseRequested (object sender, CloseRequestedEventArgs args)
 		{
-			Application.Quit();
+			if (bob != null)
+			{
+				bob.Dispose();
+				//bob = null;
+			}
+
+			//Application.Exit();
 		}
 
-		static void HandleDestroyEvent (object o, DestroyEventArgs args)
+		static void HandleDisposed (object sender, EventArgs e)
 		{
-			Application.Quit();
+//			if (bob != null)
+//			{
+//				bob.Dispose();
+//				bob = null;
+//			}
+
+			Application.Exit();
 		}
+
+//		static void HandleDeleteEvent (object o, DeleteEventArgs args)
+//		{
+//			Application.Quit();
+//		}
+//
+//		static void HandleDestroyEvent (object o, DestroyEventArgs args)
+//		{
+//			Application.Quit();
+//		}
 	}
 }
 

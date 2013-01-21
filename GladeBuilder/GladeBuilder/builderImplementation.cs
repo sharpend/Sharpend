@@ -20,24 +20,15 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Gtk;
 using Sharpend.GtkSharp;
 using Sharpend.Utils;
 using System.IO;
 using System.Collections.Generic;
 using System.Xml;
+using Xwt;
+using Xwt.Formats;
 
-namespace GladeBuilder{	public partial class builder: Gtk.Window	{
-		/// <summary>
-		/// List for files
-		/// </summary>
-		/// <value>
-		/// The tree list.
-		/// </value>
-		public GtkListTreeView TreeList {
-			get;
-			private set;
-		}
+namespace GladeBuilder{	public partial class builder: Window	{
 
 		/// <summary>
 		/// Container for the bindable DataObjects
@@ -50,6 +41,32 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			private set;
 		}
 
+		//The Datafields for the tree
+		private DataField<String> dfFilename = new DataField<String>();
+		private DataField<GladeFile> dfGladefile = new DataField<GladeFile>();
+
+		/// <summary>
+		/// Treestore containing data from the glade files
+		/// </summary>
+		/// <value>
+		/// The ts data.
+		/// </value>
+		public TreeStore TsData {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// The current .gladebuilder file 
+		/// </summary>
+		/// <value>
+		/// The current file.
+		/// </value>
+		public String CurrentFile {
+			get;
+			private set;
+		}
+
 		/// <summary>
 		/// init control
 		/// </summary>		public void init() 
@@ -57,49 +74,183 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			DataBinder.OnBindException += HandleOnBindException;
 			DataObjects = new DataObjectContainer();
 
-			TreeList = new GtkListTreeView(treeview1);
-			TreeList.loadStructureFromRessource("GladeBuilder.list.xml");
-			treeview1.Selection.Mode = SelectionMode.Multiple;
-			treeview1.RowActivated += HandleRowActivated;
-
-			btnAddFiles.SelectionChanged += HandleSelectionChanged;
-
-			FileChooserButtonWrapper fc1 = new FileChooserButtonWrapper("Please select a .glade file",BtnAddFiles,FileChooserAction.Open);
-			fc1.OnSelectionChanged += HandleSelectionChanged;
-			fc1.AddPattern("*.glade");
-
-			btnAddFiles.Action = FileChooserAction.Open;
-			btnRemoveSelected.Clicked += RemoveSelectedClicked;
-
-			FileChooserButtonWrapper fc2 = new FileChooserButtonWrapper("Please select an output path",BtnSelectOutputPath,EntryOutputPath,FileChooserAction.SelectFolder);
-
-			btnSaveAs.Clicked += BtnSaveAsClicked;
-
-			//config files
-			FileChooserButtonWrapper fc3 = new FileChooserButtonWrapper("Please select a .gladebuilder file", BtnSelectConfigFile,EntryConfigFile,FileChooserAction.Open);
-			fc3.AddPattern("*.gladebuilder");
-			fc3.OnSelectionChanged += BtnConfigFileSelectionChanged;
-
+			BtnOpenFile.Clicked += HandleOpenFileClicked;
 			BtnGenerate.Clicked += BtnGenerateClicked;
+			BtnNew.Clicked += HandleBtnNewClicked;
+			BtnAddFile.Clicked += HandleBtnAddClicked;
+			BtnRemoveSelected.Clicked += HandleBtnRemoveClicked;
+			BtnSaveAs.Clicked += HandleBtnSaveAsClicked;
 
-			btnExit.Clicked += delegate(object sender, EventArgs e) {
-				Application.Quit();
-			};
+			//the tree (not used as tree here)
+			TsData = new TreeStore(dfFilename,dfGladefile);
+			Treeview1.DataSource = TsData;
+			Treeview1.Columns.Add ("Filename", dfFilename);
+			Treeview1.Columns.Add ("GladeFile", dfGladefile);
+			Treeview1.SelectionChanged += TreeViewSelectionChangend;
+			Treeview1.ButtonPressed += HandleTreeViewButtonPressed;
+
+			CurrentFile = String.Empty;
 
 			GladeFile.connect(typeof(GladeFile),this);
 			restoreSettings();
 		}
 
+		void HandleBtnSaveAsClicked (object sender, EventArgs e)
+		{
+			saveAs();
+		}
+
+		/// <summary>
+		/// remove the selected files from the treestore
+		/// </summary>
+		/// <param name='sender'>
+		/// Sender.
+		/// </param>
+		/// <param name='e'>
+		/// E.
+		/// </param>
+		void HandleBtnRemoveClicked (object sender, EventArgs e)
+		{
+//			TreePosition[] tp = Treeview1.SelectedRows;
+//			foreach (TreePosition p in tp)
+//			{
+//				TsData.GetNavigatorAt(p).Remove();
+//			}
+
+			TreeNavigator tn = TsData.GetFirstNode();
+			do
+			{
+				tn.Remove();
+			} while (tn.MoveNext());
+			clearEntries();
+		}
+
+		/// <summary>
+		/// Add a new glade file in the datastore
+		/// </summary>
+		/// <param name='sender'>
+		/// Sender.
+		/// </param>
+		/// <param name='e'>
+		/// E.
+		/// </param>
+		void HandleBtnAddClicked (object sender, EventArgs e)
+		{
+			OpenFileDialog fc = new OpenFileDialog("select a glade file");
+			fc.Filters.Add(new FileDialogFilter("Glade","*.glade"));
+			if (fc.Run())
+			{
+				GladeFile gf = new GladeFile(fc.FileName);
+				gf.WindowName = "window1";
+				gf.Namespace = "window1";
+				gf.ClassName = "window1";
+				gf.CreateImplementation = true;
+				gf.OutputPath = new FileInfo(fc.FileName).Directory.FullName;
+				TsData.AddNode().SetValue(dfFilename,gf.Filename).SetValue(dfGladefile,gf);
+			}
+		}
+
+		//clear all entries ... kind of workaround
+		private void clearEntries()
+		{	
+			GladeFile gf = new GladeFile("");
+			gf.ClassName = String.Empty;
+			gf.CreateImplementation = true;
+			gf.CustomWidgetName = String.Empty;
+			gf.Filename = String.Empty;
+			gf.Filename = String.Empty;
+			gf.Namespace = String.Empty;
+			gf.OutputPath = String.Empty;
+			gf.Target = String.Empty;
+			gf.UseGtk2 = false;
+			gf.WindowName = String.Empty;
+			gf.XwtOutput = false;
+			DataObjects.Add(gf);
+			gf.Bind(this);
+			DataObjects.DataObjects.Clear();
+		}
+
+		/// <summary>
+		/// Clear all entries and remove all glade files
+		/// </summary>
+		/// <param name='sender'>
+		/// Sender.
+		/// </param>
+		/// <param name='e'>
+		/// E.
+		/// </param>
+		void HandleBtnNewClicked (object sender, EventArgs e)
+		{
+			TsData.Clear();
+			CurrentFile = String.Empty;
+			clearEntries();
+			TextviewMessages.LoadText(String.Empty,TextFormat.Markdown);
+		}
+
+		void HandleTreeViewButtonPressed (object sender, ButtonEventArgs e)
+		{
+			if (e.MultiplePress == 2)
+			{
+				TreePosition tp = Treeview1.SelectedRow;
+
+				GladeFile gf = (GladeFile)Treeview1.DataSource.GetValue(tp,1);
+				if (gf != null)
+				{
+					DataObjects.Add(gf);
+					gf.Bind(this);
+				}
+			}
+		}
+
+
+		void HandleOpenFileClicked (object sender, EventArgs e)
+		{
+			OpenFileDialog fc = new OpenFileDialog("select a gladebuilder file");
+			fc.Filters.Add(new FileDialogFilter("Gladebuilder","*.gladebuilder"));
+			if (fc.Run())
+			{
+				loadData(fc.FileName);
+			}
+		}
+
 		void HandleOnBindException (object sender, EventArgs e)
 		{
-			textviewMessages.Buffer.Text = "no .glade file selected ! \n";
-			notebook1.CurrentPage = 0;
-//			textviewMessages.Buffer.Clear();
-//			Exception ex = sender as Exception;
-//			if (ex != null)
-//			{
-//				textviewMessages.Buffer.Text = ex.ToString();
-//			}
+			String txt = "no .glade file selected ! \n";
+			Notebook1.CurrentTabIndex = 0;
+			Exception ex = sender as Exception;
+			if (ex != null)
+			{
+				txt = ex.ToString();
+			}
+
+			TextviewMessages.LoadText(txt,TextFormat.Markdown);
+		}
+
+		/// <summary>
+		/// gnerate c# code from .gladebuilder file
+		/// </summary>
+		/// <param name='filename'>
+		/// Filename.
+		/// </param>
+		private void generateCode(String filename)
+		{
+			try
+			{
+				TextviewMessages.LoadText("start generating c# code.\n",TextFormat.Markdown);
+				if (String.IsNullOrEmpty(filename))
+				{
+					throw new Exception("parameter filename must not be empty");
+				}
+
+				Sharpend.Glade.GladeBuilder.generateCode(filename,true);
+				TextviewMessages.LoadText("done.",TextFormat.Markdown);
+			} 
+			catch (Exception ex)
+			{
+				String txt = "error while generating c# code: \n";
+				txt += ex.ToString();
+				TextviewMessages.LoadText(txt,TextFormat.Markdown);
+			}
 		}
 
 		/// <summary>
@@ -113,42 +264,28 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// </param>
 		void BtnGenerateClicked (object sender, EventArgs e)
 		{
-			try
+			TreeNavigator tn = TsData.GetFirstNode();
+			if (tn.CurrentPosition == null)
 			{
-				if (TreeList.Rows.Count < 1)
-				{
-					textviewMessages.Buffer.Text += "there are no .glade files in the list !\n";
-					return;
-				}
+				TextviewMessages.LoadText("no glade files in list!\n",TextFormat.Markdown);
+				return;
+			}
 
-				textviewMessages.Buffer.Clear();
-				textviewMessages.Buffer.Text += "start generating...\n";
-				String fn = EntryConfigFile.Text.Trim();
-				if (String.IsNullOrEmpty(fn))
-				{
-					saveAs();
-					fn = EntryConfigFile.Text.Trim();
-				}
-
-				if (saveFile(fn))
-				{
-					Sharpend.Glade.GladeBuilder.generateCode(fn,true);
-					textviewMessages.Buffer.Text += "done\n";
-				} else
-				{
-					textviewMessages.Buffer.Text += "error, could not save file '" + fn + "' \n";
-				}
-			} catch (Exception ex)
+			if (String.IsNullOrEmpty(CurrentFile))
 			{
-				textviewMessages.Buffer.Text = ex.ToString();
-			} 
+				saveAs();
+			} else
+			{
+				save();
+			}
+
+			generateCode(CurrentFile);		
 		}
 
-
-		protected override void OnDestroyed ()
+		protected override bool OnCloseRequested ()
 		{
 			saveSettings();
-			base.OnDestroyed ();
+			return base.OnCloseRequested ();
 		}
 
 		/// <summary>
@@ -163,7 +300,7 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 				fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
 			}
 
-			//Sharpend.Configuration.ConfigurationManager.setValue("/configuration/lastloaded",EntryConfigFile.Text.Trim(),true);
+			Sharpend.Configuration.ConfigurationManager.setValue("/configuration/lastloaded",CurrentFile,true);
 			Sharpend.Configuration.ConfigurationManager.setValue("/configuration/pane",paned1.Position.ToString(),true);
 		}
 
@@ -172,12 +309,11 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// </summary>
 		private void restoreSettings()
 		{
-//			String s = Sharpend.Configuration.ConfigurationManager.getString("lastloaded");
-//			if (!String.IsNullOrEmpty(s))
-//			{
-//				EntryConfigFile.Text = s;
-//				loadData(entryConfigFile.Text.Trim());
-//			}
+			String s = Sharpend.Configuration.ConfigurationManager.getString("lastloaded");
+			if (!String.IsNullOrEmpty(s))
+			{
+				loadData(s);
+			}
 
 			String p = Sharpend.Configuration.ConfigurationManager.getString("pane");
 			if (!String.IsNullOrEmpty(p))
@@ -186,58 +322,23 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			}
 		}
 
-//		void BtnSelectOutputPathChanged (object sender, EventArgs e)
-//		{
-//			entryOutputPath.Text = BtnSelectOutputPath.CurrentFolder;
-//		}
-
 		void BtnSaveAsClicked (object sender, EventArgs e)
 		{
 			saveAs();
 		}
 
-		/// <summary>
-		/// remove selected rows from the filelist
-		/// </summary>
-		/// <param name='sender'>
-		/// Sender.
-		/// </param>
-		/// <param name='e'>
-		/// E.
-		/// </param>
-		void RemoveSelectedClicked (object sender, EventArgs e)
+
+		void TreeViewSelectionChangend (object sender, EventArgs e)
 		{
-			List<VirtualGridRow> lst = TreeList.getSelectedRows(); 
-			for (int i=lst.Count-1;i>-1;i--)
-            {
-				VirtualGridRow rw = lst[i];
-				TreeList.removeRow(rw);
+			TreePosition tp = Treeview1.SelectedRow;
+			GladeFile gf = (GladeFile)Treeview1.DataSource.GetValue(tp,1);
+			if (gf != null)
+			{
+				DataObjects.Add(gf);
+				gf.Bind(this);
 			}
 		}
 
-		/// <summary>
-		/// load
-		/// </summary>
-		/// <param name='sender'>
-		/// Sender.
-		/// </param>
-		/// <param name='e'>
-		/// E.
-		/// </param>
-//		void LoadConfigFile (object sender, EventArgs e)
-//		{
-//			loadData(entryConfigFile.Text.Trim());
-//		}
-
-		void BtnConfigFileSelectionChanged (object sender, EventArgs e)
-		{
-			loadData(entryConfigFile.Text.Trim());
-		}
-
-		void HandleShown (object sender, EventArgs e)
-		{
-			btnAddFiles.SelectMultiple = true;	
-		}
 
 		/// <summary>
 		/// load data from a config file
@@ -247,73 +348,23 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		/// </param>
 		private void loadData(String filename)
 		{
-
-			TreeList.Rows.Clear();
-			textviewMessages.Buffer.Clear();
+			TsData.Clear();
 
 			XmlDocument doc = new XmlDocument();
 			doc.Load(filename);
-
 			XmlNodeList lst = doc.SelectNodes("//gladefile");
 			foreach (XmlNode nd in lst)
 			{
 				GladeFile f = GladeFile.CreateInstance(nd);
-
-				VirtualGridRow row = TreeList.newRow();
-				row.setData("Filename",f.Filename);
-				row.setData("Object",f);	
+				TsData.AddNode().SetValue(dfFilename,f.Filename).SetValue(dfGladefile,f);
 			}
-
-			TreeList.reload();
+			CurrentFile = filename;
+		
+			TreeNavigator tn = TsData.GetFirstNode();
+			Treeview1.SelectRow(tn.CurrentPosition);
+			TextviewMessages.LoadText("File " + CurrentFile + " loaded\n",TextFormat.Markdown);
 		}
 
-		/// <summary>
-		/// Row in the treelist is activated (selected)
-		/// </summary>
-		/// <param name='o'>
-		/// O.
-		/// </param>
-		/// <param name='args'>
-		/// Arguments.
-		/// </param>
-		void HandleRowActivated (object o, RowActivatedArgs args)
-		{
-			VirtualGridRow row = TreeList.getSelectedRow();
-			if (row != null)
-			{
-				GladeFile gf = (row.getData("object") as GladeFile);
-				DataObjects.Add(gf);
-				gf.Bind(this);
-			}
-		}
-
-		/// <summary>
-		/// file selection changed
-		/// </summary>
-		/// <param name='sender'>
-		/// Sender.
-		/// </param>
-		/// <param name='e'>
-		/// E.
-		/// </param>
-		void HandleSelectionChanged (object sender, EventArgs e)
-		{
-			//TreeList.Rows.Clear();
-
-			foreach (GLib.File f in btnAddFiles.Files)
-			{
-				VirtualGridRow row = TreeList.newRow();
-				FileInfo fi = new FileInfo(f.Path);
-				row.setData("Filename",fi.Name);
-				row.setData("Path",fi.Directory.FullName);
-				GladeFile gf = new GladeFile(fi.FullName);
-				row.setData("Object",gf);
-				DataObjects.Add(gf);
-				setDefaults(gf);
-				gf.Bind(this);
-			}
-			TreeList.reload();
-		}
 
 		/// <summary>
 		/// set default values
@@ -327,7 +378,6 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			gf.Namespace = gf.ClassName;
 			gf.CreateImplementation = true;
 			gf.OutputPath = fi.Directory.FullName;
-
 		}
 
 		/// <summary>
@@ -352,11 +402,12 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			XmlElement glade = d.CreateElement("glade");
 			config.AppendChild(glade);
 
-			foreach (VirtualGridRow row in TreeList.Rows)
+			TreeNavigator tn = TsData.GetFirstNode();
+			do
 			{
-				GladeFile gf = (row.getData("Object") as GladeFile);
+				GladeFile gf = (GladeFile)tn.GetValue(dfGladefile);
 				gf.save(glade);
-			}
+			} while (tn.MoveNext());
 
 			d.Save(fullname);
 		}
@@ -374,11 +425,12 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 			if (fi.Exists) 
 			{
 				save = false;
-				if (Message.ShowInfoMessage("File " + fi.FullName + " exists, overwrite ?",this) == ResponseType.Ok)
-				{
-					save = true;
-					clear = true;
-				}
+				//TODO XWT
+//				if (Message.ShowInfoMessage("File " + fi.FullName + " exists, overwrite ?",this) == ResponseType.Ok)
+//				{
+//					save = true;
+//					clear = true;
+//				}
 			}
 		
 			if (save)
@@ -391,27 +443,33 @@ namespace GladeBuilder{	public partial class builder: Gtk.Window	{
 		}
 
 		/// <summary>
+		/// save the current file
+		/// </summary>
+		private void save()
+		{
+			doSave(CurrentFile,true);
+		}
+
+		/// <summary>
 		/// do a "save as"
 		/// </summary>
 		private void saveAs()
 		{
-			if (TreeList.Rows.Count < 1)
+			TreeNavigator tn = TsData.GetFirstNode();
+			if (tn.CurrentPosition == null)
 			{
-				textviewMessages.Buffer.Text += "there are no .glade files in the list !\n";
+				TextviewMessages.LoadText("no glade files in list!\n",TextFormat.Markdown);
 				return;
 			}
 
-			Gtk.FileChooserDialog fc = new FileChooserDialog("Save As",this,FileChooserAction.Save,Stock.Cancel, ResponseType.Cancel,
-                Stock.Open, ResponseType.Ok);
-
-			int response = fc.Run();
-
-			if ((ResponseType) response == ResponseType.Ok) {
-				saveFile(fc.Filename);
-				entryFilename.Text = fc.Filename;
-			}
-
-			fc.Destroy();
+			//FileDialogFilter fi = new FileDialogFilter(
+			SaveFileDialog fc = new SaveFileDialog("save as");
+			fc.Filters.Add(new FileDialogFilter("Gladebuilder","*.gladebuilder"));
+			if (fc.Run())
+			{
+				CurrentFile = fc.FileName;
+				doSave(CurrentFile,false);
+			}	
 		}
 
 	} //class} //namespace

@@ -21,49 +21,13 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="box17">
+                  <object class="GtkButton" id="btnNew">
+                    <property name="label" translatable="yes">Neu</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkLabel" id="label12">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Gladebuilder Config File
-(stores the gladebuilder data)</property>
-                        <property name="label" translatable="yes">Glade Config (glade.config)</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entryConfigFile">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">if empty you have to select a file when you click 'Generate Files'</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkFileChooserButton" id="btnSelectConfigFile">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -72,8 +36,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnGenerate">
-                    <property name="label" translatable="yes">Generate Files</property>
+                  <object class="GtkButton" id="btnOpenFile">
+                    <property name="label" translatable="yes">Open existing Gladebuilder(*.gladebuilder) File</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -87,8 +51,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnSaveAs">
-                    <property name="label" translatable="yes">Save as</property>
+                  <object class="GtkButton" id="btnGenerate">
+                    <property name="label" translatable="yes">Generate C# Code</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -102,6 +66,21 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="btnSaveAs">
+                    <property name="label" translatable="yes">Save Gladebuilder File (*.gladebuilder)</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkTextView" id="textviewMessages">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -109,11 +88,8 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -121,7 +97,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes">Main</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -166,8 +142,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkButton" id="btnRemoveSelected">
-                                <property name="label" translatable="yes">Remove Selected</property>
+                              <object class="GtkButton" id="btnAddFile">
+                                <property name="label" translatable="yes">Add Glade (*.glade) File</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -181,12 +157,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFileChooserButton" id="btnAddFiles">
+                              <object class="GtkButton" id="btnRemoveSelected">
+                                <property name="label" translatable="yes">Remove Selected</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="create_folders">False</property>
-                                <property name="title" translatable="yes">Add Files</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -332,14 +309,17 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFileChooserButton" id="btnSelectOutputPath">
+                              <object class="GtkButton" id="btnSelectOutputFolder">
+                                <property name="label" translatable="yes">...</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">True</property>
+                                <property name="fill">False</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -591,6 +571,47 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box19">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="label13">
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="yalign">0.49000000953674316</property>
+                            <property name="label" translatable="yes">Create Mono XWT Code</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="chkXwtOutput">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                   </object>

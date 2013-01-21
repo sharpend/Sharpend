@@ -33,33 +33,15 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="atk-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\atk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="cairo-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\cairo-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gio-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\gio-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-dotnet">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\gtk-dotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="pango-sharp">
-      <HintPath>..\..\..\gtk-sharp\lib\mono\gtk-sharp-3.0\pango-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xwt">
+      <HintPath>..\..\..\xwt\Xwt.Gtk\bin\Debug\Xwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Xwt.Gtk">
+      <HintPath>..\..\..\xwt\Xwt.Gtk\bin\Debug\Xwt.Gtk.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindow.cs" />
@@ -68,15 +50,15 @@
     <Compile Include="GladeFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sharpend\Sharpend.csproj">
-      <Project>{94641ABA-736F-4D76-BD1B-99C45313F988}</Project>
-      <Name>Sharpend</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="glade.gladebuilder" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="list.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharpendGtk2\Sharpend\Sharpend\SharpendGtk2.csproj">
+      <Project>{B85B4544-E2CB-4C5D-B599-F19F643287F3}</Project>
+      <Name>SharpendGtk2</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

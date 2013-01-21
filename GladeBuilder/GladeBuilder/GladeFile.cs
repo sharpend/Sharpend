@@ -124,12 +124,29 @@ namespace GladeBuilder
 			set;
 		}
 
+		/// <summary>
+		/// Create gtk-sharp code for Gtk2
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if use gtk2; otherwise, <c>false</c>.
+		/// </value>
 		[BindableProperty("ChkUseGtk2","Toggled")]
 		public bool UseGtk2 {
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Create Mono XWT Code
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if xwt output; otherwise, <c>false</c>.
+		/// </value>
+		[BindableProperty("ChkXwtOutput","Toggled")]
+		public bool XwtOutput {
+			get;
+			set;
+		}
 
 		private GladeFile ()
 		{
@@ -153,8 +170,7 @@ namespace GladeBuilder
 			ret.UseCustomWidget = node.AttributeValueBool("customwidget");
 			ret.CustomWidgetName = node.AttributeValue("customwidgetclass");
 			ret.UseGtk2 = node.AttributeValueBool("usegtk2");
-
-
+			ret.XwtOutput = node.AttributeValueBool("xwtoutput");
 			return ret;
 		}
 
@@ -171,7 +187,7 @@ namespace GladeBuilder
 			data.AddAttributeValue("customwidgetclass",CustomWidgetName);
 			data.AddAttributeValue("customwidget",UseCustomWidget.ToString());
 			data.AddAttributeValue("usegtk2",UseGtk2.ToString());
-
+			data.AddAttributeValue("xwtoutput",XwtOutput.ToString());
 
 			parentnode.AppendChild(data);
 
