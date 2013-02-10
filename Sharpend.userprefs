@@ -1,28 +1,19 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/GtkSharp/Widgets/MainWindow.cs">
     <Files>
-      <File FileName="Sharpend/GtkSharp/Widgets/DockcontainerWidget.cs" Line="34" Column="31" />
-      <File FileName="Sharpend/Utils/VirtualGrid/VirtualTreeRow.cs" Line="354" Column="12" />
-      <File FileName="Sharpend/Utils/VirtualGrid/VirtualTreeList.cs" Line="134" Column="27" />
+      <File FileName="Sharpend/GtkSharp/Widgets/MainWindow.cs" Line="164" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Sharpend" expanded="True">
-            <Node name="References" expanded="True" />
             <Node name="GtkSharp" expanded="True">
               <Node name="Docking" expanded="True" />
-              <Node name="Widgets" expanded="True" />
-            </Node>
-            <Node name="Utils" expanded="True">
-              <Node name="VirtualGrid" expanded="True">
-                <Node name="VirtualTreeList.cs" selected="True" />
+              <Node name="Widgets" expanded="True">
+                <Node name="DockableWidget.cs" selected="True" />
               </Node>
             </Node>
-          </Node>
-          <Node name="TaskManager" expanded="True">
-            <Node name="References" expanded="True" />
           </Node>
         </State>
       </Pad>
@@ -38,11 +29,7 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="331" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Sharpend/Utils/Reflection.cs" line="250" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="330" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <AuthorInfo Name="Dirk Lehmeier" Email="sharpend_develop@yahoo.de" Copyright="Dirk Lehmeier" Company="" Trademark="" />

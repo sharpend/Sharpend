@@ -83,7 +83,7 @@ namespace Sharpend.GtkSharp
 		}
 		
 		
-		private static void hookDelegates(XmlNode parent, Gtk.Widget source, object callingObject=null)
+		private static void hookDelegates(XmlNode parent, Gtk.Widget source, object callingObject=null, String multi="Single")
 		{	
 			XmlNodeList lst = parent.SelectNodes(".//delegate");
 			
@@ -94,7 +94,7 @@ namespace Sharpend.GtkSharp
 				String eventname = XmlHelper.getAttributeValue(nd,"event");
 				
 #if !GTK2
-				Sharpend.GtkSharp.MainWindow.hookDelegate(source,target,eventname,functionname,callingObject);
+				Sharpend.GtkSharp.MainWindow.hookDelegate(source,target,eventname,functionname,callingObject, multi);
 #endif
 
 #if GTK2

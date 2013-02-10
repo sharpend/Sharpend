@@ -144,6 +144,11 @@ namespace window{	public partial class window: Gtk.Window	{
 
 					xmptag.Keywords = csvtags.Split(',');
 
+					//xmptag.Latitude = 
+
+					//TagLib.Xmp.XmpTag xmptag = (TagLib.Xmp.XmpTag)jpg.GetTag(TagLib.TagTypes.XMP);
+
+
 				}
 
 				jpg.Save();

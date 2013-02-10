@@ -688,9 +688,11 @@ namespace Sharpend.GtkSharp
 
 		void HandleDeleteEvent (object o, DeleteEventArgs args)
 		{
+			Console.WriteLine("HandleDeleteEvent: " + o);
 			PopupWindow pw = (o as PopupWindow);
 			if (pw != null)
 			{
+				Console.WriteLine("HandleDeleteEvent: " + pw.CurrentWidget);
 				DockableWidget dw = (pw.CurrentWidget as DockableWidget);
 				if (dw != null)
 				{
@@ -723,10 +725,10 @@ namespace Sharpend.GtkSharp
 		
 		public void createPopupWindow(ParameterSet param)
 		{
+			Console.WriteLine("createPopupWindow");
 			DockableWidget wnd =  DockableWidget.createWindow(param,null);
 			//addWidget(wnd);
 			PopupWindow pw = new PopupWindow(wnd);
-			
 			windowlist.Add(wnd.ID,wnd);
 			pw.SetSizeRequest(640,480);
 			pw.WindowPosition = WindowPosition.CenterAlways;
@@ -740,9 +742,11 @@ namespace Sharpend.GtkSharp
 
 		void HandleOnClose (object o, EventArgs e)
 		{
+			Console.WriteLine("HandleOnClose" + o);
 			PopupWindow pw = (o as PopupWindow);
 			if (pw != null)
 			{
+				Console.WriteLine("HandleOnClose CW" + pw.CurrentWidget);
 				DockableWidget dw = (pw.CurrentWidget as DockableWidget);
 				if (dw != null)
 				{

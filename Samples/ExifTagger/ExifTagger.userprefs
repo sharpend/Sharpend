@@ -5,22 +5,18 @@
       <File FileName="ExifTagger/Main.cs" Line="12" Column="5" />
       <File FileName="ExifTagger/grid.xml" Line="12" Column="14" />
       <File FileName="ExifTagger/window.cs" Line="234" Column="57" />
-      <File FileName="ExifTagger/windowImplementation.cs" Line="153" Column="16" />
+      <File FileName="ExifTagger/windowImplementation.cs" Line="151" Column="8" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="ExifTagger" expanded="True">
-            <Node name="References" expanded="True" selected="True" />
-          </Node>
-        </State>
+        <State expanded="True" />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="215" />
-      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="226" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="220" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="231" />
       <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="141" />
       <Breakpoint file="/home/dirk/Projects/Sharpend/Samples/ExifTagger/ExifTagger/windowImplementation.cs" line="145" />
     </BreakpointStore>

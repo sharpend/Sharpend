@@ -25,6 +25,9 @@ using NDesk.DBus;
 using Sharpend.Utils.Applications.FreeDesktop;
 using Sharpend;
 using Sharpend.Utils.Webservices.Discogs;
+using Sharpend.Utils.Applications.Tomboy;
+using Sharpend.Utils.Applications.Canonical;
+using Gtk;
 
 namespace TestConsole
 {
@@ -42,16 +45,24 @@ namespace TestConsole
 	class MainClass
 	{
 		
-		
+		static SoundProxy sp;
 		public static void Main (string[] args)
 		{
 			Console.WriteLine ("Hello World!");
 			
-			Discogs dg = new Discogs();
+			//Discogs dg = new Discogs();
 			//dg.GetArtist("Guano Apes");
-			dg.Search("Guano Apes");
-			
-			
+			//dg.Search("Guano Apes");
+
+			//TomboyProxy tp = new TomboyProxy();
+
+			//return;
+
+			//Console.WriteLine(si.GetVolume());
+
+			//sp.SetVolume();
+			//sp.Mute();
+			//sp.SetVolume(30);
 //			GType.Init();
 //			
 //			GLib.MainLoop mainLoop = new GLib.MainLoop();		
@@ -62,10 +73,75 @@ namespace TestConsole
 //			});
 //			
 //			mainLoop.Run();
-			
+
+
+			Application.Init();
+
+			GLib.Timeout.Add (500, () => {
+				mainLoop();
+				return true;
+			});
+
+			Application.Run();
+
+			//Console.WriteLine(si.Volume);
+
 			Console.WriteLine ("Ende");
 		}
-		
+
+		static void HandleOnSoundStateUpdate (int state)
+		{
+			Console.WriteLine(state);
+		}
+
+		private static bool init=false;
+		private static double x=50.0;
+		private static void mainLoop()
+		{
+			if (!init)
+			{
+				sp = new SoundProxy();
+				sp.OnVolumeChanged += HandleVolumeChanged;
+
+				//Console.WriteLine(sp.RemoteInterface.Status);
+//				SoundIndicatorProxy si = new SoundIndicatorProxy();
+//				si.OnSoundStateUpdate += HandleOnSoundStateUpdate;
+//
+//				Console.WriteLine(si.GetVolume());
+
+				init = true;
+				//sp.SetVolume(x);
+				//sp.GetVolume();
+				Console.WriteLine("Vol:" + sp.Volume);
+			}
+
+			//Console.Write(sp.RemoteInterface.Status);
+
+//			Console.WriteLine(x);
+//			x--;
+//			if (x == 40.0)
+//			{
+//				sp.SetVolume(20);
+//			}
+
+
+//			if (init)
+//			{
+//				sp.SetVolume(30);
+//			}
+
+			Console.WriteLine(sp.GetVolume());
+			if (x < 20)
+			{
+				//x=50;
+			}
+		}
+
+		private static void HandleVolumeChanged(double vol)
+		{
+			Console.WriteLine("vol" + vol);
+		}
+
 		public static void TestScope()
 		{
 			BusG.Init ();

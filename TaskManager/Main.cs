@@ -70,7 +70,12 @@ namespace TaskManager
 			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 			
 			log.Info("Welcome to the Taskmanager");
-			
+
+			log.Info("wait a bit");
+			Thread.Sleep(10000);
+			log.Info("ready");
+
+
 			#if DBUS
 			BusG.Init();
 			rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");

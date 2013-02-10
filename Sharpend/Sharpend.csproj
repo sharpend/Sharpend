@@ -139,6 +139,9 @@
     <Compile Include="GtkSharp\Widgets\FileChooserButtonWrapper.cs" />
     <Compile Include="GtkSharp\Widgets\DockcontainerWidget.cs" />
     <Compile Include="GtkSharp\Widgets\DatePicker.cs" />
+    <Compile Include="Utils\applications\canonical\ISoundMenu.cs" />
+    <Compile Include="Utils\applications\canonical\SoundProxy.cs" />
+    <Compile Include="Utils\applications\canonical\SoundIndicatorProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -170,5 +173,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Glade\glade_transform.xsl" />
     <EmbeddedResource Include="Glade\glade_transform2.xsl" />
+    <EmbeddedResource Include="Glade\glade_transform_xwt.xsl" />
+    <EmbeddedResource Include="Glade\glade_transform2_xwt.xsl" />
   </ItemGroup>
 </Project>
