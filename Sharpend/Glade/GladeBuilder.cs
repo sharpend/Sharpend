@@ -165,10 +165,10 @@ namespace Sharpend.Glade
 
 					if (xwtcode)
 					{
-						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform.xsl");
+						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform_xwt.xsl");
 					} else
 					{
-						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform_xwt.xsl");
+						generateCode(fn, outputpath, windowname,namespacename, filename + ".cs", xslname,classname,iscustomwidget,customwidgetclass,usegtk2,"Sharpend.Glade.glade_transform.xsl");
 					}
 					
 					if (createImplementaionClass)
