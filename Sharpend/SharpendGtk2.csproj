@@ -9,13 +9,14 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SharpendGtk2</RootNamespace>
     <AssemblyName>SharpendGtk2</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;GTK2;XWTSUPPORT</DefineConstants>
+    <DefineConstants>DEBUG;GTK2;SHARPZIPLIB</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -94,8 +95,6 @@
     <Compile Include="GtkSharp\DataObjectContainer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Glade\glade_transform.xsl" />
-    <None Include="Glade\glade_transform2.xsl" />
     <None Include="GtkSharp\Docking\stock-auto-hide.png" />
     <None Include="GtkSharp\Docking\stock-close-12.png" />
     <None Include="GtkSharp\Docking\stock-dock.png" />
@@ -127,5 +126,13 @@
     <Reference Include="Xwt">
       <HintPath>..\..\..\xwt\Xwt\bin\Debug\Xwt.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Glade\glade_transform.xsl">
+      <LogicalName>Sharpend.Glade.glade_transform.xsl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Glade\glade_transform2.xsl">
+      <LogicalName>Sharpend.Glade.glade_transform2.xsl</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
