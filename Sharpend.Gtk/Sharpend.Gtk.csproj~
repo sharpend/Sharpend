@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AFACD1D1-7D9A-4B8F-B2DB-05E847666224}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Sharpend.Gtk</RootNamespace>
+    <AssemblyName>Sharpend.Gtk</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>..\..\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\..\gtk-sharp\gio\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\gtk-sharp\glib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Docking\DockContainer.cs" />
+    <Compile Include="Docking\DockFrame.cs" />
+    <Compile Include="Docking\DockItemContainer.cs" />
+    <Compile Include="Docking\DockframeWindow.cs" />
+    <Compile Include="Docking\PlaceholderWindow.cs" />
+    <Compile Include="Docking\PopupWindow.cs" />
+    <Compile Include="Toolbar\CommandToolButton.cs" />
+    <Compile Include="TreeList\GtkListTreeView.cs" />
+    <Compile Include="TreeList\XmlTreeModel.cs" />
+    <Compile Include="TreeList\XmlTreeStore.cs" />
+    <Compile Include="Widgets\CustomWidget.cs" />
+    <Compile Include="Widgets\DatePicker.cs" />
+    <Compile Include="Widgets\DockableWidget.cs" />
+    <Compile Include="Widgets\DockcontainerWidget.cs" />
+    <Compile Include="Widgets\FileChooserButtonWrapper.cs" />
+    <Compile Include="Widgets\MainWindow.cs" />
+    <Compile Include="Widgets\PanedBox.cs" />
+    <Compile Include="Widgets\ProgressWindow.cs" />
+    <Compile Include="Widgets\ProgressWindowImplementation.cs" />
+    <Compile Include="BindableData.cs" />
+    <Compile Include="BindableProperty.cs" />
+    <Compile Include="DataBinder.cs" />
+    <Compile Include="DataObjectContainer.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\CachedPictureList.cs" />
+    <Compile Include="Utils\CustomEventhandler.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Docking\" />
+    <Folder Include="Toolbar\" />
+    <Folder Include="TreeList\" />
+    <Folder Include="Widgets\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docking\stock-auto-hide.png" />
+    <None Include="Docking\stock-close-12.png" />
+    <None Include="Docking\stock-dock.png" />
+    <None Include="Docking\stock-menu-left-12.png" />
+    <None Include="Docking\stock-menu-right-12.png" />
+    <None Include="Widgets\glade\glade.config" />
+    <None Include="Widgets\glade\progresswindow.glade" />
+  </ItemGroup>
+</Project>
