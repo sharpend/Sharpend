@@ -55,7 +55,9 @@ using Gtk;
 using System.Xml.Serialization;
 using System.Xml;
 using Cairo;
-using Sharpend.Extensions;
+
+//TODO xxx
+//using Sharpend.Extensions;
 
 namespace Sharpend.GtkSharp.Docking
 {

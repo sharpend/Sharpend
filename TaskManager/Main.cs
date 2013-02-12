@@ -331,7 +331,7 @@ namespace TaskManager
 				if (!runningTasks.ContainsKey(td.Id))
 				{
 					runningTasks.Add(td.Id,td);
-					
+					log.Debug("classname: " + td.Classname + "->asm:" + td.Assembly);
 					log.Debug("create new task: " + td.Params.BaseType.ToString() + " - " + td.Id);
 					object o = Reflection.createInstance(td.Params);	
 					if ((o != null) && (o is ITask))

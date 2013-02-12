@@ -49,21 +49,36 @@
     <Reference Include="NDesk.DBus.GLib">
       <HintPath>..\..\..\..\..\..\..\usr\lib\cli\NDesk.DBus.GLib-1.0\NDesk.DBus.GLib.dll</HintPath>
     </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\..\Sharpend\bin\Debug\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\..\Sharpend\bin\Debug\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\..\Sharpend\bin\Debug\gdk-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Sharpend\bin\Debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System" />
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gio\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\glib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\..\..\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="glade.config" />

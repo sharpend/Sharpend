@@ -48,69 +48,27 @@
       <HintPath>..\..\Json45r5\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib" />
-    <Reference Include="atk-sharp">
-      <HintPath>..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="cairo-sharp">
-      <HintPath>..\..\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gio-sharp">
-      <HintPath>..\..\gtk-sharp\gio\gio-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\gtk-sharp\glib\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-dotnet">
-      <HintPath>..\..\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="pango-sharp">
-      <HintPath>..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Unity\UnityHelper.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\IAppSettingsProvider.cs" />
-    <Compile Include="Glade\GladeApplication.cs" />
     <Compile Include="Utils\VirtualGrid\VirtualGridHeaderColumn.cs" />
     <Compile Include="Utils\VirtualGrid\VirtualGridRow.cs" />
     <Compile Include="Utils\VirtualGrid\VirtualTreeRow.cs" />
     <Compile Include="Utils\VirtualGrid\VirtualGridCell.cs" />
     <Compile Include="Utils\VirtualGrid\VirtualTreeList.cs" />
-    <Compile Include="GtkSharp\TreeList\GtkListTreeView.cs" />
     <Compile Include="Utils\VirtualGrid\StandardGrid.cs" />
     <Compile Include="Utils\XmlHelper.cs" />
-    <Compile Include="GtkSharp\Toolbar\CommandToolButton.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\Parameter.cs" />
     <Compile Include="Utils\ParameterSet.cs" />
     <Compile Include="Utils\DelegateSet.cs" />
     <Compile Include="Utils\DelegateData.cs" />
-    <Compile Include="Utils\CustomEventhandler.cs" />
     <Compile Include="Utils\VirtualGrid\CustomEventArgs.cs" />
     <Compile Include="Glade\GladeBuilder.cs" />
-    <Compile Include="GtkSharp\Docking\DockFrame.cs" />
-    <Compile Include="GtkSharp\Docking\DockContainer.cs" />
-    <Compile Include="GtkSharp\Docking\DockItemContainer.cs" />
-    <Compile Include="GtkSharp\Docking\PlaceholderWindow.cs" />
-    <Compile Include="GtkSharp\Widgets\PanedBox.cs" />
-    <Compile Include="GtkSharp\Widgets\CustomWidget.cs" />
-    <Compile Include="GtkSharp\Docking\DockframeWindow.cs" />
-    <Compile Include="Glade\ToolbarHelper.cs" />
-    <Compile Include="GtkSharp\Widgets\MainWindow.cs" />
-    <Compile Include="GtkSharp\Widgets\DockableWidget.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="GtkSharp\Utils.cs" />
-    <Compile Include="GtkSharp\Docking\PopupWindow.cs" />
-    <Compile Include="GtkSharp\TreeList\XmlTreeStore.cs" />
-    <Compile Include="GtkSharp\TreeList\XmlTreeModel.cs" />
     <Compile Include="Utils\applications\tomboy\ITomboyRemoteControl.cs" />
     <Compile Include="Utils\DBus\DBusBaseProxy.cs" />
     <Compile Include="Utils\applications\tomboy\TomboyProxy.cs" />
@@ -129,16 +87,6 @@
     <Compile Include="Utils\Webservices\Discogs\Track.cs" />
     <Compile Include="Utils\Webservices\Discogs\Release.cs" />
     <Compile Include="Utils\Webservices\Discogs\Image.cs" />
-    <Compile Include="Utils\CachedPictureList.cs" />
-    <Compile Include="GtkSharp\DataBinder.cs" />
-    <Compile Include="GtkSharp\BindableProperty.cs" />
-    <Compile Include="GtkSharp\BindableData.cs" />
-    <Compile Include="GtkSharp\DataObjectContainer.cs" />
-    <Compile Include="GtkSharp\Widgets\ProgressWindow.cs" />
-    <Compile Include="GtkSharp\Widgets\ProgressWindowImplementation.cs" />
-    <Compile Include="GtkSharp\Widgets\FileChooserButtonWrapper.cs" />
-    <Compile Include="GtkSharp\Widgets\DockcontainerWidget.cs" />
-    <Compile Include="GtkSharp\Widgets\DatePicker.cs" />
     <Compile Include="Utils\applications\canonical\ISoundMenu.cs" />
     <Compile Include="Utils\applications\canonical\SoundProxy.cs" />
     <Compile Include="Utils\applications\canonical\SoundIndicatorProxy.cs" />
@@ -149,13 +97,8 @@
     <Folder Include="Configuration\" />
     <Folder Include="Glade\" />
     <Folder Include="Glade\windows\" />
-    <Folder Include="GtkSharp\" />
-    <Folder Include="GtkSharp\TreeList\" />
     <Folder Include="Utils\" />
     <Folder Include="Utils\VirtualGrid\" />
-    <Folder Include="GtkSharp\Toolbar\" />
-    <Folder Include="GtkSharp\Docking\" />
-    <Folder Include="GtkSharp\Widgets\" />
     <Folder Include="Utils\applications\" />
     <Folder Include="Utils\applications\tomboy\" />
     <Folder Include="Utils\DBus\" />
@@ -164,11 +107,6 @@
     <Folder Include="Utils\TaskManager\" />
     <Folder Include="Utils\Webservices\" />
     <Folder Include="Utils\Webservices\Discogs\" />
-    <Folder Include="GtkSharp\Widgets\glade\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GtkSharp\Widgets\glade\glade.config" />
-    <None Include="GtkSharp\Widgets\glade\progresswindow.glade" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Glade\glade_transform.xsl" />

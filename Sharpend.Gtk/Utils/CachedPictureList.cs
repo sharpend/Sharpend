@@ -220,7 +220,6 @@ namespace Sharpend.Utils
 			}
 		}
 
-		//TODO xxx
 
 		/// <summary>
 		/// returns a new Gdk Pixbuf from given image path
@@ -234,25 +233,25 @@ namespace Sharpend.Utils
 		/// <param name='addIfNotExist'>
 		/// Add if not exist.
 		/// </param>
-//		public Gdk.Pixbuf GetPicture(String fullname,bool addIfNotExist=true)
-//		{
-//			String fn = String.Empty;
-//			if (files.ContainsKey(fullname))
-//			{
-//				fn = files[fullname];
-//
-//			} else
-//			{
-//				fn = loadPicture(fullname);
-//			}
-//
-//			if (!String.IsNullOrEmpty(fn))
-//			{
-//				return getImage(fn);
-//			}
-//
-//			return getImage(PlaceHolder);
-//		}
+		public Gdk.Pixbuf GetPicture(String fullname,bool addIfNotExist=true)
+		{
+			String fn = String.Empty;
+			if (files.ContainsKey(fullname))
+			{
+				fn = files[fullname];
+
+			} else
+			{
+				fn = loadPicture(fullname);
+			}
+
+			if (!String.IsNullOrEmpty(fn))
+			{
+				return getImage(fn);
+			}
+
+			return getImage(PlaceHolder);
+		}
 
 		/// <summary>
 		/// checks if a image for this path exists

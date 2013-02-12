@@ -22,6 +22,7 @@
 using System;
 using Gtk;
 
+#if !GTK2
 namespace Sharpend.GtkSharp{	public partial class ProgressWindow: DockableWidget	{
 
 		public String Text {
@@ -81,3 +82,4 @@ namespace Sharpend.GtkSharp{	public partial class ProgressWindow: DockableWid
 			progressbar1.Fraction += progressbar1.PulseStep;
 		}
 	} //class} //namespace
+#endif

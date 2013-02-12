@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="glib-sharp">
       <HintPath>..\Sharpend\bin\Debug\glib-sharp.dll</HintPath>
+      <Package>glib-sharp-2.0</Package>
     </Reference>
     <Reference Include="NDesk.DBus">
       <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus-1.0\NDesk.DBus.dll</HintPath>
@@ -46,9 +47,7 @@
     </Reference>
     <Reference Include="gtk-sharp">
       <HintPath>..\Sharpend\bin\Debug\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Sharpend">
-      <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -65,5 +64,11 @@
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sharpend\Sharpend.csproj">
+      <Project>{94641ABA-736F-4D76-BD1B-99C45313F988}</Project>
+      <Name>Sharpend</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

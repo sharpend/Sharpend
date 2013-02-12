@@ -1,21 +1,17 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/GtkSharp/Widgets/MainWindow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend.Gtk/Docking/DockItemContainer.cs">
     <Files>
-      <File FileName="Sharpend/GtkSharp/Widgets/MainWindow.cs" Line="164" Column="4" />
+      <File FileName="TaskManager/TestTask.cs" Line="23" Column="7" />
+      <File FileName="Sharpend/Utils/Extensions.cs" Line="31" Column="1" />
+      <File FileName="TaskManager/Main.cs" Line="36" Column="7" />
+      <File FileName="Sharpend/Utils/Webservices/Discogs/Artist.cs" Line="32" Column="23" />
+      <File FileName="Sharpend/Unity/UnityHelper.cs" Line="67" Column="32" />
+      <File FileName="Sharpend.Gtk/Docking/DockItemContainer.cs" Line="59" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Sharpend" expanded="True">
-            <Node name="GtkSharp" expanded="True">
-              <Node name="Docking" expanded="True" />
-              <Node name="Widgets" expanded="True">
-                <Node name="DockableWidget.cs" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />

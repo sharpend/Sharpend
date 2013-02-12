@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 
+#if !GTK2
 namespace Sharpend.GtkSharp
 {
 	/// <summary>
@@ -288,3 +289,4 @@ namespace Sharpend.GtkSharp
 	}
 }
 
+#endif

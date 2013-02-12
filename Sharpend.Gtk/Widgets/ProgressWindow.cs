@@ -31,5 +31,7 @@
 			DO NOT EDIT
 			USE THE IMPLEMENTATION CLASS INSTEAD
 	  *******************************************/
-	  namespace Sharpend.GtkSharp{public partial class ProgressWindow
+#if !GTK2
+namespace Sharpend.GtkSharp{public partial class ProgressWindow
 					: DockableWidget{private Gtk.ProgressBar progressbar1;public Gtk.ProgressBar Progressbar1{get{return progressbar1;}}public ProgressWindow() : this(String.Empty) {}public ProgressWindow(String name) : base(name){this.Name = name;progressbar1 = new Gtk.ProgressBar();progressbar1.Name ="progressbar1";progressbar1.Visible =true;progressbar1.PulseStep = Convert.ToDouble("0.01");this.WidthRequest=100;this.HeightRequest=100;			this.Add(progressbar1);init();} //constructor} //class} //namespace
+#endif

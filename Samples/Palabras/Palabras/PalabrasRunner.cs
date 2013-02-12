@@ -161,6 +161,10 @@ namespace Palabras
 		{
 			if (PopupWindow != null)
 			{
+//				int x=0;
+//				int y=0;
+//				PopupWindow.GetPosition(out x, out y);
+//				log.Debug("x" + x +" y" + y);
 				PopupWindow.Destroy();
 			}
 			mainloop.Quit();

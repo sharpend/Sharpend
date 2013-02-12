@@ -8,7 +8,6 @@
     <ProjectGuid>{AFACD1D1-7D9A-4B8F-B2DB-05E847666224}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Sharpend.Gtk</RootNamespace>
-    <AssemblyName>Sharpend.Gtk</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +19,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
+    <AssemblyName>Sharpend.Gtk</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -29,13 +29,20 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
+    <AssemblyName>Sharpend.Gtk</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugGtk2|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugGtk2</OutputPath>
+    <DefineConstants>DEBUG;GTK2</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AssemblyName>Sharpend.Gtk2</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Sharpend">
-      <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
-    </Reference>
     <Reference Include="atk-sharp">
       <HintPath>..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
     </Reference>
@@ -60,7 +67,11 @@
     <Reference Include="pango-sharp">
       <HintPath>..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
     </Reference>
-
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="Sharpend">
+      <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -91,6 +102,8 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Utils\CachedPictureList.cs" />
     <Compile Include="Utils\CustomEventhandler.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Toolbar\ToolbarHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

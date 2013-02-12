@@ -100,6 +100,7 @@ namespace Palabras{
 //			log.Debug("Lng1" + Language1);
 //			log.Debug("Lng2" + Language2);
 
+
 			GLib.Timeout.Add (10000, () => {
 					showRandomWord();
 					return true;
