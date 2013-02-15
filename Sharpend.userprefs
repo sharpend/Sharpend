@@ -1,6 +1,6 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="TaskManager/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Utils/Utils.cs">
     <Files>
       <File FileName="TaskManager/TestTask.cs" Line="23" Column="7" />
       <File FileName="Sharpend/Utils/Extensions.cs" Line="31" Column="1" />
@@ -8,12 +8,18 @@
       <File FileName="Sharpend/Utils/Webservices/Discogs/Artist.cs" Line="32" Column="23" />
       <File FileName="Sharpend/Unity/UnityHelper.cs" Line="67" Column="32" />
       <File FileName="Sharpend.Gtk/Docking/DockItemContainer.cs" Line="53" Column="14" />
-      <File FileName="Sharpend/Utils/Utils.cs" Line="27" Column="1" />
+      <File FileName="Sharpend/Utils/Utils.cs" Line="314" Column="14" />
       <File FileName="GladeGenerator/Main.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True">
+          <Node name="Sharpend" expanded="True">
+            <Node name="Utils" expanded="True">
+              <Node name="Utils.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />
