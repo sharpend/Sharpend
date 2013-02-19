@@ -3,18 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladeBuilder", "GladeBuilder\GladeBuilder.csproj", "{D549FFBD-C7DA-4B61-9BBF-113C1E175648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpendGtk2", "..\..\SharpendGtk2\Sharpend\Sharpend\SharpendGtk2.csproj", "{B85B4544-E2CB-4C5D-B599-F19F643287F3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B85B4544-E2CB-4C5D-B599-F19F643287F3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B85B4544-E2CB-4C5D-B599-F19F643287F3}.Debug|x86.Build.0 = Debug|Any CPU
-		{B85B4544-E2CB-4C5D-B599-F19F643287F3}.Release|x86.ActiveCfg = Release|Any CPU
-		{B85B4544-E2CB-4C5D-B599-F19F643287F3}.Release|x86.Build.0 = Release|Any CPU
 		{D549FFBD-C7DA-4B61-9BBF-113C1E175648}.Debug|x86.ActiveCfg = Debug|x86
 		{D549FFBD-C7DA-4B61-9BBF-113C1E175648}.Debug|x86.Build.0 = Debug|x86
 		{D549FFBD-C7DA-4B61-9BBF-113C1E175648}.Release|x86.ActiveCfg = Release|x86

@@ -20,10 +20,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 
-namespace Sharpend
+namespace Sharpend.Databinding
 {
 	public interface IDatabindBackend
 	{
+		event EventHandler OnBindException;
+		void BindData(object container,object dataholder,string property);
+		void BindData(object source,object target,String propertyname, String targetname);
 	}
 }
 

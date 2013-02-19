@@ -95,10 +95,7 @@
     <Compile Include="Widgets\PanedBox.cs" />
     <Compile Include="Widgets\ProgressWindow.cs" />
     <Compile Include="Widgets\ProgressWindowImplementation.cs" />
-    <Compile Include="BindableData.cs" />
-    <Compile Include="BindableProperty.cs" />
     <Compile Include="DataBinder.cs" />
-    <Compile Include="DataObjectContainer.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Utils\CachedPictureList.cs" />
     <Compile Include="Utils\CustomEventhandler.cs" />

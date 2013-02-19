@@ -22,7 +22,7 @@
 using System;
 using System.Reflection;
 
-namespace Sharpend.GtkSharp
+namespace Sharpend.Databinding
 {
 	/// <summary>
 	/// Base class for bindable data
@@ -32,6 +32,46 @@ namespace Sharpend.GtkSharp
 	/// </summary>
 	public class BindableData
 	{
+
+		private static IDatabindBackend backend;
+
+		public static IDatabindBackend Backend
+		{
+			get
+			{
+				if (backend == null)
+				{
+					object b = Sharpend.Utils.Reflection.createInstance(Type.GetType("Sharpend.Xwt.DataBinder,Sharpend.Xwt"));
+					if (b != null)
+					{
+						backend = (IDatabindBackend)b;
+						return backend;
+					} 
+
+					b = Sharpend.Utils.Reflection.createInstance(Type.GetType("Sharpend.GtkSharp.DataBinder,Sharpend.Gtk"));
+					if (b != null)
+					{
+						backend = (IDatabindBackend)b;
+						return backend;
+					}
+
+					String be = Sharpend.Configuration.ConfigurationManager.getString("databind_backend");
+					b = Sharpend.Utils.Reflection.createInstance(Type.GetType(be));
+					if (b != null)
+					{
+						backend = (IDatabindBackend)b;
+					}
+				}
+
+				if (backend == null)
+				{
+					throw new ArgumentNullException("backend not loaded");
+				}
+
+				return backend;
+			}
+		}
+
 		public object Target {
 			get;
 			set;
@@ -81,7 +121,7 @@ namespace Sharpend.GtkSharp
 					BindableProperty b = Attribute.GetCustomAttribute(property,typeof(BindableProperty)) as BindableProperty;
 					if (b != null)
 					{
-						Sharpend.GtkSharp.DataBinder.BindData(this,target,property.Name ,b.ControlName);
+						Backend.BindData(this,target,property.Name ,b.ControlName);
 					}
 				}
 			} 
@@ -144,7 +184,7 @@ namespace Sharpend.GtkSharp
 							}
 
 							Sharpend.Utils.Reflection.hookDelegate(currentsender,delegate(object send, EventArgs e) {
-								Sharpend.GtkSharp.DataBinder.BindData(dataprovider,send,pn);},b.Action,"false","");
+								Backend.BindData(dataprovider,send,pn);},b.Action,"false","");
 
 							currentsender = null;
 						}

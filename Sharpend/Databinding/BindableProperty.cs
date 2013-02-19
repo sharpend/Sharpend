@@ -21,7 +21,7 @@
 
 using System;
 
-namespace Sharpend.GtkSharp
+namespace Sharpend.Databinding
 {
 	/// <summary>
 	/// Bindable property.

@@ -22,12 +22,10 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-
-#if XWTSUPPORT
 using Xwt;
-#endif
+using Sharpend.Databinding;
 
-namespace Sharpend.GtkSharp
+namespace Sharpend.Xwt
 {
 	/// <summary>
 	/// some helper functions for databinding
@@ -59,29 +57,16 @@ namespace Sharpend.GtkSharp
 				throw new ArgumentNullException("dataholder");
 			}
 
-			#if XWTSUPPORT
+
 			//XWT
-			if (dataholder is Xwt.TextEntry)
+			if (dataholder is TextEntry)
 			{
-				return (dataholder as Xwt.TextEntry).Text;
+				return (dataholder as TextEntry).Text;
 			}
 
-			if (dataholder is Xwt.CheckBox)
+			if (dataholder is CheckBox)
 			{
-				return (dataholder as Xwt.CheckBox).Active;
-			}
-			#endif
-
-
-			//GTK
-			if (dataholder is Gtk.Entry)
-			{
-				return (dataholder as Gtk.Entry).Text;
-			}
-
-			if (dataholder is Gtk.CheckButton)
-			{
-				return (dataholder as Gtk.CheckButton).Active;
+				return (dataholder as CheckBox).Active;
 			}
 
 			throw new Exception("unknown dataholder: " + dataholder);
@@ -104,32 +89,17 @@ namespace Sharpend.GtkSharp
 				throw new ArgumentNullException("dataholder");
 			}
 
-			#if XWTSUPPORT
+
 			//XWT
-			if (dataholder is Xwt.TextEntry)
+			if (dataholder is TextEntry)
 			{
-				(dataholder as Xwt.TextEntry).Text = (value as String);
+				(dataholder as TextEntry).Text = (value as String);
 				return;
 			}
 
-			if (dataholder is Xwt.CheckBox)
+			if (dataholder is CheckBox)
 			{
-				(dataholder as Xwt.CheckBox).Active = Convert.ToBoolean(value);
-				return;
-			}
-			#endif
-
-
-			//GTK
-			if (dataholder is Gtk.Entry)
-			{
-				(dataholder as Gtk.Entry).Text = (value as String);
-				return;
-			}
-
-			if (dataholder is Gtk.CheckButton)
-			{
-				(dataholder as Gtk.CheckButton).Active = Convert.ToBoolean(value);
+				(dataholder as CheckBox).Active = Convert.ToBoolean(value);
 				return;
 			}
 

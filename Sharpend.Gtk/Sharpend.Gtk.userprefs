@@ -1,10 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="DataBinder.cs">
+    <Files>
+      <File FileName="DataBinder.cs" Line="25" Column="28" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="Sharpend.Gtk" expanded="True">
+        <State expanded="True">
+          <Node name="Sharpend.Gtk" expanded="True" selected="True">
             <Node name="Widgets" expanded="True" />
           </Node>
         </State>

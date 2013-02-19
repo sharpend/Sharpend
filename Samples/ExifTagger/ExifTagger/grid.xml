@@ -4,12 +4,25 @@
 
 <grid>
 	<columns>
+	
+		<column editable="false" type="Gdk.Pixbuf,gdk-sharp" renderer="Gtk.CellRendererPixbuf,gtk-sharp">
+			<name>preview</name>
+		</column>	
+		
 		<column editable="false">
 			<name>fullfilename</name>
 		</column>	
 		
 		<column editable="false">
 			<name>tags</name>
+		</column>	
+		
+		<column editable="true">
+			<name>lat</name>
+		</column>	
+		
+		<column editable="true">
+			<name>lon</name>
 		</column>	
 	
 	</columns>

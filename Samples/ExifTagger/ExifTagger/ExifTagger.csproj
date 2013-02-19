@@ -32,23 +32,38 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="gdk-sharp">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\cli\gdk-sharp-2.0\gdk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="glib-sharp">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\cli\glib-sharp-2.0\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\cli\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-dotnet">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\cli\gtk-dotnet-2.0\gtk-dotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpendGtk2">
-      <HintPath>..\..\..\..\SharpendGtk2\Sharpend\Sharpend\bin\Debug\SharpendGtk2.dll</HintPath>
-    </Reference>
     <Reference Include="ExifLibrary">
       <HintPath>..\..\..\..\ExifLibrary_Trunk\exiflibrary-read-only\ExifLibrary\bin\Debug\ExifLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharpend.Gtk">
+      <HintPath>..\..\..\Sharpend.Gtk\bin\Debug\Sharpend.Gtk.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharpend">
+      <HintPath>..\..\..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
+    </Reference>
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\atk\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\cairo\cairo-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gdk\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gio\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\glib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\gtk\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet">
+      <HintPath>..\..\..\..\gtk-sharp\gtkdotnet\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\..\..\gtk-sharp\pango\pango-sharp.dll</HintPath>
     </Reference>
     <Reference Include="taglib-sharp">
       <HintPath>..\..\..\..\taglib-sharp-2.0.4.0\src\taglib-sharp.dll</HintPath>

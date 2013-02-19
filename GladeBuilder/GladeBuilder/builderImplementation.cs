@@ -20,13 +20,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Sharpend.GtkSharp;
+//using Sharpend.GtkSharp;
 using Sharpend.Utils;
 using System.IO;
 using System.Collections.Generic;
 using System.Xml;
 using Xwt;
 using Xwt.Formats;
+using Sharpend.Databinding;
 
 namespace GladeBuilder{	public partial class builder: Window	{
 
@@ -71,7 +72,7 @@ namespace GladeBuilder{	public partial class builder: Window	{
 		/// init control
 		/// </summary>		public void init() 
 		{
-			DataBinder.OnBindException += HandleOnBindException;
+			//DataBinder.OnBindException += HandleOnBindException;
 			DataObjects = new DataObjectContainer();
 
 			BtnOpenFile.Clicked += HandleOpenFileClicked;
@@ -309,6 +310,13 @@ namespace GladeBuilder{	public partial class builder: Window	{
 		/// </summary>
 		private void restoreSettings()
 		{
+			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getApplicationConfig();
+
+			if (fi == null)
+			{
+				fi = Sharpend.Configuration.ConfigurationManager.createApplicationConfig();
+			}
+
 			String s = Sharpend.Configuration.ConfigurationManager.getString("lastloaded");
 			if (!String.IsNullOrEmpty(s))
 			{

@@ -90,6 +90,10 @@
     <Compile Include="Utils\applications\canonical\ISoundMenu.cs" />
     <Compile Include="Utils\applications\canonical\SoundProxy.cs" />
     <Compile Include="Utils\applications\canonical\SoundIndicatorProxy.cs" />
+    <Compile Include="Databinding\BindableData.cs" />
+    <Compile Include="Databinding\BindableProperty.cs" />
+    <Compile Include="Databinding\IDatabindBackend.cs" />
+    <Compile Include="Databinding\DataObjectContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -107,6 +111,7 @@
     <Folder Include="Utils\TaskManager\" />
     <Folder Include="Utils\Webservices\" />
     <Folder Include="Utils\Webservices\Discogs\" />
+    <Folder Include="Databinding\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Glade\glade_transform.xsl" />

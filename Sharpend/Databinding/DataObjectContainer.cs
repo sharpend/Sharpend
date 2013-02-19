@@ -22,7 +22,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sharpend.GtkSharp
+namespace Sharpend.Databinding
 {
 	/// <summary>
 	/// Container for bindable data objects

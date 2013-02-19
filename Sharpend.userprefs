@@ -1,23 +1,16 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Utils/Utils.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Databinding/BindableData.cs">
     <Files>
-      <File FileName="TaskManager/TestTask.cs" Line="23" Column="7" />
-      <File FileName="Sharpend/Utils/Extensions.cs" Line="31" Column="1" />
-      <File FileName="TaskManager/Main.cs" Line="245" Column="4" />
-      <File FileName="Sharpend/Utils/Webservices/Discogs/Artist.cs" Line="32" Column="23" />
-      <File FileName="Sharpend/Unity/UnityHelper.cs" Line="67" Column="32" />
-      <File FileName="Sharpend.Gtk/Docking/DockItemContainer.cs" Line="53" Column="14" />
-      <File FileName="Sharpend/Utils/Utils.cs" Line="314" Column="14" />
-      <File FileName="GladeGenerator/Main.cs" Line="1" Column="1" />
+      <File FileName="Sharpend/Databinding/DataObjectContainer.cs" Line="25" Column="31" />
+      <File FileName="Sharpend/Databinding/BindableData.cs" Line="38" Column="17" />
+      <File FileName="Sharpend/Databinding/BindableProperty.cs" Line="30" Column="31" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Sharpend" expanded="True">
-            <Node name="Utils" expanded="True">
-              <Node name="Utils.cs" selected="True" />
-            </Node>
+          <Node name="Sharpend" expanded="True" selected="True">
+            <Node name="Databinding" expanded="True" />
           </Node>
         </State>
       </Pad>

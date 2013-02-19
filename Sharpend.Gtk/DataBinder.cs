@@ -22,6 +22,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using Sharpend.Databinding;
 
 #if XWTSUPPORT
 using Xwt;
@@ -32,14 +33,14 @@ namespace Sharpend.GtkSharp
 	/// <summary>
 	/// some helper functions for databinding
 	/// </summary>
-	public static class DataBinder
+	public class DataBinder : Sharpend.Databinding.IDatabindBackend
 	{
 
 		/// <summary>
 		/// you can use this to handle exceptions while databinding
 		/// if this is not specified the exception will be throwed
 		/// </summary>
-		public static event EventHandler OnBindException;
+		public event EventHandler OnBindException;
 
 		/// <summary>
 		/// get a value from various controls or objects
@@ -189,7 +190,7 @@ namespace Sharpend.GtkSharp
 		/// <param name='property'>
 		/// propertyname wich recieves the date
 		/// </param>
-		public static void BindData(object container,object dataholder,string property)
+		public void BindData(object container,object dataholder,string property)
 		{
 			try
 			{
@@ -218,10 +219,10 @@ namespace Sharpend.GtkSharp
 				}
 
 
-				if (target is BindableData)
+				if (target is Sharpend.Databinding.BindableData)
 				{
 					//check if we are binding in the other direction
-					if ((target as BindableData).IsBinding)
+					if ((target as Sharpend.Databinding.BindableData).IsBinding)
 					{
 						return;
 					}
@@ -269,7 +270,7 @@ namespace Sharpend.GtkSharp
 		/// <param name='targetname'>
 		/// Targetname.
 		/// </param>
-		public static void BindData(object source,object target,String propertyname, String targetname)
+		public void BindData(object source,object target,String propertyname, String targetname)
 		{
 			try
 			{

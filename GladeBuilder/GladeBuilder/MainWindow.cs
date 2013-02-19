@@ -21,7 +21,6 @@
 
 using System;
 using Xwt;
-using Sharpend.GtkSharp;
 
 namespace GladeBuilder
 {
