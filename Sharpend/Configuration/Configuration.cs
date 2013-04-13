@@ -442,7 +442,13 @@ namespace Sharpend.Configuration
 			{
 				XmlDocument doc = new XmlDocument();
 				doc.Load(fi.FullName);
+
+				if (configs.ContainsKey(fi.Name))
+				{
+					configs.Remove(fi.Name);
+				}
 				configs.Add(fi.Name,doc);
+
 				return true;
 			}	
 			

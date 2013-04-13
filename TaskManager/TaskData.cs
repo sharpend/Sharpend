@@ -69,6 +69,11 @@ namespace TaskManager
 		public bool ShouldRun {
 			get
 			{
+				if (Startup)
+				{
+					return false;
+				}
+
 				if (NextRun < DateTime.Now)
 				{
 					return true;
@@ -81,8 +86,21 @@ namespace TaskManager
 			get;
 			set;
 		}
-		
-		public TaskData (DateTime nextRun, int intervall, ParameterSet ps,String classname, String assembly)
+
+
+		/// <summary>
+		/// If true the task will only one time when the taskmanager is started
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if startup; otherwise, <c>false</c>.
+		/// </value>
+		public bool Startup 
+		{
+			get;
+			private set;
+		}
+
+		public TaskData (DateTime nextRun, int intervall, ParameterSet ps,String classname, String assembly,bool startup)
 		{
 			NextRun = nextRun;
 			Intervall = intervall;
@@ -90,8 +108,10 @@ namespace TaskManager
 			Classname = classname;
 			Assembly = assembly;
 			ExtraRun = false;
+			Startup = startup;
 		}
-		
+
+				
 		public void IncNextRun()
 		{
 			if (ExtraRun)
@@ -121,10 +141,18 @@ namespace TaskManager
 			String intervall = XmlHelper.getAttributeValue(node,"intervall");
 			String classname = XmlHelper.getAttributeValue(node,"class");
 			String assembly = XmlHelper.getAttributeValue(node,"assembly");
-			
+			String su = XmlHelper.getAttributeValue(node,"startup");
+
+			//Console.WriteLine("su" + su);
+			bool startup = false;
+			if (!String.IsNullOrEmpty(su))
+			{
+				startup = Convert.ToBoolean(su);
+			}
+
 			ParameterSet ps = ParameterSet.CreateInstance(node);
 			
-			return new TaskData(Convert.ToDateTime(nextRun),Convert.ToInt32(intervall),ps,classname,assembly);
+			return new TaskData(Convert.ToDateTime(nextRun),Convert.ToInt32(intervall),ps,classname,assembly,startup);
 		}
 		
 		

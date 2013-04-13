@@ -20,13 +20,24 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 
-namespace Sharpend
+namespace Sharpend.Logging
 {
-	public class Logger
+	public enum LogLevel
 	{
-		public Logger ()
+		Undefined = 0,
+		Exception = 1,
+		Error = 2,
+		Warn = 3,
+		Info = 4
+	}
+	
+	public static class Logger
+	{
+		public static void Log(LogLevel level, String message)
 		{
+			Console.WriteLine(level.ToString() + " - " + DateTime.Now.ToString() + " - " + message);
 		}
+		
 	}
 }
 

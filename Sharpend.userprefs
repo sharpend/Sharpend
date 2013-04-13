@@ -1,16 +1,17 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Databinding/BindableData.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Configuration/Configuration.cs">
     <Files>
-      <File FileName="Sharpend/Databinding/DataObjectContainer.cs" Line="25" Column="31" />
-      <File FileName="Sharpend/Databinding/BindableData.cs" Line="38" Column="17" />
-      <File FileName="Sharpend/Databinding/BindableProperty.cs" Line="30" Column="31" />
+      <File FileName="Sharpend/Configuration/Configuration.cs" Line="164" Column="40" />
+      <File FileName="Sharpend/Utils/XmlHelper.cs" Line="27" Column="2" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Sharpend" expanded="True" selected="True">
-            <Node name="Databinding" expanded="True" />
+        <State expanded="True" selected="True">
+          <Node name="Sharpend" expanded="True">
+            <Node name="Configuration" expanded="True" />
+            <Node name="Glade" expanded="True" />
+            <Node name="Utils" expanded="True" />
           </Node>
         </State>
       </Pad>

@@ -63,18 +63,23 @@ namespace TaskManager
 		#if DBUS
 		static private DBusRemoteControl rc;	
 		#endif
-		
+
+		private static bool startup = true;
+
 		public static void Main (string[] args)
 		{
 			Sharpend.Utils.Utils.initLog4Net();
 			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("tasks.config");
+			lastWriteTime = fi.LastWriteTime;
 			
+
+			//log.Info("wait a bit");
+			Thread.Sleep(10000); //TODO config
+			//log.Info("ready");
+
 			log.Info("Welcome to the Taskmanager");
-
-			log.Info("wait a bit");
-			Thread.Sleep(10000);
-			log.Info("ready");
-
 
 			#if DBUS
 			BusG.Init();
@@ -98,10 +103,9 @@ namespace TaskManager
 			
 			tasks = new List<TaskData>(100);
 			runningTasks = new Dictionary<string, TaskData>(100);
-						
-			loadTasks();	
-			
+
 			Running = true;
+			loadTasks();	
 			System.Threading.Thread s = new System.Threading.Thread(new ThreadStart(signalThread));
 			s.Start();
 			
@@ -240,7 +244,7 @@ namespace TaskManager
 						}
 					}
 										
-					runningTasks.Clear();	
+					runningTasks.Clear();	//TODO problem if we clear and get a callback
 				} catch (Exception ex)
 				{
 					log.Error("error");
@@ -357,17 +361,28 @@ namespace TaskManager
 				log.Error(ex.ToString()); //TODO log4Net ... throw ?? 
 			}
 		}
-		
+
 		/// <summary>
 		/// check if we have a task which should run
 		/// </summary>
-		private static void checkTasks()
+		private static void checkTasks(bool isstartup)
 		{
 			foreach (TaskData td in tasks)
 			{
-				if (td.ShouldRun)
+				if (isstartup)
 				{
-					runTask(td);
+					if (td.Startup)
+					{
+						log.Debug("start startup task" + td.Classname);
+						runTask(td);
+					}
+				} 
+				else
+				{
+					if (td.ShouldRun)
+					{
+						runTask(td);
+					}
 				}
 			}
 		}
@@ -381,14 +396,19 @@ namespace TaskManager
 			{
 				try
 				{				
-					checkTasks();
+					if (startup)
+					{
+						log.Debug("check startup tasks");
+						checkTasks(true);
+						startup = false;
+					}
+
+					checkTasks(false);
 					checkConfigFile();
-					System.Threading.Thread.Sleep(500);
-					
-					//log.Debug("alive");
+					System.Threading.Thread.Sleep(500);	
 				} catch (Exception ex)
 				{
-					log.Error(ex.ToString()); //TODO log4net
+					log.Error(ex.ToString());
 				}
 			}	
 		}
@@ -398,8 +418,15 @@ namespace TaskManager
 			if (Running)
 			{
 				try
-				{				
-					checkTasks();
+				{	
+					if (startup)
+					{
+						log.Debug("check startup tasks");
+						checkTasks(true);
+						startup = false;
+					}
+
+					checkTasks(false);
 					checkConfigFile();
 					//log.Debug("alive");
 					
