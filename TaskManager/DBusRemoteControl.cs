@@ -21,6 +21,7 @@
 
 using System;
 using NDesk.DBus;
+using System.Xml;
 
 namespace TaskManager.DBus
 {
@@ -77,6 +78,36 @@ namespace TaskManager.DBus
 				log.Debug("TaskFinished: " + message);
 				OnTaskFinished(message);
 			}
+		}
+
+		public string getTaskList()
+		{
+			log.Debug("get Tasklist");
+			String ret = String.Empty;
+			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("tasks.config", "//task");
+
+			foreach (XmlNode nd in lst)
+			{
+				String classname = nd.Attributes["class"].Value;
+				String assembly = nd.Attributes["assembly"].Value;
+
+				String alias = String.Empty;
+				XmlAttribute at = nd.Attributes["alias"];
+				if (at != null)
+				{
+					alias = at.Value;
+				}
+
+				if (!String.IsNullOrEmpty(alias))
+				{
+					ret += alias;
+				} else {
+					ret += classname + "," + assembly + ";"; 
+				}
+				log.Debug("add task: " + classname);
+			}
+
+			return ret.Trim(';');
 		}
 	}
 	

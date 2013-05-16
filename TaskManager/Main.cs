@@ -27,6 +27,7 @@ using Sharpend;
 using Sharpend.Utils;
 using Sharpend.Utils.TaskManager;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Mono.Unix;
 using System.IO;
 
@@ -49,14 +50,20 @@ namespace TaskManager
 		// Catch SIGINT and SIGUSR1
 		private static UnixSignal[] signals = new UnixSignal [] {
 			new UnixSignal(Mono.Unix.Native.Signum.SIGINT),
-			//new UnixSignal(Mono.Unix.Native.Signum.SIGKILL)
+			new UnixSignal(Mono.Unix.Native.Signum.SIGTERM),
+			new UnixSignal(Mono.Unix.Native.Signum.SIGHUP),
+			//new UnixSignal(Mono.Unix.Native.Signum.SIGKILL),
+			//new UnixSignal(Mono.Unix.Native.Signum.SIGSTOP),
 		    //new UnixSignal (Mono.Unix.Native.Signum.SIGINT),
 		    new UnixSignal (Mono.Unix.Native.Signum.SIGUSR1),
 			//new UnixSignal (Mono.Unix.Native.Signum.SIGKILL)
 		};
 		
+		//private static ConcurrentBag<TaskData> tasks;
 		private static List<TaskData> tasks;
-		private static Dictionary<String,TaskData> runningTasks;
+		//private static Dictionary<String,TaskData> runningTasks;
+		private static ConcurrentDictionary <String,TaskData> runningTasks;
+
 		private static DateTime lastWriteTime;
 		protected static log4net.ILog log;
 		
@@ -65,6 +72,7 @@ namespace TaskManager
 		#endif
 
 		private static bool startup = true;
+		private static bool shutdown = false;
 
 		public static void Main (string[] args)
 		{
@@ -101,8 +109,8 @@ namespace TaskManager
 			rc.OnStartTask += HandleRcOnStartTask;
 			#endif
 			
-			tasks = new List<TaskData>(100);
-			runningTasks = new Dictionary<string, TaskData>(100);
+			tasks = new List<TaskData>();
+			runningTasks = new ConcurrentDictionary<string, TaskData>();
 
 			Running = true;
 			loadTasks();	
@@ -118,14 +126,16 @@ namespace TaskManager
 #if DBUS
 			//GLib.MainLoop ml = new GLib.MainLoop();
 			Application.Init();
-			
+
+
 			GLib.Timeout.Add (500, () => {
-				mainLoop2();
-				return true;
+				return mainLoop2();
 			});
+
 			
 			//ml.Run();
 			Application.Run();
+
 #endif		
 			
 			log.Info("End: TaskManager");
@@ -167,27 +177,34 @@ namespace TaskManager
 			  {
 					try 
 					{
+						log.Debug("try get task");
 						TaskData td = runningTasks[tc.TaskId];
-						
+						log.Debug("finished: " + td.Classname);
 						if (td.CurrentInstance != null)
 						{
-							(td.CurrentInstance as ITask).forceQuit();
+							//(td.CurrentInstance as ITask).forceQuit(); //why ??
 							td.CurrentInstance = null;
 						}
 						
 						td.IncNextRun();
-						
-						//if we are not running anymore we remove the tasks in the storeTasks function
-						if (Running)
+
+						if (td.ExtraRun)
 						{
-							runningTasks.Remove(tc.TaskId);
-							td.ExtraRun = false;
+							log.Info("Extrarun: " + tc.Message);
 						}
-						
+						//if we are not running anymore we remove the tasks in the storeTasks function
+						//if (Running)
+						//{
+							//runningTasks.Remove(tc.TaskId);
+							TaskData removed;
+							runningTasks.TryRemove(tc.TaskId,out removed);
+							td.ExtraRun = false;
+						//}
+
 #if DBUS
 						rc.TaskFinished(tc.Message);
 #endif
-						
+
 						switch (tc.State)
 						{
 							case TaskCompletedState.None:
@@ -211,6 +228,9 @@ namespace TaskManager
 			  {
 				throw new Exception("method should return an TaskCompleted object");
 			  }				
+			} else
+			{
+				throw new Exception("this should not happen");
 			}
 			
 			log.Debug("end finished");
@@ -221,7 +241,7 @@ namespace TaskManager
 		/// </summary>
 		private static void storeTasks()
 		{
-			log.Debug("storeTasks");
+			log.Debug("storeTasks, we have " +  runningTasks.Count + " running tasks");
 			foreach (TaskData td in tasks)
 			{
 				//td.IncNextRun();
@@ -232,27 +252,43 @@ namespace TaskManager
 					String xpath = "/tasks/task[(@class='" + cls[0] + "') and (@assembly = '"+cls[1]+"')]/@nextrun";
 					Sharpend.Configuration.ConfigurationManager.setValue("tasks.config",xpath,td.NextRun.ToString());
 				}
-				
-				try 
+			}	
+		}
+
+		private static void forceQuitRunningTasks()
+		{
+			log.Debug("forceQuitRunningTasks, we have " + runningTasks.Count + " running tasks.");
+			try 
+			{
+				ConcurrentDictionary<String,TaskData> toStore = new ConcurrentDictionary<string, TaskData>();
+
+				foreach (var kp in runningTasks)
 				{
-					foreach (KeyValuePair<String,TaskData> kp in runningTasks)
+					if (kp.Value.CurrentInstance != null)
 					{
-						if (kp.Value.CurrentInstance != null)
-						{
-							log.Debug("force");
-							(kp.Value.CurrentInstance as ITask).forceQuit();
-						}
+						toStore.TryAdd(kp.Key,kp.Value);
 					}
-										
-					runningTasks.Clear();	//TODO problem if we clear and get a callback
-				} catch (Exception ex)
-				{
-					log.Error("error");
-					log.Error(ex);
 				}
+				
+				foreach (var kp in toStore)
+				{
+					if (kp.Value.CurrentInstance != null)
+					{
+						log.Debug("forcequit: " + kp.Value.Classname);
+						
+						(kp.Value.CurrentInstance as ITask).forceQuit();
+					}
+				}
+				
+				toStore.Clear();
+				
+				//runningTasks.Clear();	//TODO problem if we clear and get a callback
+			} catch (Exception ex)
+			{
+				//log.Error("error");
+				log.Error(ex);
 			}
 		}
-		
 		
 		/// <summary>
 		/// Load the tasks from a config file
@@ -265,11 +301,14 @@ namespace TaskManager
 				lastWriteTime = fi.LastWriteTime;
 				
 				XmlNodeList lst =  Sharpend.Configuration.ConfigurationManager.getValues("tasks.config","/tasks/task");				
-				tasks.Clear();
+
+				lock(tasks) {
+					tasks.Clear();
 				
-				foreach (XmlNode nd in lst)
-				{
-					tasks.Add(TaskData.CreateInstance(nd));
+					foreach (XmlNode nd in lst)
+					{
+						tasks.Add(TaskData.CreateInstance(nd));
+					}
 				}
 			}
 		}
@@ -334,7 +373,7 @@ namespace TaskManager
 			{
 				if (!runningTasks.ContainsKey(td.Id))
 				{
-					runningTasks.Add(td.Id,td);
+					runningTasks.TryAdd(td.Id,td);
 					log.Debug("classname: " + td.Classname + "->asm:" + td.Assembly);
 					log.Debug("create new task: " + td.Params.BaseType.ToString() + " - " + td.Id);
 					object o = Reflection.createInstance(td.Params);	
@@ -356,9 +395,10 @@ namespace TaskManager
 			{
 				if (runningTasks.ContainsKey(td.Id))
 				{
-					runningTasks.Remove(td.Id);
+					TaskData removed;
+					runningTasks.TryRemove(td.Id,out removed);
 				}
-				log.Error(ex.ToString()); //TODO log4Net ... throw ?? 
+				log.Error(ex.ToString()); 
 			}
 		}
 
@@ -392,7 +432,7 @@ namespace TaskManager
 		/// </summary>
 		private static void mainLoop()
 		{			
-			while(Running)
+			while(Running || shutdown)
 			{
 				try
 				{				
@@ -403,19 +443,35 @@ namespace TaskManager
 						startup = false;
 					}
 
-					checkTasks(false);
-					checkConfigFile();
+					if (Running)
+					{
+						checkTasks(false);
+						checkConfigFile();
+					}
+
+					if (shutdown)
+					{
+						if (runningTasks.Count == 0)
+						{
+							log.Debug("shutting down... we have no running tasks anymore");
+							shutdown = false;
+
+						}
+					}
+
 					System.Threading.Thread.Sleep(500);	
 				} catch (Exception ex)
 				{
 					log.Error(ex.ToString());
 				}
-			}	
+			}
+			storeTasks();
+			Application.Quit();
 		}
 		
-		private static void mainLoop2()
+		private static bool mainLoop2()
 		{			
-			if (Running)
+			if (Running  || shutdown)
 			{
 				try
 				{	
@@ -426,15 +482,35 @@ namespace TaskManager
 						startup = false;
 					}
 
-					checkTasks(false);
-					checkConfigFile();
-					//log.Debug("alive");
-					
+					if (Running)
+					{
+						checkTasks(false);
+						checkConfigFile();
+						//log.Debug("alive");
+					}
+
+					if (shutdown)
+					{
+						if (runningTasks.Count == 0)
+						{
+							log.Debug("shutting down... we have no running tasks anymore");
+							shutdown = false;
+						}
+					}
+
 				} catch (Exception ex)
 				{
-					log.Error(ex.ToString()); //TODO log4net
+					log.Error(ex.ToString()); 
+					return true;
 				}
-			}	
+				return true;
+			} else
+			{
+				log.Debug("mainloop2");
+				storeTasks();
+				Application.Quit();
+				return false;
+			}
 		}
 		
 		
@@ -442,8 +518,10 @@ namespace TaskManager
 		private static void stop()
 		{
 			Running = false;
-			storeTasks();
-			Application.Quit();
+			forceQuitRunningTasks();
+			shutdown = true;
+			log.Info("shutting down the taskmanager");
+			//Application.Quit();
 		}
 		
 		
@@ -452,7 +530,7 @@ namespace TaskManager
 			while (Running) {
 				// Wait for a signal to be delivered
 				int index = UnixSignal.WaitAny (signals, -1);
-				
+
 				Mono.Unix.Native.Signum signal = signals [index].Signum;
 				
 				log.Info("signal: " + signal.ToString());

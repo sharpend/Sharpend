@@ -34,6 +34,7 @@ namespace TaskManager.DBus
 	{
 		//void startTask(String classname, String[] parameters);
 		void startTask(String classname, String xmlparameters);
+		string getTaskList();
 		event TaskFinished OnTaskFinished;
 	}
 	
