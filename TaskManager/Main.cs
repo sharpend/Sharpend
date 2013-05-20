@@ -33,7 +33,7 @@ using System.IO;
 
 #if DBUS
 using TaskManager.DBus;
-using NDesk.DBus;
+using DBus;
 using Gtk;
 #endif
 
@@ -68,7 +68,8 @@ namespace TaskManager
 		protected static log4net.ILog log;
 		
 		#if DBUS
-		static private DBusRemoteControl rc;	
+		static private DBusRemoteControl rc;
+		static private DBusServer<DBusRemoteControl> dbusServer;
 		#endif
 
 		private static bool startup = true;
@@ -84,29 +85,35 @@ namespace TaskManager
 			
 
 			//log.Info("wait a bit");
-			Thread.Sleep(10000); //TODO config
+			//Thread.Sleep(10000); //TODO config
 			//log.Info("ready");
 
 			log.Info("Welcome to the Taskmanager");
 
 			#if DBUS
-			BusG.Init();
-			rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
-
-			if (rc == null)
-			{
-				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
-				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.UnRegister("/eu/shaprend/taskmanager");
-				//Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
-				rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
-			}
-
-			if (rc == null)
+//			BusG.Init();		
+//			rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
+//
+//			if (rc == null)
+//			{
+//				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
+//				Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.UnRegister("/eu/shaprend/taskmanager");
+//				//Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.ReleaseName("eu.shaprend.taskmanager");
+//				rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
+//			}
+//
+//			if (rc == null)
+//			{
+//				throw new Exception("could not register dbus eu.shaprend.taskmanager");
+//			}
+//
+//			rc.OnStartTask += HandleRcOnStartTask;
+			dbusServer = new DBusServer<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
+			if (!dbusServer.Register())
 			{
 				throw new Exception("could not register dbus eu.shaprend.taskmanager");
 			}
-
-			rc.OnStartTask += HandleRcOnStartTask;
+			rc = dbusServer.GetClient();
 			#endif
 			
 			tasks = new List<TaskData>();
@@ -135,7 +142,7 @@ namespace TaskManager
 			
 			//ml.Run();
 			Application.Run();
-
+			dbusServer.UnRegister();
 #endif		
 			
 			log.Info("End: TaskManager");
@@ -202,7 +209,7 @@ namespace TaskManager
 						//}
 
 #if DBUS
-						rc.TaskFinished(tc.Message);
+						// rc.TaskFinished(tc.Message);  //TODO Taskfinished Evenet for DBus
 #endif
 
 						switch (tc.State)

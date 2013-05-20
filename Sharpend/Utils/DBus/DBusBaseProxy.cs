@@ -21,7 +21,7 @@
 
 using System;
 #if DBUS
-using NDesk.DBus;
+using DBus;
 using org.freedesktop.DBus;
 
 namespace Sharpend.Utils
@@ -34,8 +34,7 @@ namespace Sharpend.Utils
 	/// </exception>
 	public class DBusBaseProxy<T> where T:class
 	{
-		//private string DBusInterface = "org.gnome.Tomboy";
-        //private string DBusPath = "/org/gnome/Tomboy/RemoteControl";
+
 		public String DBusInterface {
 			get;
 			private set;

@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 
 #if DBUS
-using NDesk.DBus;
+using DBus;
 
 namespace Sharpend
 {

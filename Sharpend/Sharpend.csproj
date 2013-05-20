@@ -35,19 +35,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
+    <Reference Include="ICSharpCode.SharpZipLib" />
     <Reference Include="log4net">
-      <HintPath>..\..\..\applications\log4net-1.2.10\bin\mono\2.0\release\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NDesk.DBus">
-      <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus-1.0\NDesk.DBus.dll</HintPath>
-    </Reference>
-    <Reference Include="NDesk.DBus.GLib">
-      <HintPath>..\..\..\..\..\usr\lib\cli\NDesk.DBus.GLib-1.0\NDesk.DBus.GLib.dll</HintPath>
+      <HintPath>..\..\log4net-1.2.11\bin\mono\2.0\release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Json45r5\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\json\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="dbus-sharp">
+      <HintPath>..\..\dbus-sharp\src\dbus-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -95,6 +92,8 @@
     <Compile Include="Databinding\IDatabindBackend.cs" />
     <Compile Include="Databinding\DataObjectContainer.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Utils\DBus\DBusServer.cs" />
+    <Compile Include="Utils\applications\gnote\GNoteRemoteControl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -114,6 +113,7 @@
     <Folder Include="Utils\Webservices\Discogs\" />
     <Folder Include="Databinding\" />
     <Folder Include="Logging\" />
+    <Folder Include="Utils\applications\gnote\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Glade\glade_transform.xsl" />

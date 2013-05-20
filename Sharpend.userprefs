@@ -1,19 +1,16 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Sharpend/Configuration/Configuration.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="TaskManager/Main.cs">
     <Files>
-      <File FileName="Sharpend/Configuration/Configuration.cs" Line="164" Column="40" />
-      <File FileName="Sharpend/Utils/XmlHelper.cs" Line="27" Column="2" />
+      <File FileName="Sharpend/Utils/applications/gnote/GNoteRemoteControl.cs" Line="1" Column="1" />
+      <File FileName="Sharpend/Utils/DBus/DBusServer.cs" Line="79" Column="1" />
+      <File FileName="TaskManager/Main.cs" Line="384" Column="43" />
+      <File FileName="Sharpend/Utils/Reflection.cs" Line="1" Column="1" />
+      <File FileName="TaskManager/app.config" Line="44" Column="2" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="Sharpend" expanded="True">
-            <Node name="Configuration" expanded="True" />
-            <Node name="Glade" expanded="True" />
-            <Node name="Utils" expanded="True" />
-          </Node>
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
       <Pad Id="ClassPad">
         <State expanded="True" selected="True" />
@@ -27,7 +24,12 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="403" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="384" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="91" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/Main.cs" line="312" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <AuthorInfo Name="Dirk Lehmeier" Email="sharpend_develop@yahoo.de" Copyright="Dirk Lehmeier" Company="" Trademark="" />

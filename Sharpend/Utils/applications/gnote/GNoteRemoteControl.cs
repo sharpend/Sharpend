@@ -1,37 +1,10 @@
-//
-// ITomboyRemoteControl.cs
-//
-//  Author:
-//       Dirk Lehmeier <sharpend_develop@yahoo.de>
-//
-//  Copyright (c) 2012 Dirk Lehmeier
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
-#if DBUS
 using DBus;
 
-namespace Sharpend.Utils.Applications.Tomboy
+namespace Sharpend.Utils.Applications.GNote
 {
-	
-	public delegate void RemoteDeletedHandler (string uri, string title);
-	public delegate void RemoteAddedHandler (string uri);
-	public delegate void RemoteSavedHandler (string uri);
-	
-	[Interface("org.gnome.Tomboy.RemoteControl")]
-	public interface ITomboyRemoteControl
+	[Interface("org.gnome.Gnote.RemoteControl")]
+	public interface GNoteRemoteControl
 	{
 		bool AddNotebook (string notebook_name);
 		bool AddNoteToNotebook (string uri, string notebook_name);
@@ -47,7 +20,7 @@ namespace Sharpend.Utils.Applications.Tomboy
 		string FindNote (string linked_title);
 		string FindStartHereNote ();
 		string [] GetAllNotesInNotebook (string notebook_name);
- 		string [] GetAllNotesWithTag (string tag_name);
+		string [] GetAllNotesWithTag (string tag_name);
 		string GetNotebookForNote (string uri);
 		long GetNoteChangeDate (string uri);
 		string GetNoteCompleteXml (string uri);
@@ -71,4 +44,3 @@ namespace Sharpend.Utils.Applications.Tomboy
 	}
 }
 
-#endif

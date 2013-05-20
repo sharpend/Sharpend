@@ -22,7 +22,7 @@
 using System;
 
 #if DBUS
-using NDesk.DBus;
+using DBus;
 using org.freedesktop.DBus;
 
 namespace Sharpend.Utils.Applications.Tomboy

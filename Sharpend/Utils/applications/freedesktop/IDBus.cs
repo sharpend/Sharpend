@@ -21,7 +21,7 @@
 
 using System;
 #if DBUS
-using NDesk.DBus;
+using DBus;
 using System.Collections.Generic;
 
 namespace Sharpend.Utils.Applications.FreeDesktop
