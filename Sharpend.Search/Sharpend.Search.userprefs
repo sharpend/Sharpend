@@ -1,17 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="LuceneSearcher.cs">
     <Files>
-      <File FileName="IndexedDocument.cs" Line="155" Column="43" />
+      <File FileName="IndexedDocument.cs" Line="146" Column="47" />
       <File FileName="FieldDescription.cs" Line="1" Column="1" />
-      <File FileName="LuceneSearcher.cs" Line="1" Column="1" />
+      <File FileName="LuceneSearcher.cs" Line="298" Column="52" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True" selected="True">
-          <Node name="Sharpend.Search" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
+          <Node name="Sharpend.Search" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

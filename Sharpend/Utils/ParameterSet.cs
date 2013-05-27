@@ -96,7 +96,7 @@ namespace Sharpend.Utils
 			{
 				String paramname = XmlHelper.getAttributeValue(n,"name");	
 				String paramtype = XmlHelper.getAttributeValue(n,"type");
-				String paramvalue = n.InnerText;
+				String paramvalue = n.InnerXml;
 				
 				ps.addParameter(new Parameter(paramname,paramtype,paramvalue));
 			}

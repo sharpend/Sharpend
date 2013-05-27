@@ -17,6 +17,8 @@ namespace Sharpend.Search
 	/// </summary>
 	public class IndexedDocument<T> : IDisposable where T:class
 	{
+		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private IndexWriter writer = null;
 		private bool _disposed;
 
@@ -25,9 +27,15 @@ namespace Sharpend.Search
 			private set;
 		}
 
-		public IndexedDocument (String indexDir,bool initializeWriter)
+		public bool CreateIndex {
+			get;
+			private set;
+		}
+
+		public IndexedDocument (String indexDir,bool initializeWriter,bool createIndex)
 		{
 			IndexDir = indexDir;
+			CreateIndex = createIndex;
 			if (initializeWriter)
 			{
 				initWriter();
@@ -36,7 +44,7 @@ namespace Sharpend.Search
 
 		public void initWriter()
 		{
-			writer = new IndexWriter(FSDirectory.Open(IndexDir), new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30), true, IndexWriter.MaxFieldLength.LIMITED);
+			writer = new IndexWriter(FSDirectory.Open(IndexDir), new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30), CreateIndex, IndexWriter.MaxFieldLength.LIMITED);
 		}
 
 		/// <summary>
@@ -57,9 +65,16 @@ namespace Sharpend.Search
 				throw new ArgumentNullException("indexwriter not opened!");
 			}
 
-			Document doc = createDocument(data);
-			writer.AddDocument(doc);
-			return true;
+			try
+			{
+				Document doc = createDocument(data);
+				writer.AddDocument(doc);
+				return true;
+			} catch (Exception ex)
+			{
+				log.Error(ex);
+				throw;
+			}
 		}
 
 		/// <summary>
@@ -87,8 +102,16 @@ namespace Sharpend.Search
 
 			if (getId(data,out id, out fieldname))
 			{
-				writer.UpdateDocument(new Lucene.Net.Index.Term(id, fieldname),doc);
-				return true;
+				if (!String.IsNullOrEmpty(id))
+				{
+					log.Debug("update document with id: " + id + " idfield: " + fieldname);
+					writer.UpdateDocument(new Lucene.Net.Index.Term(fieldname,id),doc);
+					//writer.UpdateDocument(new Lucene.Net.Index.Term(
+					return true;
+				} else
+				{
+					log.Warn("Update: could not find id");
+				}
 			}
 			return false;
 		}
@@ -122,41 +145,60 @@ namespace Sharpend.Search
 
 			XmlNode nd = Sharpend.Configuration.ConfigurationManager.getValue("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@id='yes')]");
 
-			if (nd != null)
-			{
-				fieldname = nd.Attributes["name"].Value;
-				String datasource = nd.Attributes["datasource"].Value;
-				object dt = data.GetType().GetProperty(datasource).GetValue(data,null);
-				id = Convert.ToString(dt);
+			if (nd != null) {
+				fieldname = nd.Attributes ["name"].Value.ToLower ();
+				String datasource = nd.Attributes ["datasource"].Value;
+				object dt = data.GetType ().GetProperty (datasource).GetValue (data, null);
+				id = Convert.ToString (dt);
 
-				if (!String.IsNullOrEmpty(id) && !String.IsNullOrEmpty(fieldname))
-				{
+				if (!String.IsNullOrEmpty (id) && !String.IsNullOrEmpty (fieldname)) {
 					return true;
 				}
+			} else {
+				throw new Exception("could not load searchdescription.xml");
 			}
 			return false;
 		}
 
 		private Document createDocument(T data)
 		{
-			Document ret = new Document();
+			try
+			{
+				Document ret = new Document();
 
-			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
-			if (! fi.Exists)
+				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
+				if (! fi.Exists)
+				{
+					throw new Exception("could not load searchdescription.xml");
+				}
+				String className = typeof(T).ToString();
+				String assembly = typeof(T).Assembly.FullName;
+				assembly = assembly.Split(',')[0];
+
+				log.Debug("create new document for class " + className + " assembly " + assembly);
+
+				XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"')]");
+
+				if (lst.Count == 0)
+				{
+					log.Warn("there are no matching fields specified for this class: " + className  + " assembly" + assembly );
+				}
+
+				foreach (XmlNode nd in lst)
+				{
+					Field f = FieldDescription.CreateInstance(data, nd);
+
+					log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+
+					ret.Add(f);
+				}
+				
+				return ret;
+			} catch (Exception ex)
 			{
-				throw new Exception("could not load searchdescription.xml");
+				log.Error(ex);
+				throw;
 			}
-			String className = typeof(T).ToString();
-			String assembly = typeof(T).Assembly.FullName;
-			assembly = assembly.Split(',')[0];
-			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"')]");
-			foreach (XmlNode nd in lst)
-			{
-				Field f = FieldDescription.CreateInstance(data, nd);
-				ret.Add(f);
-			}
-			
-			return ret;
 		}
 
 

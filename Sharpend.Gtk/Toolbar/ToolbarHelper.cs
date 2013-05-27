@@ -47,7 +47,8 @@ namespace Sharpend.GtkSharp
 			{
 				xpath += "[not(@class)]";
 			}
-			
+
+			Console.WriteLine ("addToolbars:" + configfile + xpath);
 			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues(configfile, xpath);
 			
 			foreach (XmlNode nd in lst)	

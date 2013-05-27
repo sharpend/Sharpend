@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;DBUS</DefineConstants>
+    <DefineConstants>DEBUG;WSControl;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>True</Externalconsole>
@@ -44,6 +44,7 @@
     <Reference Include="dbus-sharp">
       <HintPath>..\..\dbus-sharp\src\dbus-sharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -52,6 +53,10 @@
     <Compile Include="TestTask.cs" />
     <Compile Include="DBusRemoteControl.cs" />
     <Compile Include="IDBusRemoteControl.cs" />
+    <Compile Include="WebServiceControl.cs" />
+    <Compile Include="IWebserviceControl.cs" />
+    <Compile Include="WebServiceHost.cs" />
+    <Compile Include="TaskManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

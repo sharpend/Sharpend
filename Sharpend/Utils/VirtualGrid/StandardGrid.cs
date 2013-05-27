@@ -69,8 +69,15 @@ namespace Sharpend.Utils
 		public void loadStructure(String filename)
 		{
 			gridStructure = new XmlDocument();
-			gridStructure.Load(filename);
-			loadStructure(gridStructure);
+
+			if (!File.Exists (filename)) {
+				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile (filename);
+				gridStructure.Load (fi.FullName);
+				loadStructure (gridStructure);
+			} else {
+				gridStructure.Load (filename);
+				loadStructure (gridStructure);
+			}
 		}
 
 		public void loadStructureFromRessource(String ressourcename)

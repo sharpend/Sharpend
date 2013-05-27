@@ -21,6 +21,7 @@
 
 using System;
 using Gtk;
+using System.IO;
 
 namespace Sharpend.GtkSharp
 {
@@ -39,6 +40,13 @@ namespace Sharpend.GtkSharp
 		{			
 			if (!String.IsNullOrEmpty(iconfilename))
 			{
+				if (!iconfilename.StartsWith("/"))
+				{
+					FileInfo fi = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+					iconfilename = fi.Directory.FullName + "/" + iconfilename;
+				}
+
+
 				Gtk.Image img = new Gtk.Image(new Gdk.Pixbuf(iconfilename));
 				img.Visible = true;
 				this.IconWidget = img;

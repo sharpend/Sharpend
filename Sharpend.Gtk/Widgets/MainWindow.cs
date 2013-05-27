@@ -244,7 +244,10 @@ namespace Sharpend.GtkSharp
 				String name = typeof(T).Assembly.FullName;
 				String[] l = name.Split(',');
 				String fn = l[0] + ".xml";
-			
+
+				FileInfo fi = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+				fn = fi.Directory.FullName + System.IO.Path.DirectorySeparatorChar + fn;
+
 				if (File.Exists(fn))
 				{
 					XmlSerializer xs = new XmlSerializer(typeof(T));
@@ -267,6 +270,8 @@ namespace Sharpend.GtkSharp
 		public void Save()
 		{
 			String fn = CurrentAssemblyName + ".xml";
+			FileInfo fi = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+			fn = fi.Directory.FullName + System.IO.Path.DirectorySeparatorChar + fn;
 			using (XmlWriter xw = XmlWriter.Create(fn))
 			{
 				XmlSerializer xs =  new XmlSerializer(this.GetType());

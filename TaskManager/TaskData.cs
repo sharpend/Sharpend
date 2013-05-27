@@ -26,6 +26,10 @@ using Sharpend.Utils;
 
 namespace TaskManager
 {
+	/// <summary>
+	/// Task data.
+	/// Contains Information for one Task specified in the tasks.config file
+	/// </summary>
 	public class TaskData
 	{
 		
@@ -128,13 +132,29 @@ namespace TaskManager
 				NextRun = NextRun.AddMinutes(Intervall);
 			}
 		}
-		
+
+		/// <summary>
+		/// add new parameters for the task constructor 
+		/// then the task will not use the parameters specified in the tasks.config
+		/// </summary>
+		/// <param name="parameters">Parameters.</param>
 		public void addParams(String parameters)
 		{
-			Params = ParameterSet.CreateInstance(Classname,Assembly,parameters);
+			//Params = ParameterSet.CreateInstance(Classname,Assembly,parameters);
+
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (parameters);
+			XmlNode nd = doc.SelectSingleNode ("//params");
+			if (nd != null) {
+				Params = ParameterSet.CreateInstance(nd);
+			}
 		}
 		
-		
+		/// <summary>
+		/// create a TaskData instance from an xml node
+		/// </summary>
+		/// <returns>The instance.</returns>
+		/// <param name="node">Node.</param>
 		public static TaskData CreateInstance(XmlNode node)
 		{
 			String nextRun = XmlHelper.getAttributeValue(node,"nextrun");

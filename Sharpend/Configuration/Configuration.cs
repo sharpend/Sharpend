@@ -148,6 +148,7 @@ namespace Sharpend.Configuration
 		public static FileInfo getApplicationConfig()
 		{
 			String app = System.AppDomain.CurrentDomain.FriendlyName.ToLower();
+
 			String configfile = app.Replace(".exe",".config");
 			configfile = configfile.ToLower();
 			return getConfigFile(configfile);
@@ -196,11 +197,18 @@ namespace Sharpend.Configuration
 		{
 			// trying some paths for a config file
 			FileInfo fi = null;
-			
+
+			FileInfo entry = new FileInfo (System.Reflection.Assembly.GetEntryAssembly ().Location);
+			if (fi == null)
+				fi = getFileInfo (entry.Directory.FullName, filename);
+
+			//TODO ??  System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+			//CurrentDirectory ... 
 			String path = Environment.CurrentDirectory;
 			if (fi == null)
 				fi = getFileInfo(path,filename);
-			
+		
 			//the home directory
 			path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 			if (fi == null)
@@ -208,7 +216,7 @@ namespace Sharpend.Configuration
 			
 			String app = System.AppDomain.CurrentDomain.FriendlyName.ToLower();
 			app = app.Replace(".exe",String.Empty);
-						
+
 			path += "/." + app;
 			if (fi == null)
 				fi = getFileInfo(path,filename);

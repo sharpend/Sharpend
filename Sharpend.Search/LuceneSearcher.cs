@@ -18,6 +18,8 @@ namespace Sharpend.Search
 	/// </summary>
 	public class LuceneResult<T> where T:class
 	{
+		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public Document Doc {
 			get;
 			private set;	
@@ -68,6 +70,12 @@ namespace Sharpend.Search
 			assembly = assembly.Split(',')[0];
 			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@constructor='yes')]");
 
+			if (lst.Count == 0) 
+			{
+				throw new Exception("no fields specified in searchdescription.xml");
+			}
+
+
 			Type[] ret = new Type[lst.Count];
 			int i=0;
 			foreach (XmlNode nd in lst)
@@ -102,7 +110,7 @@ namespace Sharpend.Search
 			int i=0;
 			foreach (XmlNode nd in lst)
 			{
-				String name = nd.Attributes["name"].Value;
+				String name = nd.Attributes["name"].Value.ToLower();
 				ret[i] = Doc.Get(name);
 				i++;
 			}
@@ -123,6 +131,14 @@ namespace Sharpend.Search
 			{
 				T dt = (T)mi.Invoke(null,values);
 				return dt;
+			} else
+			{
+				String tps = String.Empty;
+				foreach (Type t in types)
+				{
+					tps += t.ToString() + ",";
+				}
+				log.Warn("could not find CreateInstance for " + tps);
 			}
 
 			//if not we try a constructor
@@ -160,6 +176,8 @@ namespace Sharpend.Search
 
 	public class LuceneSearcher<T> : IDisposable where T:class
 	{
+		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private class AnonymousClassCollector : Collector 
 		{
 			private Scorer scorer;
@@ -221,8 +239,80 @@ namespace Sharpend.Search
 			}
 		}
 
+		public List<LuceneResult<T>> Search(String[] fields, String querystring)
+		{
+			log.Debug("start new search for multiple fields ");
+			
+			Searcher searcher = new IndexSearcher(reader);
+			Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+			
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30,fields,analyzer);
+			Query query = parser.Parse(querystring);
+			
+			AnonymousClassCollector streamingHitCollector = new AnonymousClassCollector(searcher);
+			
+			searcher.Search(query,streamingHitCollector);
+			
+			parser = null;
+			query = null;
+			
+			List<LuceneResult<T>> ret = streamingHitCollector.GetSortedResult();
+			log.Debug("resultcount: " + ret.Count);
+			return ret;
+		}
+
+		public List<LuceneResult<T>> Search(String[] fields, String querystring, String datecol, String lowerdate, String uppderdate)
+		{
+			log.Debug("start new search for multiple fields and range");
+			//RangeFilter filter = new RangeFilter(datecol, lowerDate, upperDate, true, true);
+			Searcher searcher = new IndexSearcher(reader);
+			Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+
+
+			String low = lowerdate;
+			String up = uppderdate;
+
+			DateTime dt1 = DateTime.MinValue;
+			if (DateTime.TryParse (lowerdate,out dt1)) {
+				low = Sharpend.Utils.Utils.getDateTimeForIndex(dt1);
+			}
+
+			DateTime dt2 = DateTime.MinValue;
+			if (DateTime.TryParse (uppderdate,out dt2)) {
+				up = Sharpend.Utils.Utils.getDateTimeForIndex(dt2);
+			}
+
+
+			Query query;
+
+			if (String.IsNullOrEmpty (querystring)) {
+				query = new TermRangeQuery(datecol,low,up,true,true);
+			} else {
+				MultiFieldQueryParser parser = new MultiFieldQueryParser (Lucene.Net.Util.Version.LUCENE_30, fields, analyzer);
+				query = parser.Parse (querystring);
+			}
+
+			AnonymousClassCollector streamingHitCollector = new AnonymousClassCollector(searcher);
+
+			if (String.IsNullOrEmpty (querystring)) {
+				searcher.Search (query, streamingHitCollector);
+			} else {
+				TermRangeFilter filter = new TermRangeFilter (datecol, low, up, true, true);
+				searcher.Search (query, filter, streamingHitCollector);
+			}
+
+			//parser = null;
+			query = null;
+			
+			List<LuceneResult<T>> ret = streamingHitCollector.GetSortedResult();
+			log.Debug("resultcount: " + ret.Count);
+			return ret;
+		}
+
 		public List<LuceneResult<T>> Search(String field, String querystring)
 		{
+			log.Debug("start new search for field " + field + " query: " + querystring);
+
 			Searcher searcher = new IndexSearcher(reader);
 			Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
 
@@ -236,7 +326,9 @@ namespace Sharpend.Search
             parser = null;
             query = null;
 
-			return streamingHitCollector.GetSortedResult();
+			List<LuceneResult<T>> ret = streamingHitCollector.GetSortedResult();
+			log.Debug("resultcount: " + ret.Count);
+			return ret;
 		}
 
 
@@ -244,8 +336,6 @@ namespace Sharpend.Search
 		{
 			reader = IndexReader.Open(FSDirectory.Open(new System.IO.DirectoryInfo(IndexDir)), true); // only searching, so read-only=true
 		}
-
-
 
 
 		#region IDisposable implementation
