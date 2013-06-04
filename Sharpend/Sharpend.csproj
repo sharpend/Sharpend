@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;DBUS</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -29,22 +29,14 @@
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\log4net-1.2.11-src\log4net-1.2.11\build\bin\net\2.0\debug\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
-    <Reference Include="ICSharpCode.SharpZipLib" />
-    <Reference Include="log4net">
-      <HintPath>..\..\log4net-1.2.11\bin\mono\2.0\release\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\json\Source\Src\Newtonsoft.Json\bin\Debug\Net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="dbus-sharp">
-      <HintPath>..\..\dbus-sharp\src\dbus-sharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -97,23 +89,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Unity\" />
-    <Folder Include="Configuration\" />
-    <Folder Include="Glade\" />
     <Folder Include="Glade\windows\" />
-    <Folder Include="Utils\" />
-    <Folder Include="Utils\VirtualGrid\" />
-    <Folder Include="Utils\applications\" />
-    <Folder Include="Utils\applications\tomboy\" />
-    <Folder Include="Utils\DBus\" />
-    <Folder Include="Utils\applications\canonical\" />
-    <Folder Include="Utils\applications\freedesktop\" />
-    <Folder Include="Utils\TaskManager\" />
-    <Folder Include="Utils\Webservices\" />
-    <Folder Include="Utils\Webservices\Discogs\" />
-    <Folder Include="Databinding\" />
-    <Folder Include="Logging\" />
-    <Folder Include="Utils\applications\gnote\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Glade\glade_transform.xsl" />

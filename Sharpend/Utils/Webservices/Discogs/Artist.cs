@@ -21,10 +21,13 @@
 
 using System;
 using System.Linq;
+#if JSON
 using Newtonsoft.Json.Linq;
+#endif
 using System.Collections.Generic;
 
-#if !GTK2
+
+#if JSON
 namespace Sharpend.Utils.Webservices.Discogs
 {
 	public class Artist

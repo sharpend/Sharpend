@@ -19,7 +19,15 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+
+#if LINUX
 using Mono.Unix;
+#endif
+
+#if GTK
+using Gtk;
+#endif
+
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using TaskManager.DBus;
@@ -27,7 +35,7 @@ using Sharpend;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
-using Gtk;
+
 using Sharpend.Utils.TaskManager;
 using System.Xml;
 using Sharpend.Utils;
@@ -78,6 +86,7 @@ namespace TaskManager
 		}
 		
 		// Catch SIGINT and SIGUSR1
+#if LINUX
 		private static UnixSignal[] signals = new UnixSignal [] {
 			new UnixSignal(Mono.Unix.Native.Signum.SIGINT),
 			new UnixSignal(Mono.Unix.Native.Signum.SIGTERM),
@@ -88,7 +97,7 @@ namespace TaskManager
 			new UnixSignal (Mono.Unix.Native.Signum.SIGUSR1),
 			//new UnixSignal (Mono.Unix.Native.Signum.SIGKILL)
 		};
-		
+#endif
 		//private static ConcurrentBag<TaskData> tasks;
 		private  List<TaskData> tasks;
 		//private static Dictionary<String,TaskData> runningTasks;
@@ -122,7 +131,8 @@ namespace TaskManager
 		{
 			Sharpend.Utils.Utils.initLog4Net();
 			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-			
+            log.Debug("test");
+
 			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("tasks.config");
 			lastWriteTime = fi.LastWriteTime;
 			
@@ -132,7 +142,7 @@ namespace TaskManager
 			//log.Info("ready");
 			
 			log.Info("Welcome to the Taskmanager");
-			
+            
 			#if DBUS
 			//			BusG.Init();		
 			//			rc = Sharpend.Utils.DBusBaseProxy<DBusRemoteControl>.Register<DBusRemoteControl>("eu.shaprend.taskmanager","/eu/shaprend/taskmanager");
@@ -166,9 +176,10 @@ namespace TaskManager
 
 			Running = true;
 			loadTasks();	
-			System.Threading.Thread s = new System.Threading.Thread(new ThreadStart(signalThread));
+#if LINUX
+            System.Threading.Thread s = new System.Threading.Thread(new ThreadStart(signalThread));
 			s.Start();
-
+#endif
 			#if WSControl
 			wsListening = true;
 			wsThread = new Thread(new ThreadStart(createHost));
@@ -649,7 +660,9 @@ namespace TaskManager
 			{
 				log.Debug("mainloop2");
 				storeTasks();
+#if GTK
 				Application.Quit();
+#endif
 				return false;
 			}
 		}
@@ -666,6 +679,7 @@ namespace TaskManager
 		}
 		
 		
+#if LINUX
 		private void signalThread()
 		{
 			while (Running) {
@@ -687,6 +701,7 @@ namespace TaskManager
 				stop();
 			}
 		}
+#endif
 		
 		#if WSControl
 		
@@ -716,7 +731,8 @@ namespace TaskManager
 				//				//host.AddServiceEndpoint(typeof(IHelloWorldService),new NetTcpBinding(),"hello");
 				//				host.AddServiceEndpoint(typeof(IMetadataExchange),MetadataExchangeBindings.CreateMexTcpBinding(),"mex");
 				//
-				
+                //host.AddDefaultEndpoints();
+
 				host.Open();
 				
 				while (wsListening) 

@@ -21,6 +21,7 @@
 
 using System;
 using System.IO;
+#if LINUX
 using Mono.Posix;
 
 namespace Sharpend
@@ -122,3 +123,4 @@ namespace Sharpend
 	}
 }
 
+#endif

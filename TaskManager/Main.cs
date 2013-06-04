@@ -28,7 +28,9 @@ using Sharpend.Utils;
 using Sharpend.Utils.TaskManager;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+#if LINUX
 using Mono.Unix;
+#endif 
 using System.IO;
 using System.ServiceModel;
 

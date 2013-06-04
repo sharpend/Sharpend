@@ -20,14 +20,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-#if !GTK2
+#if JSON
 using Newtonsoft.Json.Linq;
 #endif
 
 using System.Collections.Generic;
 using System.Linq;
 
-#if !GTK2
+#if JSON
 namespace Sharpend.Utils.Webservices.Discogs
 {
 

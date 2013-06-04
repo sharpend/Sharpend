@@ -23,6 +23,7 @@ using Sharpend.Utils;
 using Sharpend.Utils.Applications.Canonical;
 using System.Collections.Generic;
 
+#if DBUS
 namespace Sharpend.Utils.Applications.Canonical
 {
 
@@ -130,3 +131,4 @@ namespace Sharpend.Utils.Applications.Canonical
 	}
 }
 
+#endif

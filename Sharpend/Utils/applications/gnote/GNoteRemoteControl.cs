@@ -1,4 +1,5 @@
 using System;
+#if DBUS
 using DBus;
 
 namespace Sharpend.Utils.Applications.GNote
@@ -43,4 +44,4 @@ namespace Sharpend.Utils.Applications.GNote
 		string Version ();
 	}
 }
-
+#endif

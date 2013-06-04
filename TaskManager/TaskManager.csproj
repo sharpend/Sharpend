@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,19 +30,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="Mono.Posix" />
-    <Reference Include="glib-sharp">
-      <HintPath>..\Sharpend\bin\Debug\glib-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="gtk-sharp">
-      <HintPath>..\Sharpend\bin\Debug\gtk-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\log4net-1.2.11\bin\mono\2.0\release\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="dbus-sharp">
-      <HintPath>..\..\dbus-sharp\src\dbus-sharp.dll</HintPath>
+      <HintPath>..\..\log4net-1.2.11-src\log4net-1.2.11\build\bin\net\2.0\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
@@ -60,9 +53,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="tasks.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tasks.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

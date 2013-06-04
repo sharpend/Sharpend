@@ -20,7 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+#if DBUS
 using DBus;
+#endif
+
 using System.Xml;
 
 namespace TaskManager.DBus

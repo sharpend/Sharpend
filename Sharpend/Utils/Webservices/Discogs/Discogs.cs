@@ -26,7 +26,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Collections.Generic;
 
-#if !GTK2
+#if JSON
 namespace Sharpend.Utils.Webservices.Discogs
 {
 	/// <summary>

@@ -23,11 +23,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-#if !GTK2
+#if JSON
 using Newtonsoft.Json.Linq;
 #endif
 
-#if !GTK2
+#if JSON
 namespace Sharpend.Utils.Webservices.Discogs
 {
   public class Release

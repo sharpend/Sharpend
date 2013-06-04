@@ -23,14 +23,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-#if !GTK2
+#if JSON
 using Newtonsoft.Json.Linq;
 #endif
 
 using System.Drawing.Imaging;
 using System.IO;
 
-#if !GTK2
+#if JSON
 namespace Sharpend.Utils.Webservices.Discogs
 {
   public class Image
