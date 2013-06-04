@@ -37,6 +37,7 @@ namespace TaskManager
 {
 	public class TaskManager : ITaskManager
 	{
+
 		#region IDependency implementation
 		public string doStuff ()
 		{
@@ -92,7 +93,8 @@ namespace TaskManager
 		private  List<TaskData> tasks;
 		//private static Dictionary<String,TaskData> runningTasks;
 		private  ConcurrentDictionary <String,TaskData> runningTasks;
-		
+		private  Dictionary<String,String> finishedTasks;
+
 		private  DateTime lastWriteTime;
 		protected  log4net.ILog log;
 		
@@ -160,7 +162,8 @@ namespace TaskManager
 			
 			tasks = new List<TaskData>();
 			runningTasks = new ConcurrentDictionary<string, TaskData>();
-			
+			finishedTasks = new Dictionary<String,String> (50);
+
 			Running = true;
 			loadTasks();	
 			System.Threading.Thread s = new System.Threading.Thread(new ThreadStart(signalThread));
@@ -240,6 +243,39 @@ namespace TaskManager
 			return "error";
 		}
 
+		public string GetTaskStatus (string classname)
+		{
+			TaskData td = getTask(classname);
+
+			TaskData running;
+			if (runningTasks.TryGetValue (td.Id, out running)) {
+				return "running";
+			}
+
+			lock (finishedTasks) {
+				if (finishedTasks.ContainsKey(td.Id))
+				{
+					return finishedTasks[td.Id];
+				}
+			}
+
+			return "undefined";
+		}
+		
+		public string WaitForTask (string classname)
+		{
+			log.Debug ("wait for task: " + classname);
+			TaskData td = getTask(classname);
+			while (true) {		
+				if (finishedTasks.ContainsKey(td.Id))
+				{
+					log.Debug ("done: " + classname);
+					return finishedTasks[td.Id];
+				}
+				Thread.Sleep(1000);
+			}
+		}
+
 
 		public Task startTask<T>(System.Func<T> func)
 		{		
@@ -286,7 +322,26 @@ namespace TaskManager
 						#if DBUS
 						// rc.TaskFinished(tc.Message);  //TODO Taskfinished Evenet for DBus
 						#endif
-						
+
+
+						String finished = tc.State.ToString();
+						finished += "," + tc.Message;
+						log.Debug("finished task:"  +removed.Id);
+						if (finishedTasks.ContainsKey(removed.Id))
+						{
+							log.Debug("remove from list: " + removed.Id);
+							lock (finishedTasks)
+							{
+								finishedTasks.Remove(removed.Id);
+							}
+						}
+
+						lock (finishedTasks)
+						{
+							log.Debug("add finished task:" + removed.Id);
+							finishedTasks.Add(removed.Id,finished);
+						}
+
 						switch (tc.State)
 						{
 						case TaskCompletedState.None:

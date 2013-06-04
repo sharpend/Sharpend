@@ -188,7 +188,7 @@ namespace Sharpend.Search
 				{
 					Field f = FieldDescription.CreateInstance(data, nd);
 
-					log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+					//log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
 
 					ret.Add(f);
 				}

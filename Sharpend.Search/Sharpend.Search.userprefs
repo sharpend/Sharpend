@@ -1,10 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="LuceneSearcher.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FieldDescription.cs">
     <Files>
-      <File FileName="IndexedDocument.cs" Line="146" Column="47" />
-      <File FileName="FieldDescription.cs" Line="1" Column="1" />
-      <File FileName="LuceneSearcher.cs" Line="298" Column="52" />
+      <File FileName="IndexedDocument.cs" Line="1" Column="1" />
+      <File FileName="FieldDescription.cs" Line="7" Column="29" />
+      <File FileName="LuceneSearcher.cs" Line="250" Column="42" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

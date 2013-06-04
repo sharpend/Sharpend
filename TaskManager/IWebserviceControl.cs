@@ -30,7 +30,10 @@ namespace TaskManager
 		string StartTask(string classname, string parameters);
 
 		[OperationContract]
-		string GetTastStatus(string taskid);
+		string GetTaskStatus(String classname);
+
+		[OperationContract]
+		string WaitForTask (String classname);
 	}
 }
 

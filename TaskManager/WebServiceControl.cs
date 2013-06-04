@@ -42,9 +42,14 @@ namespace TaskManager
 			return _dep.startTask (classname, parameters);
 		}
 
-		public string GetTastStatus (string taskid)
+		public string GetTaskStatus (string classname)
 		{
-			throw new NotImplementedException ();
+			return _dep.GetTaskStatus(classname);
+		}
+
+		public string WaitForTask (string classname)
+		{
+			return _dep.WaitForTask(classname);
 		}
 
 		#endregion

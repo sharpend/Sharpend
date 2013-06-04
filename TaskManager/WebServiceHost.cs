@@ -31,6 +31,8 @@ namespace TaskManager
 	public interface ITaskManager
 	{
 		string startTask (String classname, String parameters);
+		string GetTaskStatus(String classname);
+		string WaitForTask (String classname);
 	}
 
 
