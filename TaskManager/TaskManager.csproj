@@ -56,6 +56,9 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="taskmanager.vshost.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="tasks.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

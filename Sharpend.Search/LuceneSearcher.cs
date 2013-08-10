@@ -127,6 +127,12 @@ namespace Sharpend.Search
 
 			//try a CreateInstance Methode
 			MethodInfo mi = tp.GetMethod("CreateInstance",types);
+
+            if (mi == null)
+            {
+                mi = tp.GetMethod("CreateInstance", BindingFlags.Static);
+            }
+
 			if (mi != null)
 			{
 				T dt = (T)mi.Invoke(null,values);

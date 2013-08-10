@@ -33,7 +33,7 @@ namespace TaskManager
 	public class TaskData
 	{
 		
-		public String Id {
+		public String Name {
 			get
 			{
 				return Classname  + "_" + Assembly;
@@ -55,10 +55,10 @@ namespace TaskManager
 			private set;
 		}
 		
-		public object CurrentInstance {
-			get;
-			set;
-		}
+        //public object CurrentInstance {
+        //    get;
+        //    set;
+        //}
 		
 		public String Classname {
 			get;

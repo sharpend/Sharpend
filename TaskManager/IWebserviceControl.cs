@@ -23,7 +23,7 @@ using System.ServiceModel;
 
 namespace TaskManager
 {
-	[ServiceContract(Namespace = "http://localhost:9050")]
+    [ServiceContract]
 	public interface IWebserviceControl
 	{
 		[OperationContract]

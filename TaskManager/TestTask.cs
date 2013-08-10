@@ -32,11 +32,7 @@ namespace TaskManager
 			private set;
 		}
 		
-		public String Id {
-			get;
-			private set;
-		}
-		
+				
 		public TestTask(String data)
 		{
 			
@@ -75,31 +71,44 @@ namespace TaskManager
 //			return new Sharpend.TaskCompleted(this.getId(), Sharpend.TaskCompletedState.Success,"");
 //		}
 
-		public string getId ()
-		{
-			throw new NotImplementedException ();
-		}
-		#endregion
+		
+		
 
-		#region ITask implementation
+		
 		Sharpend.TaskCompleted ITask.doWork ()
 		{
-			for (int i=0;i<100;i++)
+			for (int i=0;i<50;i++)
 			{
-				//Console.WriteLine(Data.ToString() + "_" + i.ToString());
+				Console.WriteLine(Data.ToString() + "_" + i.ToString());
 				Thread.Sleep(200);
 			}
 			Console.WriteLine("ich bin fertig" + Data.ToString());
-			return new Sharpend.TaskCompleted(this.getId(), Sharpend.TaskCompletedState.Success,"");
+			return new Sharpend.TaskCompleted(this.Uid, Sharpend.TaskCompletedState.Success,"");
 		}
-		#endregion
+		
+				
+        public bool AllowMultipleInstances
+        {
+            get
+            {
+                return false;
+            }            
+        }
 
-		
-		public void setId (string id)
-		{
-			this.Id = id;
-		}
-		
-	}
+
+        public string Name
+        {
+            get;
+            set;            
+        }
+
+        public string Uid
+        {
+            get;
+            set;
+        }
+
+        #endregion
+    }
 }
 

@@ -101,8 +101,8 @@ namespace TaskManager
 		//private static ConcurrentBag<TaskData> tasks;
 		private  List<TaskData> tasks;
 		//private static Dictionary<String,TaskData> runningTasks;
-		private  ConcurrentDictionary <String,TaskData> runningTasks;
-		private  Dictionary<String,String> finishedTasks;
+		private  ConcurrentDictionary <String,ITask> runningTasks;
+        private Dictionary<String, ITask> finishedTasks;
 
 		private  DateTime lastWriteTime;
 		protected  log4net.ILog log;
@@ -171,8 +171,8 @@ namespace TaskManager
 			#endif
 			
 			tasks = new List<TaskData>();
-			runningTasks = new ConcurrentDictionary<string, TaskData>();
-			finishedTasks = new Dictionary<String,String> (50);
+			runningTasks = new ConcurrentDictionary<string, ITask>();
+			finishedTasks = new Dictionary<String,ITask> (50);
 
 			Running = true;
 			loadTasks();	
@@ -191,9 +191,7 @@ namespace TaskManager
 			t.Start();
 			t.Join();
 			#endif	
-			
-
-			
+						
 			#if DBUS
 			//GLib.MainLoop ml = new GLib.MainLoop();
 			Application.Init();
@@ -245,8 +243,7 @@ namespace TaskManager
 			{
 				td.addParams(parameters);
 				td.ExtraRun = true;
-				runTask(td);
-				return "done";
+				return runTask(td);			
 			} else
 			{
 				log.Error("could not find task: " + classname  + "  probably missing in tasks.config ??");
@@ -256,35 +253,40 @@ namespace TaskManager
 
 		public string GetTaskStatus (string classname)
 		{
-			TaskData td = getTask(classname);
+            //TODO xxx
+            //TaskData td = getTask(classname);
 
-			TaskData running;
-			if (runningTasks.TryGetValue (td.Id, out running)) {
-				return "running";
-			}
+            //TaskData running;
+            //if (runningTasks.TryGetValue (td.Id, out running)) {
+            //    return "running";
+            //}
 
-			lock (finishedTasks) {
-				if (finishedTasks.ContainsKey(td.Id))
-				{
-					return finishedTasks[td.Id];
-				}
-			}
+            //lock (finishedTasks) {
+            //    if (finishedTasks.ContainsKey(td.Id))
+            //    {
+            //        return finishedTasks[td.Id];
+            //    }
+            //}
 
 			return "undefined";
 		}
 		
 		public string WaitForTask (string classname)
 		{
-			log.Debug ("wait for task: " + classname);
-			TaskData td = getTask(classname);
-			while (true) {		
-				if (finishedTasks.ContainsKey(td.Id))
-				{
-					log.Debug ("done: " + classname);
-					return finishedTasks[td.Id];
-				}
-				Thread.Sleep(1000);
-			}
+            //TODO xxx
+
+            throw new NotImplementedException("WaitForTask");
+
+            //log.Debug ("wait for task: " + classname);
+            //TaskData td = getTask(classname);
+            //while (true) {		
+            //    if (finishedTasks.ContainsKey(td.Id))
+            //    {
+            //        log.Debug ("done: " + classname);
+            //        return finishedTasks[td.Id];
+            //    }
+            //    Thread.Sleep(1000);
+            //}
 		}
 
 
@@ -308,15 +310,11 @@ namespace TaskManager
 					try 
 					{
 						log.Debug("try get task");
-						TaskData td = runningTasks[tc.TaskId];
-						log.Debug("finished: " + td.Classname);
-						if (td.CurrentInstance != null)
-						{
-							td.CurrentInstance = null;
-						}
-						
-						td.IncNextRun();
-						
+						ITask task = runningTasks[tc.TaskId];
+						log.Debug("finished: " + task.Name + "-" + task.Uid);
+
+                        TaskData td = GetTaskDataByName(task.Name);
+						td.IncNextRun();						
 						if (td.ExtraRun)
 						{
 							log.Info("Extrarun: " + tc.Message);
@@ -325,7 +323,7 @@ namespace TaskManager
 						//if (Running)
 						//{
 						//runningTasks.Remove(tc.TaskId);
-						TaskData removed;
+						ITask removed;
 						runningTasks.TryRemove(tc.TaskId,out removed);
 						td.ExtraRun = false;
 						//}
@@ -333,24 +331,11 @@ namespace TaskManager
 						#if DBUS
 						// rc.TaskFinished(tc.Message);  //TODO Taskfinished Evenet for DBus
 						#endif
-
-
-						String finished = tc.State.ToString();
-						finished += "," + tc.Message;
-						log.Debug("finished task:"  +removed.Id);
-						if (finishedTasks.ContainsKey(removed.Id))
-						{
-							log.Debug("remove from list: " + removed.Id);
-							lock (finishedTasks)
-							{
-								finishedTasks.Remove(removed.Id);
-							}
-						}
-
+                        						
 						lock (finishedTasks)
 						{
-							log.Debug("add finished task:" + removed.Id);
-							finishedTasks.Add(removed.Id,finished);
+							log.Debug("add finished task:" + removed.Name + "-" + removed.Uid);
+                            finishedTasks.Add(removed.Uid, removed);
 						}
 
 						switch (tc.State)
@@ -395,7 +380,7 @@ namespace TaskManager
 					//td.IncNextRun();
 					
 					if (!td.ExtraRun) {
-						String[] cls = td.Id.Split ('_');
+						String[] cls = td.Name.Split ('_');
 						String xpath = "/tasks/task[(@class='" + cls [0] + "') and (@assembly = '" + cls [1] + "')]/@nextrun";
 						Sharpend.Configuration.ConfigurationManager.setValue ("tasks.config", xpath, td.NextRun.ToString ());
 					}
@@ -408,27 +393,38 @@ namespace TaskManager
 			log.Debug("forceQuitRunningTasks, we have " + runningTasks.Count + " running tasks.");
 			try 
 			{
-				ConcurrentDictionary<String,TaskData> toStore = new ConcurrentDictionary<string, TaskData>();
+                ConcurrentDictionary<String, ITask> toStore = new ConcurrentDictionary<string, ITask>();
+                foreach (var kp in runningTasks)
+                {
+                    kp.Value.forceQuit();
+                }
+
+                //foreach (var kp in toStore)
+                //{
+                //    ITask t;
+                //    runningTasks.TryRemove(kp.Key, out t);
+                //    t.forceQuit();
+                //}
+                
+                //foreach (var kp in runningTasks)
+                //{
+                //    if (kp.Value.CurrentInstance != null)
+                //    {
+                //        toStore.TryAdd(kp.Key,kp.Value);
+                //    }
+                //}
 				
-				foreach (var kp in runningTasks)
-				{
-					if (kp.Value.CurrentInstance != null)
-					{
-						toStore.TryAdd(kp.Key,kp.Value);
-					}
-				}
-				
-				foreach (var kp in toStore)
-				{
-					if (kp.Value.CurrentInstance != null)
-					{
-						log.Debug("forcequit: " + kp.Value.Classname);
+                //foreach (var kp in toStore)
+                //{
+                //    if (kp.Value.CurrentInstance != null)
+                //    {
+                //        log.Debug("forcequit: " + kp.Value.Classname);
 						
-						(kp.Value.CurrentInstance as ITask).forceQuit();
-					}
-				}
+                //        (kp.Value.CurrentInstance as ITask).forceQuit();
+                //    }
+                //}
 				
-				toStore.Clear();
+				//toStore.Clear();
 			} catch (Exception ex)
 			{
 				//log.Error("error");
@@ -509,45 +505,104 @@ namespace TaskManager
 			}
 			return null;
 		}
-		
+
+        /// <summary>
+        /// returns the task with the specified taskname
+        /// null if not found
+        /// </summary>
+        /// <param name="taskname"></param>
+        /// <returns></returns>
+        public TaskData GetTaskDataByName(String taskname)
+        {
+            foreach (TaskData td in tasks)
+            {
+                if (td.Name.Equals(taskname))
+                {
+                    return td;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// returns true if it is allowed to create a instance of the given taskdata task
+        /// </summary>
+        /// <param name="td"></param>
+        /// <returns></returns>
+        private bool CreateInstanceAllowed(TaskData td)
+        {            
+            foreach (KeyValuePair<String, ITask> kp in runningTasks)
+            {
+                if (kp.Value.Name == td.Name)
+                {
+                    return kp.Value.AllowMultipleInstances;                    
+                }
+            }
+            return true;
+        }
+
+        
+
+        private void TryRemoveAllTasks(TaskData td)
+        {
+            Dictionary<String, ITask> toRemove = new Dictionary<string, ITask>();
+
+            foreach (KeyValuePair<String, ITask> kp in runningTasks)
+            {
+                if (kp.Value.Name == td.Name)
+                {
+                    toRemove.Add(kp.Key, kp.Value);  
+                }
+            }
+
+            foreach (KeyValuePair<String, ITask> kp in toRemove)
+            {
+                ITask t;
+                runningTasks.TryRemove(kp.Key, out t);
+            }
+        }
+        
 		/// <summary>
 		/// run a task if the task is not currently running
 		/// </summary>
 		/// <param name='td'>
 		/// Td.
 		/// </param>
-		private void runTask(TaskData td)
+		private string runTask(TaskData td)
 		{
 			try
 			{
-				if (!runningTasks.ContainsKey(td.Id))
+				if (CreateInstanceAllowed(td))
 				{
-					runningTasks.TryAdd(td.Id,td);
+					//runningTasks.TryAdd(td.Id,td);
 					log.Debug("classname: " + td.Classname + "->asm:" + td.Assembly);
-					log.Debug("create new task: " + td.Params.BaseType.ToString() + " - " + td.Id);
+					log.Debug("create new task: " + td.Params.BaseType.ToString() + " - " + td.Name);
 					object o = Reflection.createInstance(td.Params);	
 					if ((o != null) && (o is ITask))
 					{
-						(o as ITask).setId(td.Id);
-						startTask<TaskCompleted>((o as ITask).doWork);
-						td.CurrentInstance = o;
+                        ITask task = o as ITask;
+                        String guid = Guid.NewGuid().ToString();
+                        task.Uid = guid;
+                        task.Name = td.Name;
+                        runningTasks.TryAdd(guid, task);						
+						startTask<TaskCompleted>(task.doWork);
+                        return task.Uid;
 					} else
 					{
 						log.Error("could not load task: " + td.Params.BaseType.ToString());
+                        return String.Empty;
 					}
 				} else
 				{
 					//log.Debug("task is already running: " + td.Classname);
+                    return String.Empty;
 				}
 			}
 			catch (Exception ex)
 			{
-				if (runningTasks.ContainsKey(td.Id))
-				{
-					TaskData removed;
-					runningTasks.TryRemove(td.Id,out removed);
-				}
-				log.Error(ex.ToString()); 
+                TryRemoveAllTasks(td);
+				log.Error(ex.ToString());
+                return String.Empty;
 			}
 		}
 		
@@ -714,8 +769,9 @@ namespace TaskManager
 			{
 				Environment.SetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT", "yes");
 			}
-			
-			using (WebServiceHost host = new WebServiceHost(this,typeof(WebServiceControl)))
+
+            Uri uri = new Uri("http://localhost:8080/WebServiceControl");
+			using (WebServiceHost host = new WebServiceHost(this,typeof(WebServiceControl),uri))
 			{
 				// Enable metadata publishing.
 				//				ServiceMetadataBehavior smb = new ServiceMetadataBehavior();

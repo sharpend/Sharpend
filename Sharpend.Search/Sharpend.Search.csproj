@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,18 +29,18 @@
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\Lucene_3_0_3\build\bin\core\Lucene.Net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\..\log4net-1.2.11-src\log4net-1.2.11\build\bin\net\2.0\debug\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\lucene\Apache-Lucene.Net-3.0.3-RC2.bin\NET40\bin\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
     <Reference Include="Sharpend">
       <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="log4net">
-      <HintPath>..\..\log4net-1.2.11\bin\mono\2.0\release\log4net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

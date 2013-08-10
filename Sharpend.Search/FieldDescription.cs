@@ -1,6 +1,7 @@
 using System;
 using Lucene.Net.Documents;
 using System.Xml;
+using System.Reflection;
 
 namespace Sharpend.Search
 {
@@ -42,6 +43,19 @@ namespace Sharpend.Search
 			return Sharpend.Utils.Utils.getDateTimeForIndex(input);
 		}
 
+        private static PropertyInfo GetFirstProperty(object source, String name)
+        {
+            foreach (PropertyInfo pi in source.GetType().GetProperties())
+            {
+                if (pi.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return pi;
+                }
+            }
+
+            return null;
+        }
+
 		private static String getData(object data, String datasource)
 		{
 			try
@@ -56,22 +70,43 @@ namespace Sharpend.Search
 					throw new ArgumentNullException("datasource");
 				}
 
-				object dt = data.GetType().GetProperty(datasource).GetValue(data,null);
+                String[] lst = datasource.Split('[');
+                String index = String.Empty;
+                if (lst.Length == 2)
+                {
+                    datasource = lst[0];
+                    index = lst[1].Substring(0, lst[1].Length - 1);
+                }
 
-				if (dt != null)
-				{
-					if (dt is DateTime)
-					{
-						return GetDateTime((DateTime)dt);
-					}
+                PropertyInfo pi = data.GetType().GetProperty(datasource);                
+                object dt = null;
 
-					return Convert.ToString(dt);
-				}
+                if (!String.IsNullOrEmpty(index))
+                {
+                    object source = pi.GetValue(data, null);
+                    PropertyInfo ii = GetFirstProperty(source, "Item");
+                    dt = ii.GetValue(source, new object[] { index });
+                }
+                else
+                {
+                    dt = pi.GetValue(data, null);
+                }
 
+                if (dt != null)
+                {
+                    if (dt is DateTime)
+                    {
+                        return GetDateTime((DateTime)dt);
+                    }
+
+                    return Convert.ToString(dt);
+                }
+                
 				return String.Empty;
-			} catch
+			} catch (Exception ex)
 			{
 				Console.WriteLine("error in getData: " + datasource);
+                Console.WriteLine(ex.ToString());
 				throw;
 			}
 		}

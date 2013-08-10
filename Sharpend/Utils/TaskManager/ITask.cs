@@ -23,13 +23,30 @@ using System;
 
 namespace Sharpend.Utils.TaskManager
 {
-	
+	/// <summary>
+	/// Base interface for Taskmanager Tasks
+	/// </summary>
 	public interface ITask
 	{	
+        /// <summary>
+        /// this ist the worker function
+        /// </summary>
+        /// <returns></returns>
 		TaskCompleted doWork();
 		void forceQuit();
-		String getId();
-		void setId(String id);
+		
+        /// <summary>
+        /// name of the task ... usually class and assemblyname ... will be set from the taskmanager
+        /// </summary>
+        String Name { get; set; }
+        /// <summary>
+        /// unique id for a running instance
+        /// </summary>
+        String Uid { get; set; }
+        /// <summary>
+        /// if true the taskmanager will start multiple instances from this task if required
+        /// </summary>
+        bool AllowMultipleInstances { get; }
 	}
 	
 }

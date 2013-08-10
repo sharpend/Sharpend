@@ -23,8 +23,8 @@ using System.ServiceModel;
 
 namespace TaskManager
 {
-
-	[ServiceBehavior(Namespace = "http://localhost:9050")]
+    //(Namespace = "http://localhost:9050")
+	[ServiceBehavior]
 	public class WebServiceControl : IWebserviceControl
 	{
 
