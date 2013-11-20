@@ -57,7 +57,7 @@ namespace Sharpend.Search
 //			return ret;
 //		}
 
-		private Type[] GetTypes()
+		private Type[] GetTypes(Type nominalType)
 		{
 			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
 			if (! fi.Exists)
@@ -65,8 +65,8 @@ namespace Sharpend.Search
 				throw new Exception("could not load searchdescription.xml");
 			}
 			
-			String className = typeof(T).ToString();
-			String assembly = typeof(T).Assembly.FullName;
+			String className = nominalType.ToString();
+			String assembly = nominalType.Assembly.FullName;
 			assembly = assembly.Split(',')[0];
 			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@constructor='yes')]");
 
@@ -93,7 +93,7 @@ namespace Sharpend.Search
 			return ret;
 		}
 
-		private object[] GetValues()
+		private object[] GetValues(Type nominalType)
 		{
 			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
 			if (! fi.Exists)
@@ -101,8 +101,8 @@ namespace Sharpend.Search
 				throw new Exception("could not load searchdescription.xml");
 			}
 			
-			String className = typeof(T).ToString();
-			String assembly = typeof(T).Assembly.FullName;
+			String className = nominalType.ToString();
+			String assembly = nominalType.Assembly.FullName;
 			assembly = assembly.Split(',')[0];
 			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@constructor='yes')]");
 			
@@ -122,10 +122,19 @@ namespace Sharpend.Search
 		{
 			Type tp = typeof(T);
 
-			Type[] types = GetTypes();
-			object[] values = GetValues();
-
 			//try a CreateInstance Methode
+			String nominalType = Doc.Get ("nominaltype");
+			if (!String.IsNullOrWhiteSpace (nominalType)) {
+				tp = Type.GetType(nominalType);
+				if (tp == null)
+				{
+					throw new Exception("could not find nominaltype" + nominalType);
+				}
+			}
+
+			Type[] types = GetTypes(tp);
+			object[] values = GetValues(tp);
+
 			MethodInfo mi = tp.GetMethod("CreateInstance",types);
 
             if (mi == null)
@@ -247,12 +256,16 @@ namespace Sharpend.Search
 
 		public List<LuceneResult<T>> Search(String[] fields, String querystring)
 		{
-			log.Debug("start new search for multiple fields ");
+			//querystring = "\"" + querystring + "\""; 
+
+			log.Debug("start new search for multiple fields " + querystring);
 			
 			Searcher searcher = new IndexSearcher(reader);
 			Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
 			
 			MultiFieldQueryParser parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30,fields,analyzer);
+			parser.DefaultOperator = QueryParser.Operator.AND;
+		
 			Query query = parser.Parse(querystring);
 			
 			AnonymousClassCollector streamingHitCollector = new AnonymousClassCollector(searcher);
@@ -295,6 +308,7 @@ namespace Sharpend.Search
 				query = new TermRangeQuery(datecol,low,up,true,true);
 			} else {
 				MultiFieldQueryParser parser = new MultiFieldQueryParser (Lucene.Net.Util.Version.LUCENE_30, fields, analyzer);
+				parser.DefaultOperator = QueryParser.Operator.AND;
 				query = parser.Parse (querystring);
 			}
 

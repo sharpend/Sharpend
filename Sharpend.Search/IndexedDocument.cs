@@ -22,6 +22,18 @@ namespace Sharpend.Search
 		private IndexWriter writer = null;
 		private bool _disposed;
 
+		private bool verboseMode = false;
+		public bool VerboseMode {
+			get
+			{
+				return verboseMode;
+			}
+			set
+			{
+				verboseMode = value;
+			}
+		}
+
 		public String IndexDir {
 			get;
 			private set;
@@ -116,6 +128,40 @@ namespace Sharpend.Search
 			return false;
 		}
 
+		public bool Remove(T data)
+		{
+			if (_disposed)
+			{
+				throw new ObjectDisposedException("Resource was disposed.");
+			}
+			
+			if (writer == null)
+			{
+				throw new ArgumentNullException("indexwriter not opened!");
+			}
+			
+			Document doc = createDocument(data);
+			
+			String id = String.Empty;
+			String fieldname = String.Empty;
+			
+			if (getId(data,out id, out fieldname))
+			{
+				if (!String.IsNullOrEmpty(id))
+				{
+					log.Debug("update document with id: " + id + " idfield: " + fieldname);
+					//writer.UpdateDocument(new Lucene.Net.Index.Term(fieldname,id),doc);
+					writer.DeleteDocuments(new Lucene.Net.Index.Term(fieldname,id));
+					//writer.UpdateDocument(new Lucene.Net.Index.Term(
+					return true;
+				} else
+				{
+					log.Warn("Update: could not find id");
+				}
+			}
+			return false;
+		}
+
 		/// <summary>
 		/// Optimize the index
 		/// </summary>
@@ -187,9 +233,10 @@ namespace Sharpend.Search
 				foreach (XmlNode nd in lst)
 				{
 					Field f = FieldDescription.CreateInstance(data, nd);
-
-					//log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
-
+					if (VerboseMode)
+					{
+						log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+					}
 					ret.Add(f);
 				}
 				
