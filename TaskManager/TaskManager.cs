@@ -116,6 +116,9 @@ namespace TaskManager
 		#if WSControl
 		Thread wsThread;
 		bool wsListening=false;
+		CancellationTokenSource wsCancellationTokenSource;
+		private int maxTryCount = 10;
+		private int tryCount = 0;
 		#endif
 		
 		static bool startup = true;
@@ -131,7 +134,7 @@ namespace TaskManager
 		{
 			Sharpend.Utils.Utils.initLog4Net();
 			log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            log.Debug("test");
+            //log.Debug("test");
 
 			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("tasks.config");
 			lastWriteTime = fi.LastWriteTime;
@@ -181,9 +184,12 @@ namespace TaskManager
 			s.Start();
 #endif
 			#if WSControl
-			wsListening = true;
+			/*wsListening = true;
 			wsThread = new Thread(new ThreadStart(createHost));
 			wsThread.Start();
+			*/
+			wsCancellationTokenSource = new CancellationTokenSource();
+			initWsControl();
 			#endif
 
 			#if !DBUS
@@ -210,7 +216,9 @@ namespace TaskManager
 #if WSControl
 			log.Info("shutdown wsListener");
 			wsListening = false;
-			wsThread.Join();
+			//wsThread.Join();
+			wsCancellationTokenSource.Cancel();
+
 			log.Info("done shutdown wsListener");
 #endif
 				
@@ -234,8 +242,24 @@ namespace TaskManager
 			}		 
 		}
 #endif
+		/// <summary>
+		/// Try to start the Webservicehost for the taskmanager
+		/// if createhost throws and error we retry it maxTryCount times
+		/// </summary>
+	    private void initWsControl() {
+			//TaskScheduler.Current
+			wsListening = true;
+			Task.Factory.StartNew(createHost,wsCancellationTokenSource.Token).ContinueWith(task => {
+				Thread.Sleep(1000);
+				if (tryCount < maxTryCount)
+				{
+					tryCount++;
+					initWsControl();
+				}
+			},wsCancellationTokenSource.Token,TaskContinuationOptions.OnlyOnFaulted,TaskScheduler.Current);
+		}
 
-		public string startTask(String classname, String parameters)
+		public string StartTask(String classname, String parameters)
 		{
 			log.Debug("startTask: " + classname + " - " + parameters);
 			TaskData td = getTask(classname);
@@ -765,38 +789,47 @@ namespace TaskManager
 		/// </summary>
 		private void createHost() 
 		{
-			if (Environment.GetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT") != "yes")
+			try
 			{
-				Environment.SetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT", "yes");
-			}
-
-            Uri uri = new Uri("http://localhost:8080/WebServiceControl");
-			using (WebServiceHost host = new WebServiceHost(this,typeof(WebServiceControl),uri))
-			{
-				// Enable metadata publishing.
-				//				ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
-				//				smb.HttpGetEnabled = true;
-				//				//smb.MetadataExporter.
-				//				//smb.MetadataExporter
-				//				host.Description.Behaviors.Add(smb);
-				//
-				//				//host.AddServiceEndpoint(typeof(IHelloWorldService), new WSHttpBinding(), "");
-				//
-				//
-				//				//host.Description.Behaviors.Add(new ServiceMetadataBehavior());
-				//				//host.AddServiceEndpoint(typeof(IHelloWorldService),new NetTcpBinding(),"hello");
-				//				host.AddServiceEndpoint(typeof(IMetadataExchange),MetadataExchangeBindings.CreateMexTcpBinding(),"mex");
-				//
-                //host.AddDefaultEndpoints();
-
-				host.Open();
-				
-				while (wsListening) 
+				if (Environment.GetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT") != "yes")
 				{
-					Thread.Sleep(500);
+					Environment.SetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT", "yes");
 				}
-				
-				host.Close();
+
+				String wsUrl = Sharpend.Configuration.ConfigurationManager.getString ("taskmanagerurl");
+
+				Uri uri = new Uri(wsUrl);
+				using (WebServiceHost host = new WebServiceHost(this,typeof(WebServiceControl),uri))
+				{
+					// Enable metadata publishing.
+					//				ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+					//				smb.HttpGetEnabled = true;
+					//				//smb.MetadataExporter.
+					//				//smb.MetadataExporter
+					//				host.Description.Behaviors.Add(smb);
+					//
+					//				//host.AddServiceEndpoint(typeof(IHelloWorldService), new WSHttpBinding(), "");
+					//
+					//
+					//				//host.Description.Behaviors.Add(new ServiceMetadataBehavior());
+					//				//host.AddServiceEndpoint(typeof(IHelloWorldService),new NetTcpBinding(),"hello");
+					//				host.AddServiceEndpoint(typeof(IMetadataExchange),MetadataExchangeBindings.CreateMexTcpBinding(),"mex");
+					//
+	                //host.AddDefaultEndpoints();
+
+					host.Open();
+
+					while (wsListening && (!wsCancellationTokenSource.IsCancellationRequested)) 
+					{
+						Thread.Sleep(500);
+					}
+					
+					host.Close();
+				}
+			} catch (Exception ex)
+			{
+				log.Error(ex);
+				throw;
 			}
 		}
 		#endif

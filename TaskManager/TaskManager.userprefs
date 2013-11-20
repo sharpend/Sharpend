@@ -1,19 +1,26 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Main.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="TaskManager.cs">
     <Files>
-      <File FileName="Main.cs" Line="144" Column="10" />
+      <File FileName="Main.cs" Line="1" Column="1" />
       <File FileName="TestTask.cs" Line="1" Column="1" />
       <File FileName="TaskData.cs" Line="1" Column="1" />
       <File FileName="app.config" Line="1" Column="1" />
       <File FileName="tasks.config" Line="1" Column="1" />
       <File FileName="IDBusRemoteControl.cs" Line="1" Column="1" />
       <File FileName="DBusRemoteControl.cs" Line="1" Column="1" />
+      <File FileName="WebServiceControl.cs" Line="42" Column="1" />
+      <File FileName="WebServiceHost.cs" Line="56" Column="38" />
+      <File FileName="IWebserviceControl.cs" Line="1" Column="1" />
+      <File FileName="TaskManager.cs" Line="240" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="TaskManager" expanded="True" />
+        <State expanded="True">
+          <Node name="TaskManager" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="TaskManager.cs" selected="True" />
+          </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">
@@ -27,7 +34,10 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/WebServiceControl.cs" line="42" />
+      <Breakpoint file="/home/dirk/Projects/Sharpend/TaskManager/TaskManager.cs" line="240" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

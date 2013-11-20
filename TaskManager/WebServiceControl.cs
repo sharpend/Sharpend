@@ -39,7 +39,7 @@ namespace TaskManager
 
 		public string StartTask (string classname, string parameters)
 		{
-			return _dep.startTask (classname, parameters);
+			return _dep.StartTask (classname, parameters);
 		}
 
 		public string GetTaskStatus (string classname)
