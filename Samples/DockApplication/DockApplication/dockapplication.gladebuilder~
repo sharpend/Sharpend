@@ -1,5 +1,0 @@
-<configuration>
-  <glade>
-    <gladefile windowname="window1" outputpath="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication" filename="/home/dirk/Projects/Sharpend/Samples/DockApplication/DockApplication/dockframewindow.glade" createimplementation="True" namespace="dockframewindow" class="DockframeWindow" customwidgetclass="DockableWidget" customwidget="True" usegtk2="False" />
-  </glade>
-</configuration>

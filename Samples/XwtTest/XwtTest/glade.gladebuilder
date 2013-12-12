@@ -1,5 +1,0 @@
-<configuration>
-  <glade>
-    <gladefile windowname="window1" outputpath="/home/dirk/Projects/Sharpend/Samples/XwtTest/XwtTest" filename="/home/dirk/Projects/Sharpend/Samples/XwtTest/XwtTest/window.glade" createimplementation="True" namespace="XwtTest" class="MainWindow" customwidgetclass="" customwidget="False" usegtk2="False" xwtoutput="True" />
-  </glade>
-</configuration>

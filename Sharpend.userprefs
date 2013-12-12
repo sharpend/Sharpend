@@ -1,18 +1,12 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="TaskManager/TaskManager.cs">
-    <Files>
-      <File FileName="TaskManager/TaskManager.cs" Line="341" Column="53" />
-      <File FileName="TaskManager/WebServiceControl.cs" Line="40" Column="64" />
-      <File FileName="TaskManager/WebServiceHost.cs" Line="35" Column="41" />
-      <File FileName="TaskManager/IWebserviceControl.cs" Line="36" Column="21" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Sharpend" expanded="True" />
-          <Node name="TaskManager" expanded="True" selected="True" />
-          <Node name="TestConsole" expanded="True" />
+          <Node name="TaskManager" expanded="True">
+            <Node name="TaskManager.cs" selected="True" />
+          </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">
