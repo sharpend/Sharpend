@@ -89,6 +89,8 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Utils\DBus\DBusServer.cs" />
     <Compile Include="Utils\applications\gnote\GNoteRemoteControl.cs" />
+    <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

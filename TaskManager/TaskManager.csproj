@@ -42,6 +42,7 @@
       <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.ServiceModel.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

@@ -1,10 +1,10 @@
 //
-//  WebServiceControl.cs
+//  ConfigurationManager.cs
 //
 //  Author:
 //       Dirk Lehmeier <sharpend_develop@yahoo.de>
 //
-//  Copyright (c) 2013 Dirk Lehmeier
+//  Copyright (c) 2014 Dirk Lehmeier
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -19,42 +19,35 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.ServiceModel;
 
-namespace TaskManager
+namespace Sharpend
 {
-    //(Namespace = "http://localhost:9050")
-	[ServiceBehavior]
-	public class WebServiceControl : IWebserviceControl
+	public class ConfigurationManager2 :IConfigurationManager
 	{
-
-		private ITaskManager _dep;
-
-		public WebServiceControl (ITaskManager dep)
+		public ConfigurationManager2 ()
 		{
-			_dep = dep;
 		}
 
-		#region IWebserviceControl implementation
-
-		public string StartTask (string classname, string parameters)
+		private static ConfigurationManager2 _instance;
+		public static ConfigurationManager2 Instance
 		{
-			return _dep.StartTask (classname, parameters);
+			get {
+				if (_instance == null)
+				{
+					_instance = new ConfigurationManager2();
+				}
+				return _instance;
+			}
 		}
 
-		public TestData GetTaskStatus (string classname)
-		{
-			return _dep.GetTaskStatus(classname);
-		}
+		#region IConfigurationManager implementation
 
-		public string WaitForTask (string classname)
+		public string getString (string elementName)
 		{
-			return _dep.WaitForTask(classname);
+			return Sharpend.Configuration.ConfigurationManager.getString(elementName);
 		}
 
 		#endregion
-
-
 	}
 }
 

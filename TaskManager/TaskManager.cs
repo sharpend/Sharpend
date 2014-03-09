@@ -275,8 +275,12 @@ namespace TaskManager
 			return "error";
 		}
 
-		public string GetTaskStatus (string classname)
+		public TestData GetTaskStatus (string classname)
 		{
+			TestData td = new TestData ();
+			td.Daten = "Hallo Welt: " + classname;
+			return td;
+			//return "Hallo Welt";
             //TODO xxx
             //TaskData td = getTask(classname);
 
@@ -292,7 +296,7 @@ namespace TaskManager
             //    }
             //}
 
-			return "undefined";
+			//return "undefined";
 		}
 		
 		public string WaitForTask (string classname)
@@ -645,6 +649,7 @@ namespace TaskManager
 						{
 							log.Debug("start startup task" + td.Classname);
 							runTask(td);
+							Thread.Sleep(1000);
 						}
 					} 
 					else

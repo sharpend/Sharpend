@@ -20,20 +20,31 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 
 namespace TaskManager
 {
     [ServiceContract]
 	public interface IWebserviceControl
 	{
-		[OperationContract]
+		//[OperationContract]
+		//[WebGet(ResponseFormat = WebMessageFormat.Json)]
+		[OperationContract,WebGet(UriTemplate = "/start/{classname}/{parameters}", ResponseFormat = WebMessageFormat.Json)]
 		string StartTask(string classname, string parameters);
 
-		[OperationContract]
-		string GetTaskStatus(String classname);
+		//[OperationContract]
+		[OperationContract, WebGet(UriTemplate = "/class/{classname}", ResponseFormat = WebMessageFormat.Json)]
+		TestData GetTaskStatus(String classname);
 
-		[OperationContract]
+		[OperationContract,WebGet(UriTemplate = "/waitfor/{classname}", ResponseFormat = WebMessageFormat.Json)]
 		string WaitForTask (String classname);
+	}
+
+	public class TestData {
+		public String Daten {
+			get;
+			set;
+		}
 	}
 }
 
