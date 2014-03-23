@@ -30,9 +30,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Sharpend">
-      <HintPath>..\Sharpend\bin\Debug\Sharpend.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Lucene.Net">
@@ -49,4 +46,10 @@
     <Compile Include="LuceneSearcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Sharpend\Sharpend.csproj">
+      <Project>{94641ABA-736F-4D76-BD1B-99C45313F988}</Project>
+      <Name>Sharpend</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

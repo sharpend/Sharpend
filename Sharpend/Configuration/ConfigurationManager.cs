@@ -20,25 +20,38 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 
-namespace Sharpend
+namespace Sharpend.Configuration
 {
-	public class ConfigurationManager2 :IConfigurationManager
+	public class ConfigurationManager2 :ISharpendConfigurationManager
 	{
 		public ConfigurationManager2 ()
 		{
 		}
 
 		private static ConfigurationManager2 _instance;
+
+		public static ISharpendConfigurationManager getConfigurationManager()
+		{
+			if (_instance == null) {
+				_instance = new ConfigurationManager2();
+			}
+			return _instance;
+		}
+
+		/*
 		public static ConfigurationManager2 Instance
 		{
 			get {
 				if (_instance == null)
 				{
-					_instance = new ConfigurationManager2();
+					//_instance = new Sharpend.ConfigurationManager2();
+					Type tp = Type.GetType("Sharpend.Configuration.ConfigurationManager2,Sharpend");
+					_instance = (ConfigurationManager2)Activator.CreateInstance(tp);
 				}
 				return _instance;
 			}
 		}
+		*/
 
 		#region IConfigurationManager implementation
 
