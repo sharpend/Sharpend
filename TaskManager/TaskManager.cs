@@ -275,6 +275,27 @@ namespace TaskManager
 			return "error";
 		}
 
+		public string StartTask2 (StartTaskOptions options)
+		{
+			TaskData td = getTask(options.ClassName + "," + options.AssemblyName);
+			if (td != null) {
+				ParameterSet ps = new ParameterSet (options.ClassName,options.AssemblyName);
+
+				String[] values = options.StringParameters.Split(',');
+				foreach (String s in values) {
+					ps.addParameter (typeof(String), s);
+				}
+				td.Params = ps;
+
+				td.ExtraRun = true;
+				return runTask(td);			
+			} else {
+				log.Error("could not find task: " + options.ClassName  + "  probably missing in tasks.config ??");
+			}
+
+			return "error";
+		}
+
 		public TestData GetTaskStatus (string classname)
 		{
 			TestData td = new TestData ();
@@ -578,7 +599,7 @@ namespace TaskManager
             foreach (KeyValuePair<String, ITask> kp in runningTasks)
             {
                 if (kp.Value.Name == td.Name)
-                {
+				{
                     toRemove.Add(kp.Key, kp.Value);  
                 }
             }

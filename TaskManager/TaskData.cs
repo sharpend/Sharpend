@@ -52,7 +52,7 @@ namespace TaskManager
 		
 		public ParameterSet Params {
 			get;
-			private set;
+			internal set;
 		}
 		
         //public object CurrentInstance {

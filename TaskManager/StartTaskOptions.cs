@@ -1,10 +1,10 @@
 //
-//  WebServiceControl.cs
+//  StartTaskOptions.cs
 //
 //  Author:
 //       Dirk Lehmeier <sharpend_develop@yahoo.de>
 //
-//  Copyright (c) 2013 Dirk Lehmeier
+//  Copyright (c) 2014 Dirk Lehmeier
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -19,47 +19,25 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace TaskManager
 {
-    //(Namespace = "http://localhost:9050")
-	[ServiceBehavior]
-	public class WebServiceControl : IWebserviceControl
+	[DataContract]
+	public class StartTaskOptions
 	{
+		[DataMember]
+		public String ClassName { get; set; }
 
-		private ITaskManager _dep;
+		[DataMember]
+		public String AssemblyName { get; set; }
 
-		public WebServiceControl (ITaskManager dep)
+		[DataMember]
+		public String StringParameters { get; set; }
+
+		public StartTaskOptions ()
 		{
-			_dep = dep;
 		}
-
-		#region IWebserviceControl implementation
-
-		public string StartTask (string classname, string parameters)
-		{
-			return _dep.StartTask (classname, parameters);
-		}
-
-		public string StartTask2 (StartTaskOptions options)
-		{
-			return _dep.StartTask2 (options);
-		}
-
-		public TestData GetTaskStatus (string classname)
-		{
-			return _dep.GetTaskStatus(classname);
-		}
-
-		public string WaitForTask (string classname)
-		{
-			return _dep.WaitForTask(classname);
-		}
-
-		#endregion
-
-
 	}
 }
 

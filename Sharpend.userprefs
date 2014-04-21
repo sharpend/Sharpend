@@ -1,14 +1,8 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../mono/mcs/class/corlib/System/Type.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="TaskManager/TaskManager.cs">
     <Files>
-      <File FileName="Sharpend/Configuration/ConfigurationManager.cs" Line="33" Column="16" />
-      <File FileName="Sharpend/Configuration/Configuration.cs" Line="1" Column="1" />
-      <File FileName="Sharpend/Configuration/IConfigurationManager.cs" Line="1" Column="1" />
-      <File FileName="Sharpend/Configuration/IAppSettingsProvider.cs" Line="1" Column="1" />
-      <File FileName="../mono/mcs/class/corlib/System/Type.cs" Line="928" Column="1" />
-      <File FileName="../mono/mcs/class/System.ServiceModel/System.ServiceModel.Description/ContractDescriptionGenerator.cs" Line="234" Column="1" />
-      <File FileName="TaskManager/WebServiceHost.cs" Line="59" Column="38" />
+      <File FileName="TaskManager/TaskManager.cs" Line="581" Column="18" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

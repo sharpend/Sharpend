@@ -32,6 +32,13 @@ namespace TaskManager
 		[OperationContract,WebGet(UriTemplate = "/start/{classname}/{parameters}", ResponseFormat = WebMessageFormat.Json)]
 		string StartTask(string classname, string parameters);
 
+		[OperationContract]
+		[WebInvoke(UriTemplate = "/starttask", 
+		           RequestFormat= WebMessageFormat.Json,   
+		           ResponseFormat = WebMessageFormat.Json, 
+		           Method = "POST")]
+		string StartTask2 (StartTaskOptions options);
+
 		//[OperationContract]
 		[OperationContract, WebGet(UriTemplate = "/class/{classname}", ResponseFormat = WebMessageFormat.Json)]
 		TestData GetTaskStatus(String classname);
