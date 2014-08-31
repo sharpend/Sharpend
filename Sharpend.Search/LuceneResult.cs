@@ -14,10 +14,11 @@ using System.Linq;
 
 namespace Sharpend.Search
 {
+
 	/// <summary>
 	/// Lucene result.
 	/// </summary>
-	public class LuceneResult<T> where T:class
+	public class LuceneResult<T> : ILuceneResult<T> where T:class
 	{
 		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

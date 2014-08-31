@@ -10,185 +10,10 @@ using Lucene.Net.Documents;
 using System.Xml;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 
 namespace Sharpend.Search
 {
-	/// <summary>
-	/// Lucene result.
-	/// </summary>
-	public class LuceneResult<T> where T:class
-	{
-		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-		public Document Doc {
-			get;
-			private set;	
-		}
-
-		public float Score {
-			get;
-			private set;
-		}
-
-		public LuceneResult(Document d,float score)
-		{
-			Doc = d;
-			Score = score;
-		}
-
-//		private T GetData()
-//		{
-//			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
-//			if (! fi.Exists)
-//			{
-//				throw new Exception("could not load searchdescription.xml");
-//			}
-//			
-//			String className = typeof(T).ToString();
-//			String assembly = typeof(T).Assembly.FullName;
-//			assembly = assembly.Split(',')[0];
-//			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"')]");
-//			foreach (XmlNode nd in lst)
-//			{
-//				Field f = FieldDescription.CreateInstance(data, nd);
-//				ret.Add(f);
-//			}
-//			
-//			return ret;
-//		}
-
-		private Type[] GetTypes(Type nominalType)
-		{
-			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
-			if (! fi.Exists)
-			{
-				throw new Exception("could not load searchdescription.xml");
-			}
-			
-			String className = nominalType.ToString();
-			String assembly = nominalType.Assembly.FullName;
-			assembly = assembly.Split(',')[0];
-			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@constructor='yes')]");
-
-			if (lst.Count == 0) 
-			{
-				throw new Exception("no fields specified in searchdescription.xml");
-			}
-
-
-			Type[] ret = new Type[lst.Count];
-			int i=0;
-			foreach (XmlNode nd in lst)
-			{
-				if (nd.Attributes["type"] != null)
-				{
-					throw new NotImplementedException("type");
-				} else
-				{
-					ret[i] = typeof(String);
-				}
-				i++;
-			}
-			
-			return ret;
-		}
-
-		private object[] GetValues(Type nominalType)
-		{
-			FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
-			if (! fi.Exists)
-			{
-				throw new Exception("could not load searchdescription.xml");
-			}
-			
-			String className = nominalType.ToString();
-			String assembly = nominalType.Assembly.FullName;
-			assembly = assembly.Split(',')[0];
-			XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"') and (@constructor='yes')]");
-			
-			object[] ret = new object[lst.Count];
-			int i=0;
-			foreach (XmlNode nd in lst)
-			{
-				String name = nd.Attributes["name"].Value.ToLower();
-				ret[i] = Doc.Get(name);
-				i++;
-			}
-
-			return ret;
-		}
-
-		public T GetData()
-		{
-			Type tp = typeof(T);
-
-			//try a CreateInstance Methode
-			String nominalType = Doc.Get ("nominaltype");
-			if (!String.IsNullOrWhiteSpace (nominalType)) {
-				tp = Type.GetType(nominalType);
-				if (tp == null)
-				{
-					throw new Exception("could not find nominaltype" + nominalType);
-				}
-			}
-
-			Type[] types = GetTypes(tp);
-			object[] values = GetValues(tp);
-
-			MethodInfo mi = tp.GetMethod("CreateInstance",types);
-
-            if (mi == null)
-            {
-                mi = tp.GetMethod("CreateInstance", BindingFlags.Static);
-            }
-
-			if (mi != null)
-			{
-				T dt = (T)mi.Invoke(null,values);
-				return dt;
-			} else
-			{
-				String tps = String.Empty;
-				foreach (Type t in types)
-				{
-					tps += t.ToString() + ",";
-				}
-				log.Warn("could not find CreateInstance for " + tps);
-			}
-
-			//if not we try a constructor
-			ConstructorInfo ci = tp.GetConstructor(types);
-			T data = (T)ci.Invoke(values);
-
-			if (data != null)
-			{
-				return data;
-			}
-			return null;
-		}
-	}
-
-	public class ScoreComparer<T> : IComparer<LuceneResult<T>> where T:class
-	{
-		#region IComparer implementation
-		public int Compare (LuceneResult<T> x, LuceneResult<T> y)
-		{
-			if (x.Score == y.Score)
-			{
-				return 0;
-			}
-
-			if (x.Score < y.Score)
-			{
-				return 1;
-			} else
-			{
-				return -1;
-			}
-		}
-		#endregion
-	}
-
 	public class LuceneSearcher<T> : IDisposable where T:class
 	{
 		protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -280,13 +105,14 @@ namespace Sharpend.Search
 			return ret;
 		}
 
-		public List<LuceneResult<T>> Search(String[] fields, String querystring, String datecol, String lowerdate, String uppderdate)
+
+		public List<LuceneResult<T>> Search(String[] fields, String querystring, 
+		                                    String datecol, String lowerdate, String uppderdate)
 		{
 			log.Debug("start new search for multiple fields and range");
 			//RangeFilter filter = new RangeFilter(datecol, lowerDate, upperDate, true, true);
 			Searcher searcher = new IndexSearcher(reader);
 			Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
-
 
 			String low = lowerdate;
 			String up = uppderdate;
@@ -300,7 +126,6 @@ namespace Sharpend.Search
 			if (DateTime.TryParse (uppderdate,out dt2)) {
 				up = Sharpend.Utils.Utils.getDateTimeForIndex(dt2);
 			}
-
 
 			Query query;
 
@@ -321,7 +146,6 @@ namespace Sharpend.Search
 				searcher.Search (query, filter, streamingHitCollector);
 			}
 
-			//parser = null;
 			query = null;
 			
 			List<LuceneResult<T>> ret = streamingHitCollector.GetSortedResult();
@@ -351,6 +175,15 @@ namespace Sharpend.Search
 			return ret;
 		}
 
+		public IEnumerable<IGrouping<string,LuceneResult<T>>> GroupResult(List<LuceneResult<T>> result,String field)
+		{
+			return result.GroupBy (item => item.Doc.Get (field));
+		}
+
+		public String GetData(LuceneResult<T> result, String field)
+		{
+			return result.Doc.Get (field);
+		}
 
 		public void initReader()
 		{

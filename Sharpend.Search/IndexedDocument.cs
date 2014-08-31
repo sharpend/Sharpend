@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using Lucene.Net.Store;
 using Lucene.Net.Analysis.Standard;
+using System.Linq;
 
 namespace Sharpend.Search
 {
@@ -22,7 +23,7 @@ namespace Sharpend.Search
 		private IndexWriter writer = null;
 		private bool _disposed;
 
-		private bool verboseMode = false;
+		private bool verboseMode = true;
 		public bool VerboseMode {
 			get
 			{
@@ -79,7 +80,7 @@ namespace Sharpend.Search
 
 			try
 			{
-				Document doc = createDocument(data);
+				Document doc = createDocument(data,LuceneUpdateOptions.Empty);
 				writer.AddDocument(doc);
 				return true;
 			} catch (Exception ex)
@@ -89,13 +90,44 @@ namespace Sharpend.Search
 			}
 		}
 
+		void UpdateFields (Document sourceDocument, Document input, LuceneUpdateOptions options)
+		{
+			foreach (var field in sourceDocument.GetFields()) {
+				if (!options.Fields.Any(f => f.Equals(field.Name,StringComparison.OrdinalIgnoreCase)))
+				{
+					input.Add(field);
+				}
+			}
+
+//			foreach (var field in options.Fields) {
+//				sourceDocument.RemoveField(field);
+//				Field f = input.GetField(field);
+//				sourceDocument.Add(f);
+//			}
+		}
+
+		private Document GetUpdateDocument(String id, Document input,LuceneUpdateOptions options) {
+			if (options.UpdateMode == LuceneUpdateOptions.UpdateModes.Normal) {
+				return input;
+			}
+
+			if (options.UpdateMode == LuceneUpdateOptions.UpdateModes.SelectedFields) {
+				Document sourceDocument = GetDocument(id);
+				if (sourceDocument != null) {
+					UpdateFields(sourceDocument,input,options);
+					return input;
+				}
+			}
+			return null;
+		}
+
 		/// <summary>
 		/// Update the specified data in the index
 		/// </summary>
 		/// <param name='data'>
 		/// If set to <c>true</c> data.
 		/// </param>
-		public bool Update(T data)
+		public bool Update(T data,LuceneUpdateOptions updateOptions)
 		{
 			if (_disposed)
 			{
@@ -107,18 +139,19 @@ namespace Sharpend.Search
 				throw new ArgumentNullException("indexwriter not opened!");
 			}
 
-			Document doc = createDocument(data);
+			Document doc = createDocument(data,updateOptions);
 
 			String id = String.Empty;
 			String fieldname = String.Empty;
 
 			if (getId(data,out id, out fieldname))
 			{
+				doc = GetUpdateDocument(id,doc,updateOptions);
 				if (!String.IsNullOrEmpty(id))
 				{
 					log.Debug("update document with id: " + id + " idfield: " + fieldname);
+					//Console.WriteLine("update document with id: " + id + " idfield: " + fieldname);
 					writer.UpdateDocument(new Lucene.Net.Index.Term(fieldname,id),doc);
-					//writer.UpdateDocument(new Lucene.Net.Index.Term(
 					return true;
 				} else
 				{
@@ -140,7 +173,7 @@ namespace Sharpend.Search
 				throw new ArgumentNullException("indexwriter not opened!");
 			}
 			
-			Document doc = createDocument(data);
+			Document doc = createDocument(data,LuceneUpdateOptions.Empty);
 			
 			String id = String.Empty;
 			String fieldname = String.Empty;
@@ -206,7 +239,39 @@ namespace Sharpend.Search
 			return false;
 		}
 
-		private Document createDocument(T data)
+		private bool AddField(XmlNode node, LuceneUpdateOptions updateOptions)
+		{
+			if (updateOptions == LuceneUpdateOptions.Empty) {
+				return true;
+			}
+
+			if (updateOptions.UpdateMode == LuceneUpdateOptions.UpdateModes.Normal) {
+				return true;
+			}
+
+			if (updateOptions.UpdateMode == LuceneUpdateOptions.UpdateModes.SelectedFields) {
+				if (updateOptions.Fields.Count == 0) {
+					throw new Exception("no fields specified for mode 'UpdateModes.SelectedFields'");
+				}
+
+				String fieldName = FieldDescription.GetFieldName(node);
+				return updateOptions.Fields.Any(f => f.Equals(fieldName,StringComparison.OrdinalIgnoreCase));
+			}
+
+			return false;
+		}
+
+		private Document GetDocument(String id) {
+			LuceneSearcher<T> searcher = new LuceneSearcher<T> (IndexDir, true);
+			var resultList = searcher.Search ("searchid", id);
+
+			if (resultList.Count == 1) {
+				return resultList[0].Doc;
+			}
+			return null;
+		}
+
+		private Document createDocument(object data,LuceneUpdateOptions updateOptions)
 		{
 			try
 			{
@@ -217,14 +282,14 @@ namespace Sharpend.Search
 				{
 					throw new Exception("could not load searchdescription.xml");
 				}
-				String className = typeof(T).ToString();
-				String assembly = typeof(T).Assembly.FullName;
+				String className = data.GetType().ToString();
+				String assembly = data.GetType().Assembly.FullName;
 				assembly = assembly.Split(',')[0];
-
+				
 				log.Debug("create new document for class " + className + " assembly " + assembly);
-
+				
 				XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"')]");
-
+				
 				if (lst.Count == 0)
 				{
 					log.Warn("there are no matching fields specified for this class: " + className  + " assembly" + assembly );
@@ -232,12 +297,15 @@ namespace Sharpend.Search
 
 				foreach (XmlNode nd in lst)
 				{
-					Field f = FieldDescription.CreateInstance(data, nd);
-					if (VerboseMode)
+					if (AddField(nd,updateOptions))
 					{
-						log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+						Field f = FieldDescription.CreateInstance(data, nd);
+						if (VerboseMode)
+						{
+							log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+						}
+						ret.Add(f);
 					}
-					ret.Add(f);
 				}
 				
 				return ret;
@@ -247,6 +315,50 @@ namespace Sharpend.Search
 				throw;
 			}
 		}
+
+//		private Document genericCreateDocument(T data)
+//		{
+//			return createDocument (data);
+//
+////			try
+////			{
+////				Document ret = new Document();
+////
+////				FileInfo fi = Sharpend.Configuration.ConfigurationManager.getConfigFile("searchdescription.xml");
+////				if (! fi.Exists)
+////				{
+////					throw new Exception("could not load searchdescription.xml");
+////				}
+////				String className = typeof(T).ToString();
+////				String assembly = typeof(T).Assembly.FullName;
+////				assembly = assembly.Split(',')[0];
+////
+////				log.Debug("create new document for class " + className + " assembly " + assembly);
+////
+////				XmlNodeList lst = Sharpend.Configuration.ConfigurationManager.getValues("searchdescription.xml","//field[(../../@class='"+className+"') and (../../@assembly='"+assembly+"')]");
+////
+////				if (lst.Count == 0)
+////				{
+////					log.Warn("there are no matching fields specified for this class: " + className  + " assembly" + assembly );
+////				}
+////
+////				foreach (XmlNode nd in lst)
+////				{
+////					Field f = FieldDescription.CreateInstance(data, nd);
+////					if (VerboseMode)
+////					{
+////						log.Debug("add new field: Name: " + f.Name  +" ToString: " + f.ToString());
+////					}
+////					ret.Add(f);
+////				}
+////				
+////				return ret;
+////			} catch (Exception ex)
+////			{
+////				log.Error(ex);
+////				throw;
+////			}
+//		}
 
 
 		#region IDisposable implementation

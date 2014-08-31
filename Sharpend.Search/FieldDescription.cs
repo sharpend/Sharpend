@@ -7,6 +7,11 @@ namespace Sharpend.Search
 {
 	public static class FieldDescription
 	{
+		public static String GetFieldName(XmlNode node)
+		{
+			return node.Attributes["name"].Value.ToLower();
+		}
+
 		public static Field CreateInstance(object data, XmlNode node)
 		{
 			if (data == null)
@@ -45,6 +50,10 @@ namespace Sharpend.Search
 
         private static PropertyInfo GetFirstProperty(object source, String name)
         {
+			if (source == null) {
+				throw new ArgumentNullException("source");
+			}
+
             foreach (PropertyInfo pi in source.GetType().GetProperties())
             {
                 if (pi.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
@@ -84,8 +93,13 @@ namespace Sharpend.Search
                 if (!String.IsNullOrEmpty(index))
                 {
                     object source = pi.GetValue(data, null);
-                    PropertyInfo ii = GetFirstProperty(source, "Item");
-                    dt = ii.GetValue(source, new object[] { index });
+                    if (source != null)
+					{
+						PropertyInfo ii = GetFirstProperty(source, "Item");
+	                    dt = ii.GetValue(source, new object[] { index });
+					} else {
+						throw new Exception("could not load value");
+					}
                 }
                 else
                 {

@@ -302,13 +302,13 @@ namespace TaskManager
 			td.Daten = "Hallo Welt: " + classname;
 			return td;
 			//return "Hallo Welt";
-            //TODO xxx
+            
             //TaskData td = getTask(classname);
 
-            //TaskData running;
-            //if (runningTasks.TryGetValue (td.Id, out running)) {
-            //    return "running";
-            //}
+//            TaskData running;
+//            if (runningTasks.TryGetValue (td.Id, out running)) {
+//                return "running";
+//            }
 
             //lock (finishedTasks) {
             //    if (finishedTasks.ContainsKey(td.Id))
@@ -322,20 +322,21 @@ namespace TaskManager
 		
 		public string WaitForTask (string classname)
 		{
-            //TODO xxx
+            
+			//TODO
+			return String.Empty;
+            
 
-            throw new NotImplementedException("WaitForTask");
-
-            //log.Debug ("wait for task: " + classname);
-            //TaskData td = getTask(classname);
-            //while (true) {		
-            //    if (finishedTasks.ContainsKey(td.Id))
-            //    {
-            //        log.Debug ("done: " + classname);
-            //        return finishedTasks[td.Id];
-            //    }
-            //    Thread.Sleep(1000);
-            //}
+//            log.Debug ("wait for task: " + classname);
+//            TaskData td = getTask(classname);
+//            while (true) {		
+//                if (finishedTasks.ContainsKey(td.Id))
+//                {
+//                    log.Debug ("done: " + classname);
+//                    return finishedTasks[td.Id];
+//                }
+//                Thread.Sleep(1000);
+//            }
 		}
 
 
